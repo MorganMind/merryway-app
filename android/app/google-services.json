@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "121039438158",
+    "project_id": "matterseek-staging",
+    "storage_bucket": "matterseek-staging.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121039438158:android:7814818e60f1e02d9d1e1f",
+        "android_client_info": {
+          "package_name": "com.morganmind.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121039438158-i7bosjerj4rkef6cq69npn5b9qt970g1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRjo9s8dbX5B0oGmh1c9RpDU1vdPRzlIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121039438158-i7bosjerj4rkef6cq69npn5b9qt970g1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
