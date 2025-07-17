@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset('assets/img/pb_logo_full_white.png', height: 30),
+                                Image.asset('assets/img/logo_full_white.png', height: 30),
                                 const Spacer(),
                                 Text(
                                   '"Live as if you were to die tomorrow. Learn as if you were to live forever."',
@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                   Column( 
                     children: [
                       Image.asset(
-                        'assets/img/pb_logo_full_black.png',
+                        'assets/img/logo_full_black.png',
                         height: 45,
                       ),
                       const SizedBox(height: 70),

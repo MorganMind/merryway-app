@@ -53,8 +53,8 @@ class _NavigationSidebarState extends State<NavigationSidebar> {
                 return Image.asset(
                   width: 150,
                   ShadTheme.of(context).brightness == Brightness.dark
-                    ? 'assets/img/pb_logo_full_white.png'
-                    : 'assets/img/pb_logo_full_black.png',
+                    ? 'assets/img/logo_full_white.png'
+                    : 'assets/img/logo_full_black.png',
                   height: 25,
                 );
               },
@@ -64,42 +64,41 @@ class _NavigationSidebarState extends State<NavigationSidebar> {
             context,
             icon: LucideIcons.chartPie,
             label: 'Dashboard',
-            route: '/dashboard',
-            disabled: true,
+            route: '/home',
           ),
-          _buildNavButton(
-            context,
-            icon: LucideIcons.cloudUpload,
-            label: 'Content',
-            route: '/content',
-          ),
-          _buildNavButton(
-            context,
-            icon: LucideIcons.bookOpen,
-            label: 'Knowledgebase',
-            route: '/knowledgebase',
-          ),
-          _buildNavButton(
-            context,
-            icon: LucideIcons.messageSquare,
-            label: 'Conversations',
-            route: '/conversations',
-            disabled: true,
-          ),
-          _buildNavButton(
-            context,
-            icon: LucideIcons.users,
-            label: 'Members',
-            route: '/members',
-            disabled: true,
-          ),
-          _buildNavButton(
-            context,
-            icon: LucideIcons.dollarSign,
-            label: 'Earnings',
-            route: '/earnings',
-            disabled: true,
-          ),
+          // _buildNavButton(
+          //   context,
+          //   icon: LucideIcons.cloudUpload,
+          //   label: 'Content',
+          //   route: '/content',
+          // ),
+          // _buildNavButton(
+          //   context,
+          //   icon: LucideIcons.bookOpen,
+          //   label: 'Knowledgebase',
+          //   route: '/knowledgebase',
+          // ),
+          // _buildNavButton(
+          //   context,
+          //   icon: LucideIcons.messageSquare,
+          //   label: 'Conversations',
+          //   route: '/conversations',
+          //   disabled: true,
+          // ),
+          // _buildNavButton(
+          //   context,
+          //   icon: LucideIcons.users,
+          //   label: 'Members',
+          //   route: '/members',
+          //   disabled: true,
+          // ),
+          // _buildNavButton(
+          //   context,
+          //   icon: LucideIcons.dollarSign,
+          //   label: 'Earnings',
+          //   route: '/earnings',
+          //   disabled: true,
+          // ),
         ],
       ),
     );

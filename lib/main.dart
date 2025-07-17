@@ -3,7 +3,6 @@ import 'package:app/modules/auth/services/auth_state_listener.dart';
 import 'package:app/modules/core/blocs/layout_bloc.dart';
 import 'package:app/modules/core/blocs/layout_event.dart';
 import 'package:app/modules/core/routing/app_router.dart';
-import 'package:app/modules/onboarding/blocs/onboarding_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,9 +52,6 @@ class MyApp extends StatelessWidget with WatchItMixin {
         BlocProvider<LayoutBloc>.value(
           value: sl<LayoutBloc>(),
         ),
-        BlocProvider<OnboardingBloc>(
-          create: (context) => sl<OnboardingBloc>(),
-        ),
       ],
       child: Builder(
         builder: (context) {
@@ -70,8 +66,8 @@ class MyApp extends StatelessWidget with WatchItMixin {
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     sl<LayoutBloc>().add(
-                          UpdateLayoutType(constraints.maxWidth),
-                        );
+                      UpdateLayoutType(constraints.maxWidth),
+                    );
                     
                     return ShadApp.materialRouter(
                       debugShowCheckedModeBanner: false,

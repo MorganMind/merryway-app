@@ -14,9 +14,9 @@ import 'package:app/modules/core/blocs/layout_bloc.dart';
 import 'package:app/modules/core/blocs/layout_state.dart';
 import 'package:app/modules/core/di/service_locator.dart';
 import 'package:app/modules/user/repositories/user_settings_repository.dart';
-import 'package:app/modules/onboarding/blocs/onboarding_bloc.dart';
-import 'package:app/modules/onboarding/blocs/onboarding_event.dart';
-import 'package:app/modules/onboarding/blocs/onboarding_state.dart';
+// import 'package:app/modules/onboarding/blocs/onboarding_bloc.dart';
+// import 'package:app/modules/onboarding/blocs/onboarding_event.dart';
+// import 'package:app/modules/onboarding/blocs/onboarding_state.dart';
 import 'package:flutter/foundation.dart';
 
 class JoinPage extends StatefulWidget {
@@ -112,7 +112,7 @@ class _JoinPageState extends State<JoinPage> {
       _isLoading = true;
     });
 
-    final onboardingBloc = context.read<OnboardingBloc>();
+    // final onboardingBloc = context.read<OnboardingBloc>();
 
     // onboardingBloc.add(
     //   CompleteJoinOrganizationOnboarding(
@@ -123,8 +123,8 @@ class _JoinPageState extends State<JoinPage> {
     // );
 
     // Listen for the result
-    await for (final state in onboardingBloc.stream) {
-      if (state is OnboardingComplete) {
+    // await for (final state in onboardingBloc.stream) {
+    //   if (state is OnboardingComplete) {
         // Create a completer to wait for settings to actually update
         final settingsCompleter = Completer<void>();
         
@@ -147,23 +147,23 @@ class _JoinPageState extends State<JoinPage> {
         // Now that settings are confirmed updated, navigate
         if (!mounted) return;
         context.go('/');
-        break;
-      }
+        // break;
+      // }
 
-      if (state is OnboardingError) {
-        if (!mounted) return;
-        setState(() {
-          _isLoading = false;
-        });
-        ShadToaster.of(context).show(
-          ShadToast.destructive(
-            title: const Text('Error'),
-            description: Text(state.message),
-          ),
-        );
-        break;
-      }
-    }
+      // if (state is OnboardingError) {
+      //   if (!mounted) return;
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   ShadToaster.of(context).show(
+      //     ShadToast.destructive(
+      //       title: const Text('Error'),
+      //       description: Text(state.message),
+      //     ),
+      //   );
+      //   break;
+      // }
+    // }
   }
 
   void _joinOrganization() async {
@@ -232,7 +232,7 @@ class _JoinPageState extends State<JoinPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset('assets/img/pb_logo_full_white.png', height: 30),
+                                Image.asset('assets/img/logo_full_white.png', height: 30),
                                 const Spacer(),
                                 Text(
                                   '"Live as if you were to die tomorrow. Learn as if you were to live forever."',

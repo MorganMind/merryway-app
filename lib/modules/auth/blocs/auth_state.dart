@@ -13,11 +13,9 @@ class AuthLoading extends AuthState {}
 class Authenticated extends AuthState {
   final String userId;
   final UserData userData;
+  final bool isDataFresh;
 
-  Authenticated(this.userId, this.userData);
-
-  @override
-  List<Object?> get props => [userId, userData];
+  Authenticated(this.userId, this.userData, {this.isDataFresh = true});
 }
 
 class Unauthenticated extends AuthState {}

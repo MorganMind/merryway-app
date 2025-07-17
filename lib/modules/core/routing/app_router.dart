@@ -7,17 +7,21 @@ import 'package:app/modules/core/di/service_locator.dart';
 import 'package:app/modules/core/routing/router_observer.dart';
 import 'package:app/modules/core/ui/pages/main_layout.dart';
 import 'package:app/modules/core/routing/router_refresh_stream_group.dart';
+import 'package:app/modules/core/ui/widgets/fullscreen_loader.dart';
 import 'package:app/modules/home/pages/home_layout.dart';
 import 'package:app/modules/home/pages/home_page.dart';
 import 'package:app/modules/user/repositories/user_settings_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app/modules/onboarding/pages/onboarding_page.dart';
 import 'package:app/modules/settings/pages/settings_layout.dart';
 import 'package:app/modules/settings/pages/about_you_page.dart';
 import 'package:app/modules/settings/pages/appearance_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppRouter {
+
+  static final SharedPreferences _prefs = sl<SharedPreferences>();
+
   static GoRouter setupRouter(BuildContext context) {
     final authBloc = sl<AuthBloc>();
     final settings = sl<UserSettingsRepository>();
@@ -27,7 +31,7 @@ class AppRouter {
 
     return GoRouter(
       debugLogDiagnostics: false,
-      initialLocation: '/login',
+      initialLocation: '/',
       observers: [RouterObserver()],
       // Only refresh on auth changes, org changes, or initial settings load
       refreshListenable: GoRouterRefreshStreamGroup([
@@ -36,59 +40,67 @@ class AppRouter {
       ]),
       redirect: (context, state) {
         final authState = authBloc.state;
-        final currentPath = state.uri.toString();
-        final currentSettings = settings.currentSettings;
+        final currentPath = state.uri.path;
         
-        print('Router Redirect - Current URI: $currentPath');
-
-        // Don't redirect while loading or checking initial session
-        if (authState is AuthLoading) {
-          return null;
+        // Always allow splash screen to show while loading
+        if (currentPath == '/') {
+          if (authState is AuthLoading || authState is AuthInitial) {
+            return null; // Stay on splash screen
+          } else if (authState is Authenticated) {
+            final deepLink = _getStoredDeepLink();
+            if (deepLink != null && deepLink.isNotEmpty) {
+              _clearStoredDeepLink();
+              return deepLink;
+            }
+            return '/home';
+          } else {
+            return '/login';
+          }
+        }
+        
+        // Store deep link attempts during loading
+        if ((authState is AuthLoading || authState is AuthInitial) && 
+            currentPath != '/' && 
+            !currentPath.startsWith('/login') && 
+            !currentPath.startsWith('/signup')) {
+          _storeDeepLink(currentPath);
+          return '/'; // Redirect to splash screen
         }
 
-        // Handle authenticated state
+        // Handle authenticated users
         if (authState is Authenticated) {
-
-          // TODO: Always redirect to onboarding if not completed
-          // if (!authState.userData.onboardingCompleted && !currentPath.startsWith('/join')) {
-          //   if (currentPath != '/start') {
-          //     print('Router Redirect - Redirecting to onboarding');
-          //     return '/start';
-          //   }
-          //   return null;
-          // }
-
-          // If onboarding is complete and user is on auth or onboarding pages, 
-          // redirect to default agent view
-          if (currentPath.startsWith('/login') || 
-              currentPath.startsWith('/signup') || 
-              currentPath.startsWith('/start') ||
-              currentPath.startsWith('/home')) {
-
-            print('Router Redirect - Redirecting to main view');
+          if (currentPath.startsWith('/login') || currentPath.startsWith('/signup')) {
+            final deepLink = _getStoredDeepLink();
+            if (deepLink != null && deepLink.isNotEmpty) {
+              _clearStoredDeepLink();
+              return deepLink;
+            }
             return '/home';
           }
-
-          return null;
+          return null; // Allow authenticated users to access their routes
         }
 
-        // Handle unauthenticated state
-        if (authState is Unauthenticated || authState is AuthInitial) {
-          // Allow access to login and signup pages
-          if (currentPath.startsWith('/login') || 
-              currentPath.startsWith('/signup') || 
-              currentPath.startsWith('/join')) {
-            return null;
+        // Handle unauthenticated users
+        if (authState is Unauthenticated) {
+          if (currentPath.startsWith('/login') || currentPath.startsWith('/signup')) {
+            return null; // Allow access to auth pages
           }
           
-          // Redirect all other paths to login
-          print('Router Redirect - Unauthenticated, redirecting to login');
+          // Store attempted path and redirect to login
+          if (!currentPath.startsWith('/join') && currentPath != '/') {
+            _storeDeepLink(currentPath);
+          }
           return '/login';
         }
 
         return null;
       },
       routes: [
+        // Root/Splash route
+        GoRoute(
+          path: '/',
+          builder: (context, state) => FullscreenLoader(),
+        ),
         // Auth routes (no shell)
         GoRoute(
           path: '/login/:code',
@@ -161,14 +173,6 @@ class AppRouter {
                 GoRoute(
                   path: '/home',
                   builder: (context, state) => HomePage(),
-                  // routes: [
-                  //   GoRoute(
-                  //     path: ':sourceId',
-                  //     builder: (context, state) => SourceDetailsPage(
-                  //       sourceId: state.pathParameters['sourceId']!,
-                  //     ),
-                  //   ),
-                  // ],
                 ),
               ],
             ),
@@ -187,30 +191,6 @@ class AppRouter {
                       path: '/about-you',
                       builder: (context, state) => const AboutYouPage(),
                     ),
-                    // GoRoute(
-                    //   path: '/preferences',
-                    //   builder: (context, state) => const PreferencesPage(),
-                    // ),
-                    // GoRoute(
-                    //   path: '/groups',
-                    //   builder: (context, state) => const GroupsPage(),
-                    // ),
-                    // GoRoute(
-                    //   path: '/notifications',
-                    //   builder: (context, state) => const NotificationsPage(),
-                    // ),
-                    // GoRoute(
-                    //   path: '/integrations',
-                    //   builder: (context, state) => const IntegrationsPage(),
-                    // ),
-                    // GoRoute(
-                    //   path: '/billing',
-                    //   builder: (context, state) => const BillingPage(),
-                    // ),
-                    // GoRoute(
-                    //   path: '/security',
-                    //   builder: (context, state) => const SecurityPage(),
-                    // ),
                     GoRoute(
                       path: '/appearance',
                       builder: (context, state) => const AppearancePage(),
@@ -224,5 +204,18 @@ class AppRouter {
         ),
       ],
     );
+  }
+
+  // Deep link storage methods
+  static void _storeDeepLink(String path) {
+    _prefs.setString('deep_link', path);
+  }
+  
+  static String? _getStoredDeepLink() {
+    return _prefs.getString('deep_link');
+  }
+  
+  static void _clearStoredDeepLink() {
+    _prefs.remove('deep_link');
   }
 }

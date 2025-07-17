@@ -34,12 +34,12 @@ class Environment {
   // Add other environment-specific configurations
   static String get supabaseUrl => const String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: 'https://sjajyqbqwoffvazwvwva.supabase.co',
+    defaultValue: 'https://live-wired-fox.ngrok-free.app',
   );
 
   static String get supabaseAnonKey => const String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqYWp5cWJxd29mZnZhend2d3ZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzNDY5NjUsImV4cCI6MjA1NzkyMjk2NX0.RHlNlN-lxx1CM0YvWnde9lcJ8FvDDVdJ1mWyVHSN5t0',
+    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzQ1NDY3MjAwLCJleHAiOjE5MDMyMzM2MDB9.nJIBddnuSoAuyDW_4dZl0MaX41Gnvn__3EHySRVziZI',
   );
 
   static String get appUrl {

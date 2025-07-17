@@ -13,12 +13,16 @@ import 'package:app/modules/auth/services/auth_state_listener.dart';
 import 'package:app/modules/core/services/upload/i_upload_service.dart';
 import 'package:app/modules/core/services/upload/upload_service.dart';
 import 'package:app/modules/settings/blocs/settings_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
   // Core
   sl.registerSingleton<SupabaseClient>(Supabase.instance.client);
+  sl.registerSingleton<SharedPreferences>(
+    await SharedPreferences.getInstance()
+  );
   
   // Services
   sl.registerLazySingleton<IApiService>(() => ApiService());

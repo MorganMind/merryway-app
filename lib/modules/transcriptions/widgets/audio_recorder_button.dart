@@ -1,5 +1,5 @@
-import 'package:app/modules/chat/services/audio_recorder_service.dart';
-import 'package:app/modules/chat/services/transcription_service.dart';
+import 'package:app/modules/transcriptions/services/audio_recorder_service.dart';
+import 'package:app/modules/transcriptions/services/transcription_service.dart';
 import 'package:app/modules/core/theme/theme_extension.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

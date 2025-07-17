@@ -63,6 +63,7 @@ dependencies:
   cross_file: ^0.3.4+2
   dio: ^5.7.0
   watch_it: ^1.6.2
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

@@ -37,6 +37,20 @@ class UserData extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'first_name': firstName,
+      'last_name': lastName,
+      'full_name': fullName,
+      'created_at': createdAt?.toIso8601String(),
+      'onboarding_completed': onboardingCompleted,
+      'analytics_id': analyticsId,
+      'avatar_url': avatarUrl,
+    };
+  }
+
   static const empty = UserData(id: '', email: '', onboardingCompleted: false);
 
   @override
