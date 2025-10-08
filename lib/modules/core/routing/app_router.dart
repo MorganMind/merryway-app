@@ -16,6 +16,9 @@ import 'package:go_router/go_router.dart';
 import 'package:app/modules/settings/pages/settings_layout.dart';
 import 'package:app/modules/settings/pages/about_you_page.dart';
 import 'package:app/modules/settings/pages/appearance_page.dart';
+import 'package:app/modules/memberships/screens/membership_home_screen.dart';
+import 'package:app/modules/memberships/screens/subscribe_screen.dart';
+import 'package:app/modules/memberships/screens/checkout_return_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppRouter {
@@ -197,6 +200,39 @@ class AppRouter {
                     ),
 
                   ]
+                ),
+              ],
+            ),
+
+            // Membership routes (nested shell)
+            ShellRoute(
+              builder: (context, state, child) {
+                return SettingsLayout(child: child);
+              },
+              routes: [
+                GoRoute(
+                  path: '/membership',
+                  builder: (context, state) {
+                    final shouldRefresh = state.queryParameters['refresh'] == 'true';
+                    return MembershipHomeScreen(key: shouldRefresh ? UniqueKey() : null);
+                  },
+                  routes: [
+                    GoRoute(
+                      path: '/subscribe',
+                      builder: (context, state) => const SubscribeScreen(),
+                    ),
+                    GoRoute(
+                      path: '/success',
+                      builder: (context, state) {
+                        final sessionId = state.queryParameters['session_id'];
+                        return CheckoutReturnScreen(status: 'success', sessionId: sessionId);
+                      },
+                    ),
+                    GoRoute(
+                      path: '/cancel',
+                      builder: (context, state) => const CheckoutReturnScreen(status: 'cancel'),
+                    ),
+                  ],
                 ),
               ],
             ),
