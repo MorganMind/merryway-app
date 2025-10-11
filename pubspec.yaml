@@ -1,5 +1,5 @@
-name: iact_app
-description: "Morgan"
+name: merryway
+description: "Merryway"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -125,13 +125,13 @@ flutter:
 flavors:
   development:
     app:
-      name: "iact-app Dev"
+      name: "Merryway Dev"
       target: lib/main_development.dart
   staging:
     app:
-      name: "iact-app Staging"
+      name: "Merryway Staging"
       target: lib/main_staging.dart
   production:
     app:
-      name: "iact-app"
+      name: "Merryway"
       target: lib/main_production.dart
