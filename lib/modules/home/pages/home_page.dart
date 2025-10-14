@@ -1194,9 +1194,7 @@ class _HomePageState extends State<HomePage> {
                         
                         // Greeting + Pod Row (horizontal)
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: RedesignTokens.getGutter(MediaQuery.of(context).size.width),
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(
                             children: [
                               // Family Avatar
@@ -1268,9 +1266,7 @@ class _HomePageState extends State<HomePage> {
                         // Pod Filter (inline, no background)
                         if (pods.isNotEmpty)
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: RedesignTokens.getGutter(MediaQuery.of(context).size.width),
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -1426,9 +1422,7 @@ class _HomePageState extends State<HomePage> {
                         // Smart suggestion section
                         if (showSmartSuggestion && smartSuggestionData != null)
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: RedesignTokens.getGutter(MediaQuery.of(context).size.width),
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: SmartSuggestionCard(
                               activityTitle: smartSuggestionData!['activity']?['activity'] ?? 'Activity',
                               rationale: smartSuggestionData!['activity']?['rationale'] ?? '',
@@ -1451,9 +1445,7 @@ class _HomePageState extends State<HomePage> {
                         // AI suggestions loading banner
                         if (isLoadingAISuggestions)
                           Container(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: RedesignTokens.getGutter(MediaQuery.of(context).size.width),
-                            ),
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
                             padding: const EdgeInsets.all(RedesignTokens.space24),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -1622,7 +1614,8 @@ class _HomePageState extends State<HomePage> {
                                           },
                                           memberFeedback: currentMemberId != null ? () {
                                             final activityKey = suggestion.activity.toLowerCase().trim();
-                                            return _suggestionFeedback[activityKey];
+                                            final feedback = _suggestionFeedback[activityKey];
+                                            return feedback != null ? {currentMemberId!: feedback} : null;
                                           }() : null,
                                           onFeedback: (feedbackType) {
                                             if (currentMemberId != null) {
@@ -1768,10 +1761,10 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 memberFeedback: currentMemberId != null ? () {
                                   final activityKey = suggestion.activity.toLowerCase().trim();
-                                  final feedback = _suggestionFeedback[activityKey] ?? 'neutral';
+                                  final feedback = _suggestionFeedback[activityKey];
                                   debugPrint('🔍 Looking up feedback for "$activityKey": $feedback');
-                                  return {currentMemberId!: feedback};
-                                }() : {},
+                                  return feedback != null ? {currentMemberId!: feedback} : null;
+                                }() : null,
                                 onFeedback: (action) async {
                                   // Save feedback to database
                                   if (householdId != null && currentMemberId != null) {
@@ -1879,7 +1872,7 @@ class _HomePageState extends State<HomePage> {
           
           // Bottom Composer (sticky at bottom)
           Positioned(
-            bottom: 0,
+            bottom: MediaQuery.of(context).size.width < 900 ? 80 : 0, // Attach to nav bar on mobile
             left: 0,
             right: 0,
             child: BottomComposer(
