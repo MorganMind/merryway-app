@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../family/models/family_models.dart';
-import '../../core/theme/theme_colors.dart';
-import '../../core/theme/merryway_theme.dart';
+import '../../core/theme/redesign_tokens.dart';
 
 class SmartSuggestionCard extends StatelessWidget {
   final String activityTitle;

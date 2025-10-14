@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../../family/models/family_models.dart';
 import '../../core/theme/merryway_theme.dart';
+import '../../core/theme/redesign_tokens.dart';
 import 'participant_selector.dart';
 import 'idea_voting_widget.dart';
 
