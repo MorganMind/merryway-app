@@ -1501,9 +1501,11 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                     // Show loading indicator if not complete
                                     if (!state.isComplete)
-                                      Container(
-                                        margin: const EdgeInsets.only(bottom: 16),
-                                        padding: const EdgeInsets.all(16),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                                        child: Container(
+                                          margin: const EdgeInsets.only(bottom: 16),
+                                          padding: const EdgeInsets.all(16),
                                         decoration: BoxDecoration(
                                           color: RedesignTokens.accentGold.withOpacity(0.1),
                                           borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
@@ -1534,6 +1536,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ],
                                         ),
+                                      ),
                                       ),
                                     
                                     // Show suggestions as they come in
