@@ -1663,7 +1663,8 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     );
                                   }).toList(),
-                                ],
+                                  ],
+                                ),
                               );
                             }
 
@@ -1836,7 +1837,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                                 }).toList(),
-                              );
+                                ],
+                              ),
+                            );
                             }
 
                             return const SizedBox.shrink();
