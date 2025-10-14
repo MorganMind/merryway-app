@@ -234,7 +234,7 @@ class _BottomComposerState extends State<BottomComposer> {
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
                   decoration: InputDecoration(
-                    hintText: 'What are you thinking?',
+                    hintText: 'What are you thinking about doing?',
                     hintStyle: RedesignTokens.body.copyWith(
                       color: RedesignTokens.mutedText.withOpacity(0.4),
                     ),
