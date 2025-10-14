@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/redesign_tokens.dart';
 
 class SimpleLoginPage extends StatefulWidget {
@@ -68,7 +69,7 @@ class _SimpleLoginPageState extends State<SimpleLoginPage> {
     try {
       await Supabase.instance.client.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: 'https://merryway.app/auth/callback',
+        redirectTo: 'http://localhost:8686',
       );
     } catch (e) {
       setState(() {
@@ -190,24 +191,11 @@ class _SimpleLoginPageState extends State<SimpleLoginPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Google icon (using Unicode G for now)
-                          Container(
+                          // Google logo
+                          SvgPicture.asset(
+                            'assets/img/google.svg',
                             width: 20,
                             height: 20,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'G',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF4285F4), // Google blue
-                                ),
-                              ),
-                            ),
                           ),
                           const SizedBox(width: 12),
                           Text(
