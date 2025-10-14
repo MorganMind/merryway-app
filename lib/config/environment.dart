@@ -39,7 +39,7 @@ class Environment {
         return 'http://localhost:8686';
       
       case BuildFlavor.production:
-        return 'http://localhost:8686';
+        return 'https://merryway.onrender.com';  // Production URL
     }
   }
 

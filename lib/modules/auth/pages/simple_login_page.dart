@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/redesign_tokens.dart';
+import '../../config/environment.dart';
 
 class SimpleLoginPage extends StatefulWidget {
   const SimpleLoginPage({super.key});
@@ -69,7 +70,7 @@ class _SimpleLoginPageState extends State<SimpleLoginPage> {
     try {
       await Supabase.instance.client.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: 'http://localhost:8686',
+        redirectTo: Environment.appUrl,
       );
     } catch (e) {
       setState(() {
