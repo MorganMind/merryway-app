@@ -14,9 +14,10 @@ import 'package:merryway/modules/ideas/pages/my_ideas_page.dart';
 import 'package:merryway/modules/ideas/pages/idea_detail_page.dart';
 import 'package:merryway/modules/ideas/widgets/idea_composer.dart';
 import 'package:merryway/modules/plans/screens/plans_list_screen.dart';
+import 'package:merryway/modules/auth/pages/simple_login_page.dart';
 
 // Phase 1 Auth Pages
-class LoginPage extends StatefulWidget {
+class OldLoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
@@ -293,7 +294,7 @@ class AppRouter {
         // Auth pages
         GoRoute(
           path: '/login',
-          builder: (context, state) => const LoginPage(),
+          builder: (context, state) => const SimpleLoginPage(),
         ),
         GoRoute(
           path: '/signup',

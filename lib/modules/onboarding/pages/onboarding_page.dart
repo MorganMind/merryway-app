@@ -248,24 +248,26 @@ class _OnboardingPageState extends State<OnboardingPage> {
           const SizedBox(height: 24),
           Text(
             'Welcome to Merryway',
-            style: Theme.of(context).textTheme.displayMedium,
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              color: RedesignTokens.ink,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
           Text(
             'Your family\'s personal guide to making the most of your time together.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: MerryWayTheme.textMuted,
+                  color: RedesignTokens.slate,
                 ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
           TextField(
             controller: householdNameController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'What should we call your family?',
-              hintStyle: TextStyle(color: Color(0xFFCCCCCC)),
-              prefixIcon: Icon(Icons.home_rounded, color: MerryWayTheme.primarySoftBlue),
+              hintStyle: TextStyle(color: RedesignTokens.slate),
+              prefixIcon: Icon(Icons.home_rounded, color: RedesignTokens.primary),
             ),
             style: Theme.of(context).textTheme.bodyLarge,
           ),
@@ -284,10 +286,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 onPressed: () {
                   householdNameController.text = suggestion;
                 },
-                backgroundColor: RedesignTokens.accentSage.withOpacity(0.2),
-                labelStyle: const TextStyle(
+                backgroundColor: RedesignTokens.primary.withOpacity(0.1),
+                labelStyle: TextStyle(
                   fontSize: 12,
-                  color: MerryWayTheme.textDark,
+                  color: RedesignTokens.ink,
                 ),
               );
             }).toList(),
@@ -328,13 +330,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
           const SizedBox(height: 24),
           Text(
             'Who\'s in the family?',
-            style: Theme.of(context).textTheme.displaySmall,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+              color: RedesignTokens.ink,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'Tell us about the wonderful people who make your home special',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: MerryWayTheme.textMuted,
+                  color: RedesignTokens.slate,
                 ),
             textAlign: TextAlign.center,
           ),
@@ -348,18 +352,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         Icon(
                           Icons.people_outline_rounded,
                           size: 80,
-                          color: MerryWayTheme.primarySoftBlue.withOpacity(0.3),
+                          color: RedesignTokens.primary.withOpacity(0.3),
                         ),
                         const SizedBox(height: 16),
                         Text(
                           'No family members yet',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: RedesignTokens.ink,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Tap the button below to add someone special! 💫',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: MerryWayTheme.textMuted,
+                                color: RedesignTokens.slate,
                               ),
                         ),
                       ],
@@ -380,7 +386,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               label: const Text('Add Family Member'),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                side: const BorderSide(color: MerryWayTheme.primarySoftBlue, width: 2),
+                side: BorderSide(color: RedesignTokens.primary, width: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -528,8 +534,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       }
                     });
                   },
-                  selectedColor: RedesignTokens.accentSage.withOpacity(0.3),
-                  checkmarkColor: MerryWayTheme.primarySoftBlue,
+                  selectedColor: RedesignTokens.primary.withOpacity(0.15),
+                  checkmarkColor: RedesignTokens.primary,
                 );
               }).toList(),
             ),
@@ -552,13 +558,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
           const SizedBox(height: 16),
           Text(
             'Ready to begin?',
-            style: Theme.of(context).textTheme.displaySmall,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+              color: RedesignTokens.ink,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'Here\'s your beautiful family',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: MerryWayTheme.textMuted,
+                  color: RedesignTokens.slate,
                 ),
           ),
           const SizedBox(height: 32),
@@ -570,12 +578,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.home_rounded, color: MerryWayTheme.primarySoftBlue),
+                      Icon(Icons.home_rounded, color: RedesignTokens.primary),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           householdNameController.text,
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: RedesignTokens.ink,
+                          ),
                         ),
                       ),
                     ],
@@ -590,13 +600,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+                                color: RedesignTokens.primary.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.person,
                                 size: 20,
-                                color: MerryWayTheme.primarySoftBlue,
+                                color: RedesignTokens.primary,
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -608,12 +618,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                     member.name,
                                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                           fontWeight: FontWeight.w600,
+                                          color: RedesignTokens.ink,
                                         ),
                                   ),
                                   Text(
                                     '${member.age} years • ${_capitalize(member.role.name)}',
                                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: MerryWayTheme.textMuted,
+                                          color: RedesignTokens.slate,
                                         ),
                                   ),
                                 ],
