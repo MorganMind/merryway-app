@@ -66,6 +66,27 @@ class GetSuggestionsEvent extends FamilyEvent {
   List<Object?> get props => [householdId, weather, timeOfDay, dayOfWeek, customPrompt, participants];
 }
 
+class GetProgressiveSuggestionsEvent extends FamilyEvent {
+  final String householdId;
+  final String weather;
+  final String timeOfDay;
+  final String dayOfWeek;
+  final String? customPrompt;
+  final List<String>? participants;
+
+  const GetProgressiveSuggestionsEvent({
+    required this.householdId,
+    required this.weather,
+    required this.timeOfDay,
+    required this.dayOfWeek,
+    this.customPrompt,
+    this.participants,
+  });
+
+  @override
+  List<Object?> get props => [householdId, weather, timeOfDay, dayOfWeek, customPrompt, participants];
+}
+
 // States
 abstract class FamilyState extends Equatable {
   const FamilyState();
@@ -109,6 +130,18 @@ class SuggestionsLoaded extends FamilyState {
   List<Object?> get props => [suggestions];
 }
 
+class ProgressiveSuggestionsLoading extends FamilyState {
+  final List<ActivitySuggestion> suggestions;
+  final bool isComplete;
+  const ProgressiveSuggestionsLoading({
+    required this.suggestions,
+    this.isComplete = false,
+  });
+
+  @override
+  List<Object?> get props => [suggestions, isComplete];
+}
+
 class FamilyError extends FamilyState {
   final String message;
   const FamilyError(this.message);
@@ -126,6 +159,7 @@ class FamilyBloc extends Bloc<FamilyEvent, FamilyState> {
     on<FetchHouseholdEvent>(_onFetchHousehold);
     on<AddMemberEvent>(_onAddMember);
     on<GetSuggestionsEvent>(_onGetSuggestions);
+    on<GetProgressiveSuggestionsEvent>(_onGetProgressiveSuggestions);
   }
 
   Future<void> _onCreateHousehold(
@@ -192,6 +226,35 @@ class FamilyBloc extends Bloc<FamilyEvent, FamilyState> {
         participants: event.participants,
       );
       emit(SuggestionsLoaded(suggestions));
+    } catch (e) {
+      emit(FamilyError(e.toString()));
+    }
+  }
+
+  Future<void> _onGetProgressiveSuggestions(
+    GetProgressiveSuggestionsEvent event,
+    Emitter<FamilyState> emit,
+  ) async {
+    emit(ProgressiveSuggestionsLoading(suggestions: []));
+    try {
+      final suggestions = await repository.getSuggestions(
+        householdId: event.householdId,
+        weather: event.weather,
+        timeOfDay: event.timeOfDay,
+        dayOfWeek: event.dayOfWeek,
+        customPrompt: event.customPrompt,
+        participants: event.participants,
+      );
+      
+      // Emit suggestions progressively
+      final allSuggestions = suggestions.suggestions;
+      for (int i = 0; i < allSuggestions.length; i++) {
+        await Future.delayed(const Duration(milliseconds: 300)); // Small delay between suggestions
+        emit(ProgressiveSuggestionsLoading(
+          suggestions: allSuggestions.take(i + 1).toList(),
+          isComplete: i == allSuggestions.length - 1,
+        ));
+      }
     } catch (e) {
       emit(FamilyError(e.toString()));
     }

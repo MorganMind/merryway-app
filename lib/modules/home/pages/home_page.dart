@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
           debugPrint('Error fetching pod-aware suggestions: $e');
           // Fallback to regular endpoint
           context.read<FamilyBloc>().add(
-            GetSuggestionsEvent(
+            GetProgressiveSuggestionsEvent(
               householdId: householdId!,
               weather: weather,
               timeOfDay: timeOfDay,
@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
       } else {
         // Use regular endpoint when no pod is selected
         context.read<FamilyBloc>().add(
-          GetSuggestionsEvent(
+          GetProgressiveSuggestionsEvent(
             householdId: householdId!,
             weather: weather,
             timeOfDay: timeOfDay,
@@ -1498,6 +1498,177 @@ class _HomePageState extends State<HomePage> {
                                 child: GentleLoadingIndicator(
                                   message: 'Finding wonderful ideas...',
                                 ),
+                              );
+                            }
+
+                            if (state is ProgressiveSuggestionsLoading) {
+                              // Show progressive suggestions as they load
+                              final suggestions = state.suggestions;
+                              
+                              return Column(
+                                children: [
+                                  // Show loading indicator if not complete
+                                  if (!state.isComplete)
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 16),
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: RedesignTokens.accentGold.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
+                                        border: Border.all(
+                                          color: RedesignTokens.accentGold.withOpacity(0.3),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                RedesignTokens.accentGold,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Text(
+                                            'Finding more wonderful ideas...',
+                                            style: GoogleFonts.spaceGrotesk(
+                                              fontSize: 14,
+                                              color: RedesignTokens.ink,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  
+                                  // Show suggestions as they come in
+                                  ...suggestions.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final suggestion = entry.value;
+                                    
+                                    return AnimatedListItem(
+                                      index: index,
+                                      delay: const Duration(milliseconds: 80),
+                                      child: WhimsicalCard(
+                                        hoverScale: 1.005,
+                                        child: SimplifiedSuggestionCard(
+                                          title: suggestion.activity,
+                                          rationale: suggestion.rationale,
+                                          durationMinutes: suggestion.durationMinutes,
+                                          tags: suggestion.tags,
+                                          location: suggestion.location,
+                                          distanceMiles: suggestion.distanceMiles,
+                                          venueType: suggestion.venueType,
+                                          participants: isAllMode 
+                                              ? familyMembers
+                                              : familyMembers
+                                                  .where((m) => selectedParticipants.contains(m.id))
+                                                  .toList(),
+                                          podName: pods.firstWhere(
+                                            (p) => p.id == selectedPodId,
+                                            orElse: () => Pod(
+                                              id: '',
+                                              householdId: '',
+                                              name: isAllMode ? 'All' : 'Everyone',
+                                              memberIds: [],
+                                            ),
+                                          ).name,
+                                          onTap: () {
+                                            final currentParticipants = isAllMode 
+                                                ? familyMembers
+                                                : familyMembers
+                                                    .where((m) => selectedParticipants.contains(m.id))
+                                                    .toList();
+                                            
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) => IdeaCardDetailModal(
+                                                  title: suggestion.activity,
+                                                  rationale: suggestion.rationale,
+                                                  durationMinutes: suggestion.durationMinutes,
+                                                  tags: suggestion.tags,
+                                                  location: suggestion.location,
+                                                  distanceMiles: suggestion.distanceMiles,
+                                                  venueType: suggestion.venueType,
+                                                  participants: currentParticipants,
+                                                  description: suggestion.description ?? 
+                                                      'This is a family-friendly activity perfect for all ages. Expect to spend quality time together with plenty of smiles and laughter. The atmosphere is welcoming and there are facilities nearby.',
+                                                  onMakeExperience: () {
+                                                    final participantIds = currentParticipants
+                                                        .map((m) => m.id ?? '')
+                                                        .where((id) => id.isNotEmpty)
+                                                        .toList();
+                                                    Navigator.pop(context);
+                                                    _showCreateExperienceSheet(suggestion, participantIds: participantIds);
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          onMakeExperience: (activeParticipantIds) => _showCreateExperienceSheet(suggestion, participantIds: activeParticipantIds),
+                                          onParticipantToggle: (memberId, included) {
+                                            setState(() {
+                                              if (included) {
+                                                if (!selectedParticipants.contains(memberId)) {
+                                                  selectedParticipants.add(memberId);
+                                                }
+                                              } else {
+                                                selectedParticipants.remove(memberId);
+                                              }
+                                            });
+                                          },
+                                          memberFeedback: currentMemberId != null ? () {
+                                            final activityKey = suggestion.activity.toLowerCase().trim();
+                                            return _suggestionFeedback[activityKey];
+                                          }() : null,
+                                          onFeedback: (feedbackType) {
+                                            if (currentMemberId != null) {
+                                              SuggestionFeedbackService.saveFeedback(
+                                                householdId: householdId!,
+                                                memberId: currentMemberId!,
+                                                activityName: suggestion.activity,
+                                                feedbackType: feedbackType,
+                                              );
+                                              
+                                              setState(() {
+                                                final activityKey = suggestion.activity.toLowerCase().trim();
+                                                _suggestionFeedback[activityKey] = feedbackType;
+                                              });
+                                            }
+                                          },
+                                          onWhyThis: () {
+                                            final currentParticipants = isAllMode 
+                                                ? familyMembers
+                                                : familyMembers
+                                                    .where((m) => selectedParticipants.contains(m.id))
+                                                    .toList();
+                                            
+                                            final participantIds = currentParticipants
+                                                .map((m) => m.id ?? '')
+                                                .where((id) => id.isNotEmpty)
+                                                .toList();
+                                            
+                                            showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              backgroundColor: Colors.transparent,
+                                              builder: (context) => WhyThisSheet(
+                                                suggestion: suggestion,
+                                                allMembers: familyMembers,
+                                                activeParticipantIds: participantIds,
+                                                currentMemberId: currentMemberId ?? '',
+                                                householdId: householdId ?? '',
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ],
                               );
                             }
 
