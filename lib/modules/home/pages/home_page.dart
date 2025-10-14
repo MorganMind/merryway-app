@@ -1497,47 +1497,49 @@ class _HomePageState extends State<HomePage> {
                               // Show progressive suggestions as they load
                               final suggestions = state.suggestions;
                               
-                              return Column(
-                                children: [
-                                  // Show loading indicator if not complete
-                                  if (!state.isComplete)
-                                    Container(
-                                      margin: const EdgeInsets.only(bottom: 16),
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        color: RedesignTokens.accentGold.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
-                                        border: Border.all(
-                                          color: RedesignTokens.accentGold.withOpacity(0.3),
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    // Show loading indicator if not complete
+                                    if (!state.isComplete)
+                                      Container(
+                                        margin: const EdgeInsets.only(bottom: 16),
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: RedesignTokens.accentGold.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
+                                          border: Border.all(
+                                            color: RedesignTokens.accentGold.withOpacity(0.3),
+                                          ),
                                         ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 20,
-                                            height: 20,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              valueColor: AlwaysStoppedAnimation<Color>(
-                                                RedesignTokens.accentGold,
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor: AlwaysStoppedAnimation<Color>(
+                                                  RedesignTokens.accentGold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Text(
-                                            'Finding more wonderful ideas...',
-                                            style: GoogleFonts.spaceGrotesk(
-                                              fontSize: 14,
-                                              color: RedesignTokens.ink,
-                                              fontWeight: FontWeight.w500,
+                                            const SizedBox(width: 12),
+                                            Text(
+                                              'Finding more wonderful ideas...',
+                                              style: GoogleFonts.spaceGrotesk(
+                                                fontSize: 14,
+                                                color: RedesignTokens.ink,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  
-                                  // Show suggestions as they come in
-                                  ...suggestions.asMap().entries.map((entry) {
+                                    
+                                    // Show suggestions as they come in
+                                    ...suggestions.asMap().entries.map((entry) {
                                     final index = entry.key;
                                     final suggestion = entry.value;
                                     
@@ -1680,8 +1682,10 @@ class _HomePageState extends State<HomePage> {
                                 ...uniqueSavedSuggestions, // Then unique saved AI suggestions
                               ];
                               
-                              return Column(
-                                children: allSuggestions.asMap().entries.map((entry) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  children: allSuggestions.asMap().entries.map((entry) {
                                   final index = entry.key;
                                   final suggestion = entry.value;
                                   
