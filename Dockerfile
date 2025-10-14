@@ -27,7 +27,7 @@ RUN echo "SUPABASE_URL=$SUPABASE_URL" > .env && \
 RUN flutter pub get
 
 # Build the web app
-RUN flutter build web --release --web-renderer canvaskit
+RUN flutter build web --release
 
 # Use nginx to serve the built web app
 FROM nginx:alpine
