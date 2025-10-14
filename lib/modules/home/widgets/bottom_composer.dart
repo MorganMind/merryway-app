@@ -209,66 +209,51 @@ class _BottomComposerState extends State<BottomComposer> {
             isDesktop ? RedesignTokens.space16 : 0,
             isDesktop ? MediaQuery.of(context).padding.bottom + RedesignTokens.space16 : 0,
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: RedesignTokens.space12,
-            vertical: RedesignTokens.space12,
-          ),
-          decoration: BoxDecoration(
-            color: RedesignTokens.cardSurface,
-            borderRadius: isDesktop ? BorderRadius.circular(RedesignTokens.radiusCard) : null,
-            boxShadow: RedesignTokens.shadowLevel2,
-            border: _focusNode.hasFocus
-                ? Border.all(color: RedesignTokens.accentGold, width: 2)
-                : null,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // Text field
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  maxLines: null,
-                  minLines: 1,
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  decoration: InputDecoration(
-                    hintText: 'What are you thinking about doing?',
-                    hintStyle: RedesignTokens.body.copyWith(
-                      color: RedesignTokens.mutedText.withOpacity(0.4),
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: RedesignTokens.space8,
-                      vertical: RedesignTokens.space8,
-                    ),
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            maxLines: null,
+            minLines: 1,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            decoration: InputDecoration(
+              hintText: 'What are you thinking about doing?',
+              hintStyle: RedesignTokens.body.copyWith(
+                color: RedesignTokens.mutedText.withOpacity(0.4),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24), // More rounded corners
+                borderSide: BorderSide(color: RedesignTokens.divider),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+                borderSide: BorderSide(color: RedesignTokens.divider),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+                borderSide: BorderSide(color: RedesignTokens.accentGold, width: 2),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: RedesignTokens.space16,
+                vertical: RedesignTokens.space12,
+              ),
+              suffixIcon: hasText 
+                ? _buildAccessoryButton(
+                    icon: _isSending ? Icons.hourglass_empty : Icons.send,
+                    onPressed: _isSending ? null : _handleSubmit,
+                    color: RedesignTokens.accentGold,
+                    isInsideField: true,
+                  )
+                : _buildAccessoryButton(
+                    icon: widget.isRecording ? Icons.stop : Icons.mic,
+                    onPressed: widget.isRecording ? widget.onVoiceStop : widget.onVoiceStart,
+                    color: widget.isRecording ? RedesignTokens.dangerColor : RedesignTokens.slate,
+                    isInsideField: true,
                   ),
-                  style: RedesignTokens.body,
-                  onSubmitted: (_) => _handleSubmit(),
-                  onChanged: (_) => setState(() {}),
-                ),
-              ),
-              
-              const SizedBox(width: RedesignTokens.space8),
-              
-              // Mic button (moved to right side)
-              _buildAccessoryButton(
-                icon: widget.isRecording ? Icons.stop : Icons.mic,
-                onPressed: widget.isRecording ? widget.onVoiceStop : widget.onVoiceStart,
-                color: widget.isRecording ? RedesignTokens.dangerColor : RedesignTokens.slate,
-              ),
-              
-              // Send button (appears when there's text)
-              if (hasText) ...[
-                const SizedBox(width: RedesignTokens.space8),
-                _buildAccessoryButton(
-                  icon: _isSending ? Icons.hourglass_empty : Icons.send,
-                  onPressed: _isSending ? null : _handleSubmit,
-                  color: RedesignTokens.accentGold,
-                ),
-              ],
-            ],
+            ),
+            style: RedesignTokens.body,
+            onSubmitted: (_) => _handleSubmit(),
+            onChanged: (_) => setState(() {}),
           ),
         ),
       ],
@@ -304,13 +289,20 @@ class _BottomComposerState extends State<BottomComposer> {
     required IconData icon,
     required VoidCallback? onPressed,
     required Color color,
+    bool isInsideField = false,
   }) {
     return IconButton(
-      onPressed: onPressed,
+      onPressed: onPressed != null ? () {
+        // Prevent double-click by disabling the button temporarily
+        if (_isSending) return;
+        onPressed();
+      } : null,
       icon: Icon(icon, size: 20),
       color: color,
-      padding: const EdgeInsets.all(8),
-      constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+      padding: isInsideField ? const EdgeInsets.all(4) : const EdgeInsets.all(8),
+      constraints: isInsideField 
+        ? const BoxConstraints(minWidth: 32, minHeight: 32)
+        : const BoxConstraints(minWidth: 44, minHeight: 44),
     );
   }
 
