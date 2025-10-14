@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/redesign_tokens.dart';
-import '../../config/environment.dart';
+import '../../../config/environment.dart';
 
 class SimpleLoginPage extends StatefulWidget {
   const SimpleLoginPage({super.key});
