@@ -26,8 +26,8 @@ RUN echo "SUPABASE_URL=$SUPABASE_URL" > .env && \
 # Get dependencies
 RUN flutter pub get
 
-# Build the web app
-RUN flutter build web --release
+# Build the web app (use production entry point)
+RUN flutter build web --release --target lib/main_production.dart --verbose
 
 # Use nginx to serve the built web app
 FROM nginx:alpine
