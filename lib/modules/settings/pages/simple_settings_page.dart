@@ -1840,6 +1840,40 @@ class _SimpleSettingsPageState extends State<SimpleSettingsPage> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavBar(
+        isIdeasActive: false,
+        isMomentsActive: false,
+        isPlannerActive: false,
+        isTimeActive: false,
+        onIdeas: () => context.go('/'),
+        onMoments: () {
+          if (householdId != null && familyMembers.isNotEmpty) {
+            context.push('/moments', extra: {
+              'householdId': householdId!,
+              'allMembers': familyMembers,
+            });
+          }
+        },
+        onPlanner: () {
+          if (householdId != null) {
+            context.push('/plans', extra: {
+              'householdId': householdId,
+            });
+          }
+        },
+        onTime: () {
+          if (householdId != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FamilyHealthDashboardPage(
+                  householdId: householdId!,
+                ),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 

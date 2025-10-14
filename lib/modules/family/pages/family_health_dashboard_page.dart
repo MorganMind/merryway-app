@@ -9,6 +9,7 @@ import '../../core/theme/redesign_tokens.dart';
 import '../../home/widgets/compact_header.dart';
 import '../../auth/services/user_context_service.dart';
 import '../../auth/widgets/user_switcher.dart';
+import '../../experiences/pages/moments_v2_page.dart';
 import '../../../config/environment.dart';
 
 class FamilyHealthDashboardPage extends StatefulWidget {
@@ -219,6 +220,33 @@ class _FamilyHealthDashboardPageState extends State<FamilyHealthDashboardPage>
             child: _buildContent(context),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavBar(
+        isIdeasActive: false,
+        isMomentsActive: false,
+        isPlannerActive: false,
+        isTimeActive: true,
+        onIdeas: () => Navigator.pop(context),
+        onMoments: () {
+          if (_householdId != null && _familyMembers.isNotEmpty) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MomentsV2Page(
+                  householdId: _householdId!,
+                  allMembers: _familyMembers,
+                ),
+              ),
+            );
+          }
+        },
+        onPlanner: () {
+          // Navigate to plans - you'll need to import and implement this
+          // context.push('/plans', extra: {'householdId': _householdId});
+        },
+        onTime: () {
+          // Already on Trails page
+        },
       ),
     );
   }

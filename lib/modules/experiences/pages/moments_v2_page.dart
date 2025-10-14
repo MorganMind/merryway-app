@@ -558,6 +558,31 @@ class _MomentsV2PageState extends State<MomentsV2Page> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavBar(
+        isIdeasActive: false,
+        isMomentsActive: true,
+        isPlannerActive: false,
+        isTimeActive: false,
+        onIdeas: () => context.go('/'),
+        onMoments: () {
+          // Already on moments page
+        },
+        onPlanner: () {
+          context.push('/plans', extra: {
+            'householdId': widget.householdId,
+          });
+        },
+        onTime: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FamilyHealthDashboardPage(
+                householdId: widget.householdId,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
