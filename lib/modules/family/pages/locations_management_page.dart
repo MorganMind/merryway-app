@@ -203,7 +203,7 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MerryWayTheme.softBg,
+      backgroundColor: RedesignTokens.canvas,
       appBar: AppBar(
         title: const Text('Saved Locations'),
         backgroundColor: Colors.transparent,

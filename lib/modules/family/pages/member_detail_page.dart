@@ -379,7 +379,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MerryWayTheme.softBg,
+      backgroundColor: RedesignTokens.canvas,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -18,13 +18,13 @@ import 'package:merryway/modules/auth/pages/simple_login_page.dart';
 
 // Phase 1 Auth Pages
 class OldLoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const OldLoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<OldLoginPage> createState() => _OldLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _OldLoginPageState extends State<OldLoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;

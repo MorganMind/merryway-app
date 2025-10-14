@@ -107,7 +107,7 @@ class SmartSuggestionCard extends StatelessWidget {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: MerryWayTheme.primarySoftBlue.withOpacity(0.2),
+                    color: RedesignTokens.primary.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -126,7 +126,7 @@ class SmartSuggestionCard extends StatelessWidget {
                         Text(
                           '${nearbyMembers.length} ${nearbyMembers.length == 1 ? "person" : "people"} nearby',
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: MerryWayTheme.textMuted,
+                            color: RedesignTokens.slate,
                           ),
                         ),
                     ],
@@ -140,7 +140,7 @@ class SmartSuggestionCard extends StatelessWidget {
                   activityTitle,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: MerryWayTheme.textDark,
+                    color: RedesignTokens.ink,
                   ),
                 ),
 
@@ -150,7 +150,7 @@ class SmartSuggestionCard extends StatelessWidget {
                 Text(
                   rationale,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: MerryWayTheme.textMuted,
+                    color: RedesignTokens.slate,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -164,7 +164,7 @@ class SmartSuggestionCard extends StatelessWidget {
                       Text(
                         'Who\'s nearby:',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: MerryWayTheme.textMuted,
+                          color: RedesignTokens.slate,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -174,7 +174,7 @@ class SmartSuggestionCard extends StatelessWidget {
                           height: 28,
                           margin: const EdgeInsets.only(right: 6),
                           decoration: BoxDecoration(
-                            color: MerryWayTheme.primarySoftBlue,
+                            color: RedesignTokens.primary,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Center(
@@ -217,7 +217,7 @@ class SmartSuggestionCard extends StatelessWidget {
                         child: Text(
                           reason,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: MerryWayTheme.textDark,
+                            color: RedesignTokens.ink,
                           ),
                         ),
                       ),
@@ -242,7 +242,7 @@ class SmartSuggestionCard extends StatelessWidget {
                           '🔍 Debug Info',
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: MerryWayTheme.textMuted,
+                            color: RedesignTokens.slate,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -250,21 +250,21 @@ class SmartSuggestionCard extends StatelessWidget {
                           'Signals: ${signals.join(", ")}',
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             fontSize: 10,
-                            color: MerryWayTheme.textMuted,
+                            color: RedesignTokens.slate,
                           ),
                         ),
                         Text(
                           'Confidence: ${(confidence * 100).toStringAsFixed(0)}%',
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             fontSize: 10,
-                            color: MerryWayTheme.textMuted,
+                            color: RedesignTokens.slate,
                           ),
                         ),
                         Text(
                           'Members: ${nearbyMembers.map((m) => m.name).join(", ")}',
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             fontSize: 10,
-                            color: MerryWayTheme.textMuted,
+                            color: RedesignTokens.slate,
                           ),
                         ),
                       ],
@@ -281,8 +281,8 @@ class SmartSuggestionCard extends StatelessWidget {
                       child: OutlinedButton(
                         onPressed: onDismiss,
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: MerryWayTheme.textMuted.withOpacity(0.3)),
-                          foregroundColor: MerryWayTheme.textDark,
+                          side: BorderSide(color: RedesignTokens.slate.withOpacity(0.3)),
+                          foregroundColor: RedesignTokens.ink,
                         ),
                         child: const Text('Maybe later'),
                       ),

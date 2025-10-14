@@ -234,7 +234,7 @@ class _PodDetailPageState extends State<PodDetailPage> {
         .toList();
 
     return Scaffold(
-      backgroundColor: MerryWayTheme.softBg,
+      backgroundColor: RedesignTokens.canvas,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

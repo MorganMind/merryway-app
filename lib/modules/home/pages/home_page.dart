@@ -1376,17 +1376,17 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.only(bottom: 16),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: MerryWayTheme.accentGolden.withOpacity(0.1),
+                                  color: RedesignTokens.accentGold.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: MerryWayTheme.accentGolden.withOpacity(0.3),
+                                    color: RedesignTokens.accentGold.withOpacity(0.3),
                                     width: 1,
                                   ),
                                 ),
                                 padding: const EdgeInsets.all(12),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.schedule, color: MerryWayTheme.accentGolden),
+                                    Icon(Icons.schedule, color: RedesignTokens.accentGold),
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Column(
@@ -1396,7 +1396,7 @@ class _HomePageState extends State<HomePage> {
                                             exp.activityName ?? 'Experience',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w600,
-                                              color: MerryWayTheme.textDark,
+                                              color: RedesignTokens.ink,
                                             ),
                                           ),
                                           const SizedBox(height: 2),
@@ -1404,13 +1404,13 @@ class _HomePageState extends State<HomePage> {
                                             'Starting in $minutesUntil minutes',
                                             style: const TextStyle(
                                               fontSize: 13,
-                                              color: MerryWayTheme.textMuted,
+                                              color: RedesignTokens.slate,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    Icon(Icons.arrow_forward_ios, size: 16, color: MerryWayTheme.textMuted),
+                                    Icon(Icons.arrow_forward_ios, size: 16, color: RedesignTokens.slate),
                                   ],
                                 ),
                               ),
