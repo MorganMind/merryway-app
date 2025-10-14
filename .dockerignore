@@ -1,0 +1,42 @@
+# Flutter/Dart specific
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# Environment
+.env
+.env.*
+
+# Test
+test/
+*_test.dart
+integration_test/
+
+# Documentation
+*.md
+!README.md
+
+# Android/iOS specific (not needed for web build)
+android/
+ios/
+
+# Windows/Linux/macOS specific
+windows/
+linux/
+macos/

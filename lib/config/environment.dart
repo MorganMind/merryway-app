@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 enum BuildFlavor {
   development,
   staging,
@@ -16,31 +18,14 @@ class Environment {
   static bool get isStaging => flavor == BuildFlavor.staging;
 
   static String get apiUrl {
-    switch (flavor) {
-      case BuildFlavor.development:
-        // if (Platform.isAndroid && !kIsWeb) {
-        //   return 'http://localhost:8000/api/v1'; 
-        // }
-        return 'http://localhost:8000/api/v1';    // Web/Desktop/iOS simulator
-      
-      case BuildFlavor.staging:
-        return 'http://localhost:8000/api/v1';
-      
-      case BuildFlavor.production:
-        return 'http://localhost:8000/api/v1';
-    }
+    // Try to get from .env first, fallback to localhost
+    return dotenv.get('API_URL', fallback: 'http://localhost:8000/api/v1');
   }
 
-  // Supabase Configuration (hosted project)
-  static String get supabaseUrl => const String.fromEnvironment(
-    'SUPABASE_URL',
-    defaultValue: 'https://xnvzkjqnirqfgemjakok.supabase.co',
-  );
+  // Supabase Configuration (from .env)
+  static String get supabaseUrl => dotenv.get('SUPABASE_URL', fallback: '');
 
-  static String get supabaseAnonKey => const String.fromEnvironment(
-    'SUPABASE_ANON_KEY',
-    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhudnpranFuaXJxZmdlbWpha29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMTk0NTksImV4cCI6MjA3NTc5NTQ1OX0.3Xz99qEjRzCTInLHLDVqkBd7xF_RJ9NpF5_CxtULkwE',
-  );
+  static String get supabaseAnonKey => dotenv.get('SUPABASE_ANON_KEY', fallback: '');
 
   static String get appUrl {
     switch (flavor) {
@@ -58,10 +43,7 @@ class Environment {
     }
   }
 
-  // OpenAI API Key (for journaling/parsing)
-  static String get openAIApiKey => const String.fromEnvironment(
-    'OPENAI_API_KEY',
-    defaultValue: '', // User will provide via --dart-define
-  );
+  // OpenAI API Key (from .env)
+  static String get openAIApiKey => dotenv.get('OPENAI_API_KEY', fallback: '');
   
 } 
