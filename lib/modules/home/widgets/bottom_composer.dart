@@ -204,9 +204,9 @@ class _BottomComposerState extends State<BottomComposer> {
             maxWidth: isDesktop ? 720 : double.infinity,
           ),
           margin: EdgeInsets.fromLTRB(
-            RedesignTokens.space16,
+            isDesktop ? RedesignTokens.space16 : 0,
             0,
-            RedesignTokens.space16,
+            isDesktop ? RedesignTokens.space16 : 0,
             isDesktop ? MediaQuery.of(context).padding.bottom + RedesignTokens.space16 : 0,
           ),
           padding: const EdgeInsets.symmetric(
@@ -215,7 +215,7 @@ class _BottomComposerState extends State<BottomComposer> {
           ),
           decoration: BoxDecoration(
             color: RedesignTokens.cardSurface,
-            borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
+            borderRadius: isDesktop ? BorderRadius.circular(RedesignTokens.radiusCard) : null,
             boxShadow: RedesignTokens.shadowLevel2,
             border: _focusNode.hasFocus
                 ? Border.all(color: RedesignTokens.accentGold, width: 2)
