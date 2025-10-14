@@ -1,6 +1,6 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/theme/merryway_theme.dart';
 import '../models/family_models.dart';
 import '../models/pod_model.dart';
 import '../widgets/pod_rules_widget.dart';
@@ -99,10 +99,10 @@ class _PodDetailPageState extends State<PodDetailPage> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: isSelected ? MerryWayTheme.primarySoftBlue.withOpacity(0.2) : Colors.grey[100],
+                          color: isSelected ? RedesignTokens.primary.withOpacity(0.2) : Colors.grey[100],
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: isSelected ? MerryWayTheme.primarySoftBlue : Colors.grey[300]!,
+                            color: isSelected ? RedesignTokens.primary : Colors.grey[300]!,
                             width: 2,
                           ),
                         ),
@@ -240,18 +240,18 @@ class _PodDetailPageState extends State<PodDetailPage> {
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context, currentPod),
-          icon: const Icon(Icons.arrow_back, color: MerryWayTheme.textDark),
+          icon: const Icon(Icons.arrow_back, color: RedesignTokens.ink),
         ),
         title: Text(
           currentPod.name,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
         ),
         actions: [
           IconButton(
             onPressed: _showEditDialog,
-            icon: const Icon(Icons.edit, color: MerryWayTheme.primarySoftBlue),
+            icon: const Icon(Icons.edit, color: RedesignTokens.primary),
           ),
         ],
       ),
@@ -323,7 +323,7 @@ class _PodDetailPageState extends State<PodDetailPage> {
                       Text(
                         'No members in this pod',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: MerryWayTheme.textMuted,
+                              color: RedesignTokens.slate,
                             ),
                       )
                     else
@@ -335,7 +335,7 @@ class _PodDetailPageState extends State<PodDetailPage> {
                                   width: 32,
                                   height: 32,
                                   decoration: BoxDecoration(
-                                    color: MerryWayTheme.primarySoftBlue.withOpacity(0.2),
+                                    color: RedesignTokens.primary.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Center(

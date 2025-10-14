@@ -1,9 +1,9 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../../config/environment.dart';
-import '../../../modules/core/theme/theme_colors.dart';
 import '../../../modules/family/models/family_models.dart';
 import '../models/experience_models.dart';
 import '../repositories/experience_repository.dart';
@@ -165,7 +165,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('✨ Merry Moment saved!'),
-            backgroundColor: MerryWayTheme.accentGolden,
+            backgroundColor: RedesignTokens.accentGold,
           ),
         );
       }
@@ -222,7 +222,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: MerryWayTheme.textDark,
+                      color: RedesignTokens.ink,
                     ),
                   ),
                 ),
@@ -233,7 +233,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
               'Journal your family\'s memories',
               style: TextStyle(
                 fontSize: 14,
-                color: MerryWayTheme.textMuted,
+                color: RedesignTokens.slate,
               ),
             ),
             const SizedBox(height: 24),
@@ -244,7 +244,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -260,7 +260,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
                   icon: const Icon(Icons.auto_awesome),
                   onPressed: _isProcessing ? null : _parseWithOpenAI,
                   tooltip: 'Parse with AI',
-                  color: MerryWayTheme.accentGolden,
+                  color: RedesignTokens.accentGold,
                 ),
               ),
               maxLines: 3,
@@ -283,8 +283,8 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
                       : const Icon(Icons.auto_awesome, size: 18),
                   label: Text(_isProcessing ? 'Processing...' : 'Parse with AI'),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: MerryWayTheme.accentGolden),
-                    foregroundColor: MerryWayTheme.accentGolden,
+                    side: const BorderSide(color: RedesignTokens.accentGold),
+                    foregroundColor: RedesignTokens.accentGold,
                   ),
                 ),
               ),
@@ -299,7 +299,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -320,7 +320,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -345,8 +345,8 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
                       }
                     });
                   },
-                  selectedColor: MerryWayTheme.primarySoftBlue.withOpacity(0.2),
-                  checkmarkColor: MerryWayTheme.primarySoftBlue,
+                  selectedColor: RedesignTokens.primary.withOpacity(0.2),
+                  checkmarkColor: RedesignTokens.primary,
                 );
               }).toList(),
             ),
@@ -358,7 +358,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -389,7 +389,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -412,7 +412,7 @@ class _AddManualMomentSheetState extends State<AddManualMomentSheet> {
                 onPressed: _isProcessing ? null : _saveMoment,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: MerryWayTheme.primarySoftBlue,
+                  backgroundColor: RedesignTokens.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

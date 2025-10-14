@@ -1,5 +1,5 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
-import '../../core/theme/theme_colors.dart';
 import '../../family/models/family_models.dart';
 import '../../family/models/pod_model.dart';
 import '../models/idea_models.dart';
@@ -173,14 +173,14 @@ class _MyIdeasPageState extends State<MyIdeasPage>
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: MerryWayTheme.textDark,
+            color: RedesignTokens.ink,
           ),
         ),
         bottom: TabBar(
           controller: _tabController,
-          labelColor: MerryWayTheme.primarySoftBlue,
-          unselectedLabelColor: MerryWayTheme.textMuted,
-          indicatorColor: MerryWayTheme.primarySoftBlue,
+          labelColor: RedesignTokens.primary,
+          unselectedLabelColor: RedesignTokens.slate,
+          indicatorColor: RedesignTokens.primary,
           labelStyle: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -216,7 +216,7 @@ class _MyIdeasPageState extends State<MyIdeasPage>
         onPressed: _createNewIdea,
         icon: const Icon(Icons.add),
         label: const Text('New Idea'),
-        backgroundColor: MerryWayTheme.primarySoftBlue,
+        backgroundColor: RedesignTokens.primary,
       ),
     );
   }
@@ -231,7 +231,7 @@ class _MyIdeasPageState extends State<MyIdeasPage>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
-              color: MerryWayTheme.primarySoftBlue,
+              color: RedesignTokens.primary,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
@@ -259,14 +259,14 @@ class _MyIdeasPageState extends State<MyIdeasPage>
               Icon(
                 Icons.lightbulb_outline,
                 size: 64,
-                color: MerryWayTheme.textMuted.withOpacity(0.5),
+                color: RedesignTokens.slate.withOpacity(0.5),
               ),
               const SizedBox(height: 16),
               Text(
                 emptyMessage,
                 style: const TextStyle(
                   fontSize: 16,
-                  color: MerryWayTheme.textMuted,
+                  color: RedesignTokens.slate,
                 ),
               ),
             ],

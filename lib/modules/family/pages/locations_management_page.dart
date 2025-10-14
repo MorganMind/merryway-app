@@ -1,6 +1,6 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/theme/merryway_theme.dart';
 import '../models/location_model.dart';
 
 class LocationsManagementPage extends StatefulWidget {
@@ -172,7 +172,7 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: MerryWayTheme.primaryWarmPink,
+              backgroundColor: RedesignTokens.dangerColor,
             ),
             child: const Text('Delete'),
           ),
@@ -209,12 +209,12 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: MerryWayTheme.textDark),
+          icon: const Icon(Icons.arrow_back, color: RedesignTokens.ink),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add, color: MerryWayTheme.textDark),
+            icon: const Icon(Icons.add, color: RedesignTokens.ink),
             onPressed: _showLocationDialog,
           ),
         ],
@@ -226,12 +226,12 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.location_on, size: 64, color: MerryWayTheme.textMuted),
+                      const Icon(Icons.location_on, size: 64, color: RedesignTokens.slate),
                       const SizedBox(height: 16),
                       Text(
                         'No Locations Yet!',
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              color: MerryWayTheme.textDark,
+                              color: RedesignTokens.ink,
                             ),
                       ),
                       const SizedBox(height: 8),
@@ -240,7 +240,7 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
                         child: Text(
                           'Save places like "Home", "School", or "Grandma\'s House" to reference in prompts',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: MerryWayTheme.textMuted,
+                                color: RedesignTokens.slate,
                               ),
                           textAlign: TextAlign.center,
                         ),
@@ -264,7 +264,7 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
                       margin: const EdgeInsets.only(bottom: 12),
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: MerryWayTheme.primarySoftBlue,
+                          backgroundColor: RedesignTokens.primary,
                           child: Icon(
                             _getLocationIcon(location.name),
                             color: Colors.white,
@@ -287,7 +287,7 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontStyle: FontStyle.italic,
-                                    color: MerryWayTheme.textMuted,
+                                    color: RedesignTokens.slate,
                                   ),
                                 ),
                               ),
@@ -297,11 +297,11 @@ class _LocationsManagementPageState extends State<LocationsManagementPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.edit_outlined, color: MerryWayTheme.primarySoftBlue),
+                              icon: const Icon(Icons.edit_outlined, color: RedesignTokens.primary),
                               onPressed: () => _showLocationDialog(locationToEdit: location),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete_outline, color: MerryWayTheme.primaryWarmPink),
+                              icon: const Icon(Icons.delete_outline, color: RedesignTokens.dangerColor),
                               onPressed: () => _deleteLocation(location),
                             ),
                           ],

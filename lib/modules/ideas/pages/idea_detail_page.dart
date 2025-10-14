@@ -1,6 +1,6 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../core/theme/theme_colors.dart';
 import '../../family/models/family_models.dart';
 import '../../family/models/pod_model.dart';
 import '../models/idea_models.dart';
@@ -160,7 +160,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('✅ Idea approved!'),
-          backgroundColor: MerryWayTheme.primarySoftBlue,
+          backgroundColor: RedesignTokens.primary,
         ),
       );
     } catch (e) {
@@ -329,10 +329,10 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: MerryWayTheme.accentGolden.withOpacity(0.1),
+                  color: RedesignTokens.accentGold.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: MerryWayTheme.accentGolden,
+                    color: RedesignTokens.accentGold,
                     width: 2,
                   ),
                 ),
@@ -341,7 +341,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.hourglass_empty, color: MerryWayTheme.accentGolden),
+                        Icon(Icons.hourglass_empty, color: RedesignTokens.accentGold),
                         SizedBox(width: 8),
                         Text(
                           'Awaiting Parent Approval',
@@ -364,7 +364,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                         icon: const Icon(Icons.check_circle),
                         label: const Text('Approve This Idea'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: MerryWayTheme.accentGolden,
+                          backgroundColor: RedesignTokens.accentGold,
                         ),
                       ),
                     ],
@@ -380,7 +380,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 12),
@@ -398,13 +398,13 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                   ),
                   label: Text(creator.name),
                   visualDensity: VisualDensity.compact,
-                  backgroundColor: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+                  backgroundColor: RedesignTokens.primary.withOpacity(0.1),
                 ),
                 // Visibility chip
                 Chip(
                   label: Text(idea.visibility.displayName),
                   visualDensity: VisualDensity.compact,
-                  backgroundColor: MerryWayTheme.accentLavender.withOpacity(0.1),
+                  backgroundColor: RedesignTokens.accentSage.withOpacity(0.1),
                 ),
                 // State chip
                 Chip(
@@ -450,7 +450,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                 idea.summary!,
                 style: const TextStyle(
                   fontSize: 16,
-                  color: MerryWayTheme.textDark,
+                  color: RedesignTokens.ink,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -469,7 +469,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                   idea.detailsMd!,
                   style: const TextStyle(
                     fontSize: 15,
-                    color: MerryWayTheme.textDark,
+                    color: RedesignTokens.ink,
                     height: 1.5,
                   ),
                 ),
@@ -520,11 +520,11 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                       idea.isLikedByMe ? Icons.favorite : Icons.favorite_border,
                       color: idea.isLikedByMe
                           ? MerryWayTheme.accentSoftPink
-                          : MerryWayTheme.textMuted,
+                          : RedesignTokens.slate,
                     ),
                     label: Text('${idea.likesCount}'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: MerryWayTheme.textDark,
+                      foregroundColor: RedesignTokens.ink,
                     ),
                   ),
                 ),
@@ -537,7 +537,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                     icon: const Icon(Icons.celebration),
                     label: const Text('Make it an Experience'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: MerryWayTheme.primarySoftBlue,
+                      backgroundColor: RedesignTokens.primary,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                   ),
@@ -558,20 +558,20 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+        color: RedesignTokens.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: MerryWayTheme.primarySoftBlue),
+          Icon(icon, size: 16, color: RedesignTokens.primary),
           const SizedBox(width: 4),
           Text(
             label,
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: MerryWayTheme.textDark,
+              color: RedesignTokens.ink,
             ),
           ),
         ],
@@ -582,14 +582,14 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
   Widget _buildInfoRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: MerryWayTheme.textMuted),
+        Icon(icon, size: 20, color: RedesignTokens.slate),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
             style: const TextStyle(
               fontSize: 14,
-              color: MerryWayTheme.textDark,
+              color: RedesignTokens.ink,
             ),
           ),
         ),
@@ -612,7 +612,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: MerryWayTheme.textDark,
+              color: RedesignTokens.ink,
             ),
           ),
           const SizedBox(height: 16),
@@ -650,7 +650,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.send),
-                color: MerryWayTheme.primarySoftBlue,
+                color: RedesignTokens.primary,
               ),
             ],
           ),
@@ -663,7 +663,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                 padding: EdgeInsets.all(24),
                 child: Text(
                   'No comments yet. Be the first!',
-                  style: TextStyle(color: MerryWayTheme.textMuted),
+                  style: TextStyle(color: RedesignTokens.slate),
                 ),
               ),
             )
@@ -708,7 +708,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                           _formatCommentTime(comment.createdAt),
                           style: const TextStyle(
                             fontSize: 12,
-                            color: MerryWayTheme.textMuted,
+                            color: RedesignTokens.slate,
                           ),
                         ),
                       ],
@@ -718,7 +718,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
                       comment.body,
                       style: const TextStyle(
                         fontSize: 14,
-                        color: MerryWayTheme.textDark,
+                        color: RedesignTokens.ink,
                       ),
                     ),
                   ],
@@ -735,7 +735,7 @@ class _IdeaDetailPageState extends State<IdeaDetailPage> {
       case IdeaState.draft:
         return Colors.grey;
       case IdeaState.pendingApproval:
-        return MerryWayTheme.accentGolden;
+        return RedesignTokens.accentGold;
       case IdeaState.active:
         return Colors.green;
       case IdeaState.archived:

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../modules/core/theme/theme_colors.dart';
-import '../../../modules/core/theme/merryway_theme.dart';
+import '../../../modules/core/theme/redesign_tokens.dart';
 import '../models/experience_models.dart';
 import '../repositories/experience_repository.dart';
 
@@ -125,7 +124,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('✨ Merry Moment created!'),
-            backgroundColor: MerryWayTheme.primarySoftBlue,
+            backgroundColor: RedesignTokens.primary,
             duration: Duration(seconds: 2),
           ),
         );
@@ -163,12 +162,12 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: MerryWayTheme.accentGolden.withOpacity(0.1),
+                        color: RedesignTokens.accentGold.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(
                         Icons.star,
-                        color: MerryWayTheme.accentGolden,
+                        color: RedesignTokens.accentGold,
                         size: 24,
                       ),
                     ),
@@ -179,7 +178,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: MerryWayTheme.textDark,
+                          color: RedesignTokens.ink,
                         ),
                       ),
                     ),
@@ -190,7 +189,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                   'How was it? (10 seconds!)',
                   style: TextStyle(
                     fontSize: 14,
-                    color: MerryWayTheme.textMuted,
+                    color: RedesignTokens.slate,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -201,7 +200,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: MerryWayTheme.textDark,
+                    color: RedesignTokens.ink,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -215,7 +214,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                       },
                       child: Icon(
                         _rating >= starValue ? Icons.star : Icons.star_border,
-                        color: MerryWayTheme.accentGolden,
+                        color: RedesignTokens.accentGold,
                         size: 40,
                       ),
                     );
@@ -229,7 +228,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: MerryWayTheme.textDark,
+                    color: RedesignTokens.ink,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -242,7 +241,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                         onSelected: (selected) {
                           if (selected) setState(() => _effortFelt = 'easy');
                         },
-                        selectedColor: MerryWayTheme.primarySoftBlue.withOpacity(0.3),
+                        selectedColor: RedesignTokens.primary.withOpacity(0.3),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -253,7 +252,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                         onSelected: (selected) {
                           if (selected) setState(() => _effortFelt = 'moderate');
                         },
-                        selectedColor: MerryWayTheme.accentGolden.withOpacity(0.3),
+                        selectedColor: RedesignTokens.accentGold.withOpacity(0.3),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -264,7 +263,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                         onSelected: (selected) {
                           if (selected) setState(() => _effortFelt = 'hard');
                         },
-                        selectedColor: MerryWayTheme.accentLavender.withOpacity(0.3),
+                        selectedColor: RedesignTokens.accentSage.withOpacity(0.3),
                       ),
                     ),
                   ],
@@ -277,7 +276,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: MerryWayTheme.textDark,
+                    color: RedesignTokens.ink,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -290,7 +289,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                         onSelected: (selected) {
                           if (selected) setState(() => _cleanupFelt = 'easy');
                         },
-                        selectedColor: MerryWayTheme.primarySoftBlue.withOpacity(0.3),
+                        selectedColor: RedesignTokens.primary.withOpacity(0.3),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -301,7 +300,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                         onSelected: (selected) {
                           if (selected) setState(() => _cleanupFelt = 'moderate');
                         },
-                        selectedColor: MerryWayTheme.accentGolden.withOpacity(0.3),
+                        selectedColor: RedesignTokens.accentGold.withOpacity(0.3),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -312,7 +311,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                         onSelected: (selected) {
                           if (selected) setState(() => _cleanupFelt = 'hard');
                         },
-                        selectedColor: MerryWayTheme.accentLavender.withOpacity(0.3),
+                        selectedColor: RedesignTokens.accentSage.withOpacity(0.3),
                       ),
                     ),
                   ],
@@ -325,7 +324,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: MerryWayTheme.textDark,
+                    color: RedesignTokens.ink,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -351,14 +350,14 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
                           color: _photo != null
-                              ? MerryWayTheme.accentGolden
-                              : MerryWayTheme.textMuted,
+                              ? RedesignTokens.accentGold
+                              : RedesignTokens.slate,
                         ),
                       ),
                     ),
                     if (_photo != null) ...[
                       const SizedBox(width: 8),
-                      const Icon(Icons.check_circle, color: MerryWayTheme.accentGolden, size: 20),
+                      const Icon(Icons.check_circle, color: RedesignTokens.accentGold, size: 20),
                     ],
                   ],
                 ),
@@ -371,7 +370,7 @@ class _ExperienceDebriefModalState extends State<ExperienceDebriefModal>
                     onPressed: _isSubmitting ? null : _submitDebrief,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: MerryWayTheme.primarySoftBlue,
+                      backgroundColor: RedesignTokens.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

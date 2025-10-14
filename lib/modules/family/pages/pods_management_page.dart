@@ -1,6 +1,6 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/theme/merryway_theme.dart';
 import '../../core/services/user_context_service.dart';
 import '../models/family_models.dart';
 import '../models/pod_model.dart';
@@ -269,7 +269,7 @@ class _PodsManagementPageState extends State<PodsManagementPage> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: MerryWayTheme.primaryWarmPink,
+              backgroundColor: RedesignTokens.dangerColor,
             ),
             child: const Text('Delete'),
           ),
@@ -307,18 +307,18 @@ class _PodsManagementPageState extends State<PodsManagementPage> {
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: MerryWayTheme.textDark),
+          icon: const Icon(Icons.arrow_back, color: RedesignTokens.ink),
         ),
         title: Text(
           'Manage Pods',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
         ),
         actions: [
           IconButton(
             onPressed: _showCreatePodDialog,
-            icon: const Icon(Icons.add, color: MerryWayTheme.primarySoftBlue),
+            icon: const Icon(Icons.add, color: RedesignTokens.primary),
           ),
         ],
       ),
@@ -329,19 +329,19 @@ class _PodsManagementPageState extends State<PodsManagementPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.group_add, size: 64, color: MerryWayTheme.textMuted),
+                      const Icon(Icons.group_add, size: 64, color: RedesignTokens.slate),
                       const SizedBox(height: 16),
                       Text(
                         'No pods yet',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: MerryWayTheme.textMuted,
+                              color: RedesignTokens.slate,
                             ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Create pods to quickly select groups',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: MerryWayTheme.textMuted,
+                              color: RedesignTokens.slate,
                             ),
                       ),
                       const SizedBox(height: 24),
@@ -412,7 +412,7 @@ class _PodsManagementPageState extends State<PodsManagementPage> {
                           ],
                         ),
                         trailing: IconButton(
-                          icon: const Icon(Icons.delete_outline, color: MerryWayTheme.primaryWarmPink),
+                          icon: const Icon(Icons.delete_outline, color: RedesignTokens.dangerColor),
                           onPressed: () => _deletePod(pod),
                         ),
                       ),

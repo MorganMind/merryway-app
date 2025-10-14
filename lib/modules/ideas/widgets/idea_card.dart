@@ -1,5 +1,5 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
-import '../../core/theme/theme_colors.dart';
 import '../../family/models/family_models.dart';
 import '../models/idea_models.dart';
 
@@ -64,12 +64,12 @@ class IdeaCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: MerryWayTheme.accentLavender.withOpacity(0.15),
+                      color: RedesignTokens.accentSage.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
                       Icons.lightbulb,
-                      color: MerryWayTheme.accentLavender,
+                      color: RedesignTokens.accentSage,
                       size: 20,
                     ),
                   ),
@@ -87,7 +87,7 @@ class IdeaCard extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: MerryWayTheme.accentGolden.withOpacity(0.2),
+                              color: RedesignTokens.accentGold.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text(
@@ -95,7 +95,7 @@ class IdeaCard extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
-                                color: MerryWayTheme.accentGolden,
+                                color: RedesignTokens.accentGold,
                               ),
                             ),
                           ),
@@ -107,7 +107,7 @@ class IdeaCard extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
-                            color: MerryWayTheme.textDark,
+                            color: RedesignTokens.ink,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -122,7 +122,7 @@ class IdeaCard extends StatelessWidget {
                               'by ${creator.name}',
                               style: const TextStyle(
                                 fontSize: 12,
-                                color: MerryWayTheme.textMuted,
+                                color: RedesignTokens.slate,
                               ),
                             ),
                           ],
@@ -140,7 +140,7 @@ class IdeaCard extends StatelessWidget {
                   idea.summary!,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: MerryWayTheme.textDark,
+                    color: RedesignTokens.ink,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -177,7 +177,7 @@ class IdeaCard extends StatelessWidget {
                   _buildChip(
                     _getVisibilityIcon(),
                     idea.visibility.displayName,
-                    MerryWayTheme.textMuted,
+                    RedesignTokens.slate,
                   ),
                   const Spacer(),
                   // Likes
@@ -191,7 +191,7 @@ class IdeaCard extends StatelessWidget {
                           size: 18,
                           color: idea.isLikedByMe
                               ? MerryWayTheme.accentSoftPink
-                              : MerryWayTheme.textMuted,
+                              : RedesignTokens.slate,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -199,7 +199,7 @@ class IdeaCard extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: MerryWayTheme.textDark,
+                            color: RedesignTokens.ink,
                           ),
                         ),
                       ],
@@ -213,7 +213,7 @@ class IdeaCard extends StatelessWidget {
                       const Icon(
                         Icons.comment_outlined,
                         size: 18,
-                        color: MerryWayTheme.textMuted,
+                        color: RedesignTokens.slate,
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -221,7 +221,7 @@ class IdeaCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: MerryWayTheme.textDark,
+                          color: RedesignTokens.ink,
                         ),
                       ),
                     ],
@@ -239,20 +239,20 @@ class IdeaCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+        color: RedesignTokens.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: MerryWayTheme.primarySoftBlue),
+          Icon(icon, size: 12, color: RedesignTokens.primary),
           const SizedBox(width: 3),
           Text(
             label,
             style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: MerryWayTheme.textDark,
+              color: RedesignTokens.ink,
             ),
           ),
         ],

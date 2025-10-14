@@ -1,5 +1,5 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
-import '../../core/theme/theme_colors.dart';
 import '../../family/models/family_models.dart';
 import '../../family/models/pod_model.dart';
 import '../models/idea_models.dart';
@@ -149,7 +149,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
             content: Text(widget.existingIdea != null
                 ? '✨ Idea updated!'
                 : '✨ Idea saved!'),
-            backgroundColor: MerryWayTheme.primarySoftBlue,
+            backgroundColor: RedesignTokens.primary,
           ),
         );
       }
@@ -183,7 +183,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: MerryWayTheme.textDark,
+            color: RedesignTokens.ink,
           ),
         ),
         actions: [
@@ -206,7 +206,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: MerryWayTheme.primarySoftBlue,
+                  color: RedesignTokens.primary,
                 ),
               ),
             ),
@@ -365,7 +365,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
               title: const Text('Requires Adult Supervision'),
               value: _needsAdult,
               onChanged: (value) => setState(() => _needsAdult = value ?? false),
-              activeColor: MerryWayTheme.primarySoftBlue,
+              activeColor: RedesignTokens.primary,
               contentPadding: EdgeInsets.zero,
             ),
             const SizedBox(height: 12),
@@ -428,7 +428,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
       style: const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: MerryWayTheme.textDark,
+        color: RedesignTokens.ink,
       ),
     );
   }
@@ -447,7 +447,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
           label,
           style: const TextStyle(
             fontSize: 13,
-            color: MerryWayTheme.textMuted,
+            color: RedesignTokens.slate,
           ),
         ),
         const SizedBox(height: 8),
@@ -460,10 +460,10 @@ class _IdeaComposerState extends State<IdeaComposer> {
               label: Text(optionLabels[option]!),
               selected: isSelected,
               onSelected: (_) => onSelected(option),
-              selectedColor: MerryWayTheme.primarySoftBlue.withOpacity(0.2),
+              selectedColor: RedesignTokens.primary.withOpacity(0.2),
               backgroundColor: Colors.white,
               labelStyle: TextStyle(
-                color: isSelected ? MerryWayTheme.primarySoftBlue : MerryWayTheme.textDark,
+                color: isSelected ? RedesignTokens.primary : RedesignTokens.ink,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             );
@@ -487,7 +487,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
             label,
             style: const TextStyle(
               fontSize: 13,
-              color: MerryWayTheme.textMuted,
+              color: RedesignTokens.slate,
             ),
           ),
         ),
@@ -553,7 +553,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
           groupValue: _visibility,
           title: Text(vis.displayName),
           subtitle: Text(_getVisibilitySubtitle(vis)),
-          activeColor: MerryWayTheme.primarySoftBlue,
+          activeColor: RedesignTokens.primary,
           onChanged: (value) {
             if (value != null) {
               setState(() => _visibility = value);
@@ -579,7 +579,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: MerryWayTheme.primarySoftBlue.withOpacity(0.05),
+        color: RedesignTokens.primary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -590,7 +590,7 @@ class _IdeaComposerState extends State<IdeaComposer> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: MerryWayTheme.textDark,
+              color: RedesignTokens.ink,
             ),
           ),
           const SizedBox(height: 8),
@@ -611,9 +611,9 @@ class _IdeaComposerState extends State<IdeaComposer> {
                     }
                   });
                 },
-                selectedColor: MerryWayTheme.primarySoftBlue.withOpacity(0.2),
+                selectedColor: RedesignTokens.primary.withOpacity(0.2),
                 backgroundColor: Colors.white,
-                checkmarkColor: MerryWayTheme.primarySoftBlue,
+                checkmarkColor: RedesignTokens.primary,
               );
             }).toList(),
           ),

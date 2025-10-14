@@ -1,7 +1,6 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../modules/core/theme/theme_colors.dart';
-import '../../../modules/core/theme/merryway_theme.dart';
 import '../../../modules/family/models/family_models.dart';
 import '../models/experience_models.dart';
 import '../repositories/experience_repository.dart';
@@ -104,7 +103,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                   ? '✨ Experience started! Enjoy!' 
                   : '✅ Experience planned!',
             ),
-            backgroundColor: MerryWayTheme.primarySoftBlue,
+            backgroundColor: RedesignTokens.primary,
           ),
         );
       }
@@ -140,12 +139,12 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+                    color: RedesignTokens.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
                     Icons.event_available,
-                    color: MerryWayTheme.primarySoftBlue,
+                    color: RedesignTokens.primary,
                     size: 24,
                   ),
                 ),
@@ -159,14 +158,14 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: MerryWayTheme.textDark,
+                          color: RedesignTokens.ink,
                         ),
                       ),
                       Text(
                         widget.activityName,
                         style: const TextStyle(
                           fontSize: 14,
-                          color: MerryWayTheme.textMuted,
+                          color: RedesignTokens.slate,
                         ),
                       ),
                     ],
@@ -182,7 +181,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 12),
@@ -207,8 +206,8 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                       }
                     });
                   },
-                  selectedColor: MerryWayTheme.primarySoftBlue.withOpacity(0.2),
-                  checkmarkColor: MerryWayTheme.primarySoftBlue,
+                  selectedColor: RedesignTokens.primary.withOpacity(0.2),
+                  checkmarkColor: RedesignTokens.primary,
                 );
               }).toList(),
             ),
@@ -220,7 +219,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 12),
@@ -233,7 +232,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                     onSelected: (selected) {
                       if (selected) setState(() => _timeWindow = 'now');
                     },
-                    selectedColor: MerryWayTheme.accentGolden.withOpacity(0.3),
+                    selectedColor: RedesignTokens.accentGold.withOpacity(0.3),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -244,7 +243,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                     onSelected: (selected) {
                       if (selected) setState(() => _timeWindow = 'today');
                     },
-                    selectedColor: MerryWayTheme.primarySoftBlue.withOpacity(0.3),
+                    selectedColor: RedesignTokens.primary.withOpacity(0.3),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -258,7 +257,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                         _pickCustomTime();
                       }
                     },
-                    selectedColor: MerryWayTheme.accentLavender.withOpacity(0.3),
+                    selectedColor: RedesignTokens.accentSage.withOpacity(0.3),
                   ),
                 ),
               ],
@@ -269,7 +268,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                 'Scheduled for: ${_customStartTime!.toString().substring(0, 16)}',
                 style: const TextStyle(
                   fontSize: 13,
-                  color: MerryWayTheme.textMuted,
+                  color: RedesignTokens.slate,
                 ),
               ),
             ],
@@ -281,7 +280,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -306,7 +305,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -350,7 +349,7 @@ class _CreateExperienceSheetState extends State<CreateExperienceSheet> {
                 onPressed: _isCreating ? null : _createExperience,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: MerryWayTheme.primarySoftBlue,
+                  backgroundColor: RedesignTokens.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

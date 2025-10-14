@@ -1,9 +1,9 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import '../../core/theme/merryway_theme.dart';
 import '../models/family_models.dart';
 import '../widgets/member_rules_widget.dart';
 
@@ -385,18 +385,18 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context, currentMember),
-          icon: const Icon(Icons.arrow_back, color: MerryWayTheme.textDark),
+          icon: const Icon(Icons.arrow_back, color: RedesignTokens.ink),
         ),
         title: Text(
           currentMember.name,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
         ),
         actions: [
           IconButton(
             onPressed: _showEditDialog,
-            icon: const Icon(Icons.edit, color: MerryWayTheme.primarySoftBlue),
+            icon: const Icon(Icons.edit, color: RedesignTokens.primary),
           ),
         ],
       ),
@@ -413,7 +413,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: MerryWayTheme.primarySoftBlue.withOpacity(0.2),
+                      color: RedesignTokens.primary.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(24),
                       image: currentMember.photoUrl != null
                           ? DecorationImage(
@@ -435,7 +435,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                     bottom: 0,
                     right: 0,
                     child: Material(
-                      color: MerryWayTheme.primarySoftBlue,
+                      color: RedesignTokens.primary,
                       elevation: 2,
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
@@ -505,7 +505,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                         children: currentMember.favoriteActivities
                             .map((activity) => Chip(
                                   label: Text(activity.capitalize()),
-                                  backgroundColor: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+                                  backgroundColor: RedesignTokens.primary.withOpacity(0.1),
                                 ))
                             .toList(),
                       ),
@@ -539,7 +539,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
           Text(
             label,
             style: const TextStyle(
-              color: MerryWayTheme.textMuted,
+              color: RedesignTokens.slate,
               fontWeight: FontWeight.w500,
             ),
           ),

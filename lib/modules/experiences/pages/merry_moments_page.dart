@@ -1,7 +1,7 @@
+import 'package:merryway/modules/core/theme/redesign_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
-import '../../../modules/core/theme/theme_colors.dart';
 import '../../../modules/family/models/family_models.dart';
 import '../models/experience_models.dart';
 import '../widgets/add_manual_moment_sheet.dart';
@@ -110,13 +110,13 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: MerryWayTheme.textDark,
+            color: RedesignTokens.ink,
           ),
         ),
         actions: [
           IconButton(
             onPressed: _showAddManualMomentSheet,
-            icon: const Icon(Icons.add_circle, color: MerryWayTheme.primarySoftBlue),
+            icon: const Icon(Icons.add_circle, color: RedesignTokens.primary),
             tooltip: 'Add Manual Moment',
           ),
         ],
@@ -130,7 +130,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
         onPressed: _showAddManualMomentSheet,
         icon: const Icon(Icons.edit),
         label: const Text('Journal'),
-        backgroundColor: MerryWayTheme.accentGolden,
+        backgroundColor: RedesignTokens.accentGold,
       ),
     );
   }
@@ -145,13 +145,13 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+                color: RedesignTokens.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.photo_album_outlined,
                 size: 64,
-                color: MerryWayTheme.primarySoftBlue,
+                color: RedesignTokens.primary,
               ),
             ),
             const SizedBox(height: 24),
@@ -160,7 +160,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: MerryWayTheme.textDark,
+                color: RedesignTokens.ink,
               ),
               textAlign: TextAlign.center,
             ),
@@ -169,7 +169,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
               'Complete experiences or add manual entries to start building your family\'s memory album!',
               style: TextStyle(
                 fontSize: 15,
-                color: MerryWayTheme.textMuted,
+                color: RedesignTokens.slate,
               ),
               textAlign: TextAlign.center,
             ),
@@ -179,7 +179,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
               icon: const Icon(Icons.add),
               label: const Text('Add Your First Moment'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: MerryWayTheme.primarySoftBlue,
+                backgroundColor: RedesignTokens.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               ),
             ),
@@ -223,7 +223,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                         decoration: BoxDecoration(
                           color: (moment.isManual
                                   ? MerryWayTheme.accentSoftPink
-                                  : MerryWayTheme.accentGolden)
+                                  : RedesignTokens.accentGold)
                               .withOpacity(0.15),
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -231,7 +231,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                           moment.isManual ? Icons.edit : Icons.celebration,
                           color: moment.isManual
                               ? MerryWayTheme.accentSoftPink
-                              : MerryWayTheme.accentGolden,
+                              : RedesignTokens.accentGold,
                           size: 20,
                         ),
                       ),
@@ -245,7 +245,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                               style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
-                                color: MerryWayTheme.textDark,
+                                color: RedesignTokens.ink,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -253,7 +253,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                               '$daysSince · $dateStr',
                               style: const TextStyle(
                                 fontSize: 12,
-                                color: MerryWayTheme.textMuted,
+                                color: RedesignTokens.slate,
                               ),
                             ),
                           ],
@@ -269,7 +269,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                       moment.description!,
                       style: const TextStyle(
                         fontSize: 14,
-                        color: MerryWayTheme.textDark,
+                        color: RedesignTokens.ink,
                       ),
                     ),
                   ],
@@ -280,13 +280,13 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                     Row(
                       children: [
                         const Icon(Icons.place_outlined,
-                            size: 14, color: MerryWayTheme.textMuted),
+                            size: 14, color: RedesignTokens.slate),
                         const SizedBox(width: 4),
                         Text(
                           moment.place!,
                           style: const TextStyle(
                             fontSize: 13,
-                            color: MerryWayTheme.textMuted,
+                            color: RedesignTokens.slate,
                           ),
                         ),
                       ],
@@ -311,7 +311,7 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                           ),
                           visualDensity: VisualDensity.compact,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          backgroundColor: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+                          backgroundColor: RedesignTokens.primary.withOpacity(0.1),
                         );
                       }).toList(),
                     ),
@@ -323,20 +323,20 @@ class _MerryMomentsPageState extends State<MerryMomentsPage> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: MerryWayTheme.primarySoftBlue.withOpacity(0.1),
+                        color: RedesignTokens.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.photo_library,
-                              size: 14, color: MerryWayTheme.primarySoftBlue),
+                              size: 14, color: RedesignTokens.primary),
                           const SizedBox(width: 4),
                           Text(
                             '${moment.mediaIds.length} ${moment.mediaIds.length == 1 ? 'photo' : 'photos'}',
                             style: const TextStyle(
                               fontSize: 12,
-                              color: MerryWayTheme.primarySoftBlue,
+                              color: RedesignTokens.primary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
