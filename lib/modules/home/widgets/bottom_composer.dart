@@ -207,7 +207,7 @@ class _BottomComposerState extends State<BottomComposer> {
             RedesignTokens.space16,
             0,
             RedesignTokens.space16,
-            MediaQuery.of(context).padding.bottom + RedesignTokens.space16,
+            isDesktop ? MediaQuery.of(context).padding.bottom + RedesignTokens.space16 : 0,
           ),
           padding: const EdgeInsets.symmetric(
             horizontal: RedesignTokens.space12,

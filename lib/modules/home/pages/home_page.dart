@@ -1497,10 +1497,8 @@ class _HomePageState extends State<HomePage> {
                               // Show progressive suggestions as they load
                               final suggestions = state.suggestions;
                               
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Column(
-                                  children: [
+                              return Column(
+                                children: [
                                     // Show loading indicator if not complete
                                     if (!state.isComplete)
                                       Container(
@@ -1663,8 +1661,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     );
                                   }).toList(),
-                                  ],
-                                ),
+                                ],
                               );
                             }
 
@@ -1683,10 +1680,8 @@ class _HomePageState extends State<HomePage> {
                                 ...uniqueSavedSuggestions, // Then unique saved AI suggestions
                               ];
                               
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Column(
-                                  children: allSuggestions.asMap().entries.map((entry) {
+                              return Column(
+                                children: allSuggestions.asMap().entries.map((entry) {
                                   final index = entry.key;
                                   final suggestion = entry.value;
                                   
@@ -1837,9 +1832,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                                 }).toList(),
-                                ],
-                              ),
-                            );
+                              );
                             }
 
                             return const SizedBox.shrink();
