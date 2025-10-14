@@ -1872,7 +1872,7 @@ class _HomePageState extends State<HomePage> {
           
           // Bottom Composer (sticky at bottom)
           Positioned(
-            bottom: MediaQuery.of(context).size.width < 900 ? 80 : 0, // Attach to nav bar on mobile
+            bottom: 0, // Pin directly to bottom on all screen sizes
             left: 0,
             right: 0,
             child: BottomComposer(
