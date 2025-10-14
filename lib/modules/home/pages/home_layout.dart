@@ -1,7 +1,7 @@
-import 'package:app/modules/core/blocs/layout_bloc.dart';
-import 'package:app/modules/core/di/service_locator.dart';
+import 'package:merryway/modules/core/blocs/layout_bloc.dart';
+import 'package:merryway/modules/core/di/service_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:app/modules/core/theme/theme_extension.dart';
+import 'package:merryway/modules/core/theme/theme_extension.dart';
 
 class HomeLayout extends StatefulWidget {
   final Widget child;

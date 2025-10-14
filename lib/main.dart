@@ -1,20 +1,20 @@
-import 'package:app/modules/auth/blocs/auth_bloc.dart';
-import 'package:app/modules/auth/services/auth_state_listener.dart';
-import 'package:app/modules/core/blocs/layout_bloc.dart';
-import 'package:app/modules/core/blocs/layout_event.dart';
-import 'package:app/modules/core/routing/app_router.dart';
+// Phase 1: Simplified main.dart for family module only
+import 'package:merryway/modules/core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:app/modules/core/di/service_locator.dart';
-import 'package:app/modules/core/platform/url_strategy.dart';
-import 'package:app/config/environment.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:app/modules/user/repositories/user_settings_repository.dart';
-import 'package:app/modules/user/models/user_settings.dart' as u;
-import 'package:app/modules/core/theme/theme_provider.dart';
-import 'package:watch_it/watch_it.dart';
+import 'package:merryway/modules/core/di/service_locator.dart';
+import 'package:merryway/modules/core/platform/url_strategy.dart';
+import 'package:merryway/config/environment.dart';
+import 'package:merryway/modules/family/blocs/family_bloc.dart';
+import 'package:merryway/modules/core/theme/merryway_theme.dart';
+
+// Legacy imports commented out for Phase 1
+// import 'package:merryway/modules/auth/blocs/auth_bloc.dart';
+// import 'package:merryway/modules/auth/services/auth_state_listener.dart';
+// import 'package:merryway/modules/core/blocs/layout_bloc.dart';
+// import 'package:merryway/modules/user/repositories/user_settings_repository.dart';
+// import 'package:merryway/modules/core/theme/theme_provider.dart';
 
 void mainCommon() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,60 +26,34 @@ void mainCommon() async {
   
   await setupServiceLocator();
 
-  sl<AuthStateListener>().initialize();
+  // Legacy auth listener - commented out for Phase 1
+  // sl<AuthStateListener>().initialize();
   
   initializeUrlStrategy();
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget with WatchItMixin {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    final theme = watchStream(
-      (UserSettingsRepository r) => r.theme,
-      initialValue: sl<UserSettingsRepository>().currentTheme,
-    ).data;
-
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) => sl<AuthBloc>(),
+        // Phase 1: Only FamilyBloc
+        BlocProvider<FamilyBloc>(
+          create: (context) => sl<FamilyBloc>(),
         ),
-        BlocProvider<LayoutBloc>.value(
-          value: sl<LayoutBloc>(),
-        ),
+        // Legacy blocs commented out for Phase 1
+        // BlocProvider<AuthBloc>(create: (context) => sl<AuthBloc>()),
+        // BlocProvider<LayoutBloc>.value(value: sl<LayoutBloc>()),
       ],
-      child: Builder(
-        builder: (context) {
-        
-          return ThemeProvider(
-            currentTheme: theme ?? u.ThemeMode.light,
-            child: Builder(
-              builder: (context) {
-                final goRouter = AppRouter.setupRouter(context);
-                final themeProvider = ThemeProvider.of(context);
-
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    sl<LayoutBloc>().add(
-                      UpdateLayoutType(constraints.maxWidth),
-                    );
-                    
-                    return ShadApp.materialRouter(
-                      debugShowCheckedModeBanner: false,
-                      routerConfig: goRouter,
-                      theme: themeProvider.theme,
-                    );
-                  },
-                );
-              },
-            ),
-          );
-        },
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.setupRouter(context),
+        theme: MerryWayTheme.lightTheme,
+        title: 'Merryway - Phase 1',
       ),
     );
   }

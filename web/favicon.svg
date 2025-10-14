@@ -1,0 +1,22 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="32" fill="#B4D7E8"/>
+  
+  <!-- Letter M -->
+  <text x="16" y="46" font-family="Eczar, serif" font-size="36" font-weight="800" fill="#2C3E50">M</text>
+  
+  <!-- Sparkle -->
+  <g transform="translate(45, 20)">
+    <!-- Center point -->
+    <circle cx="0" cy="0" r="1.5" fill="#D4A848"/>
+    <!-- Vertical beam -->
+    <rect x="-0.75" y="-6" width="1.5" height="12" fill="#D4A848"/>
+    <!-- Horizontal beam -->
+    <rect x="-6" y="-0.75" width="12" height="1.5" fill="#D4A848"/>
+    <!-- Diagonal beam 1 -->
+    <rect x="-0.75" y="-4.5" width="1.5" height="9" fill="#D4A848" transform="rotate(45)"/>
+    <!-- Diagonal beam 2 -->
+    <rect x="-0.75" y="-4.5" width="1.5" height="9" fill="#D4A848" transform="rotate(-45)"/>
+  </g>
+</svg>
+

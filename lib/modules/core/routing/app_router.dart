@@ -1,257 +1,437 @@
-import 'package:app/modules/auth/blocs/auth_bloc.dart';
-import 'package:app/modules/auth/blocs/auth_state.dart';
-import 'package:app/modules/auth/pages/join_page.dart';
-import 'package:app/modules/auth/pages/login_page.dart';
-import 'package:app/modules/auth/pages/signup_page.dart';
-import 'package:app/modules/core/di/service_locator.dart';
-import 'package:app/modules/core/routing/router_observer.dart';
-import 'package:app/modules/core/ui/pages/main_layout.dart';
-import 'package:app/modules/core/routing/router_refresh_stream_group.dart';
-import 'package:app/modules/core/ui/widgets/fullscreen_loader.dart';
-import 'package:app/modules/home/pages/home_layout.dart';
-import 'package:app/modules/home/pages/home_page.dart';
-import 'package:app/modules/user/repositories/user_settings_repository.dart';
+// Phase 1: Auth → Onboarding → Home flow
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app/modules/settings/pages/settings_layout.dart';
-import 'package:app/modules/settings/pages/about_you_page.dart';
-import 'package:app/modules/settings/pages/appearance_page.dart';
-import 'package:app/modules/memberships/screens/membership_home_screen.dart';
-import 'package:app/modules/memberships/screens/subscribe_screen.dart';
-import 'package:app/modules/memberships/screens/checkout_return_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:merryway/modules/home/pages/home_page.dart';
+import 'package:merryway/modules/onboarding/pages/onboarding_page.dart';
+import 'package:merryway/modules/settings/pages/simple_settings_page.dart';
+import 'package:merryway/modules/experiences/pages/moments_page.dart';
+import 'package:merryway/modules/experiences/pages/moments_v2_page.dart';
+import 'package:merryway/modules/family/models/family_models.dart';
+import 'package:merryway/modules/family/models/pod_model.dart';
+import 'package:merryway/modules/ideas/pages/my_ideas_page.dart';
+import 'package:merryway/modules/ideas/pages/idea_detail_page.dart';
+import 'package:merryway/modules/ideas/widgets/idea_composer.dart';
+import 'package:merryway/modules/plans/screens/plans_list_screen.dart';
+
+// Phase 1 Auth Pages
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.auth.signInWithPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      if (mounted) {
+        context.go('/home');
+      }
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 400),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Welcome to Merryway',
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                enabled: !_isLoading,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+                enabled: !_isLoading,
+                onSubmitted: (_) => _handleLogin(),
+              ),
+              const SizedBox(height: 24),
+              if (_error != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _handleLogin,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Sign In'),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: _isLoading ? null : () => context.go('/signup'),
+                child: const Text('Don\'t have an account? Sign Up'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleSignUp() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.auth.signUp(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      if (mounted) {
+        // Check if email confirmation is required
+        final session = supabase.auth.currentSession;
+        if (session != null) {
+          context.go('/onboarding');
+        } else {
+          setState(() {
+            _error = 'Please check your email to confirm your account';
+            _isLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 400),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Create Account',
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                enabled: !_isLoading,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+                enabled: !_isLoading,
+                onSubmitted: (_) => _handleSignUp(),
+              ),
+              const SizedBox(height: 24),
+              if (_error != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _handleSignUp,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Sign Up'),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: _isLoading ? null : () => context.go('/login'),
+                child: const Text('Already have an account? Sign In'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class AppRouter {
-
-  static final SharedPreferences _prefs = sl<SharedPreferences>();
-
   static GoRouter setupRouter(BuildContext context) {
-    final authBloc = sl<AuthBloc>();
-    final settings = sl<UserSettingsRepository>();
-
-    // Define standalone routes that bypass MainLayout
-    final standaloneRoutes = {'/login', '/signup', '/start', '/join'};
-
+    final supabase = Supabase.instance.client;
+    
     return GoRouter(
-      debugLogDiagnostics: false,
+      debugLogDiagnostics: true,
       initialLocation: '/',
-      observers: [RouterObserver()],
-      // Only refresh on auth changes, org changes, or initial settings load
-      refreshListenable: GoRouterRefreshStreamGroup([
-        authBloc.stream,
-        settings.initialSettingsLoaded,
-      ]),
+      refreshListenable: GoRouterRefreshStream(supabase.auth.onAuthStateChange),
       redirect: (context, state) {
-        final authState = authBloc.state;
-        final currentPath = state.uri.path;
-        
-        // Always allow splash screen to show while loading
-        if (currentPath == '/') {
-          if (authState is AuthLoading || authState is AuthInitial) {
-            return null; // Stay on splash screen
-          } else if (authState is Authenticated) {
-            final deepLink = _getStoredDeepLink();
-            if (deepLink != null && deepLink.isNotEmpty) {
-              _clearStoredDeepLink();
-              return deepLink;
-            }
-            return '/home';
-          } else {
-            return '/login';
-          }
-        }
-        
-        // Store deep link attempts during loading
-        if ((authState is AuthLoading || authState is AuthInitial) && 
-            currentPath != '/' && 
-            !currentPath.startsWith('/login') && 
-            !currentPath.startsWith('/signup')) {
-          _storeDeepLink(currentPath);
-          return '/'; // Redirect to splash screen
-        }
+        final session = supabase.auth.currentSession;
+        final isAuthenticated = session != null;
+        final isOnLoginPage = state.uri.path == '/login';
+        final isOnOnboarding = state.uri.path == '/onboarding';
+        final isOnHome = state.uri.path == '/home';
 
-        // Handle authenticated users
-        if (authState is Authenticated) {
-          if (currentPath.startsWith('/login') || currentPath.startsWith('/signup')) {
-            final deepLink = _getStoredDeepLink();
-            if (deepLink != null && deepLink.isNotEmpty) {
-              _clearStoredDeepLink();
-              return deepLink;
-            }
-            return '/home';
-          }
-          return null; // Allow authenticated users to access their routes
-        }
-
-        // Handle unauthenticated users
-        if (authState is Unauthenticated) {
-          if (currentPath.startsWith('/login') || currentPath.startsWith('/signup')) {
-            return null; // Allow access to auth pages
-          }
-          
-          // Store attempted path and redirect to login
-          if (!currentPath.startsWith('/join') && currentPath != '/') {
-            _storeDeepLink(currentPath);
-          }
+        // Not authenticated → redirect to login
+        if (!isAuthenticated && !isOnLoginPage) {
           return '/login';
         }
 
-        return null;
+        // Authenticated but on login page → go to home
+        if (isAuthenticated && isOnLoginPage) {
+          return '/home';
+        }
+
+        // Authenticated on root → go to home
+        if (isAuthenticated && state.uri.path == '/') {
+          return '/home';
+        }
+
+        return null; // No redirect needed
       },
       routes: [
-        // Root/Splash route
+        // Auth pages
         GoRoute(
-          path: '/',
-          builder: (context, state) => FullscreenLoader(),
-        ),
-        // Auth routes (no shell)
-        GoRoute(
-          path: '/login/:code',
-          builder: (context, state) => LoginPage(
-            code: state.pathParameters['code'],
-          ),
-        ),
-        GoRoute(
-          name: 'login',
           path: '/login',
-          builder: (context, state) => LoginPage(),
+          builder: (context, state) => const LoginPage(),
         ),
         GoRoute(
-          path: '/signup/:code',
-          builder: (context, state) => SignUpPage(
-            code: state.pathParameters['code'],
-          ),
-        ),
-        GoRoute(
-          name: 'signup',
           path: '/signup',
           builder: (context, state) => const SignUpPage(),
         ),
-
-        // Join routes (no shell)
+        
+        // Onboarding (after auth)
         GoRoute(
-          path: '/join/:joinCode/:code',
-          builder: (context, state) => JoinPage(
-            joinCode: state.pathParameters['joinCode'],
-            code: state.pathParameters['code'],
-          ),
-        ),
-        GoRoute(
-          path: '/join/:joinCode',
-          builder: (context, state) => JoinPage(
-            joinCode: state.pathParameters['joinCode'],
-          ),
-        ),
-        GoRoute(
-          path: '/join',
-          builder: (context, state) => const JoinPage(),
+          path: '/onboarding',
+          builder: (context, state) => const OnboardingPage(),
         ),
         
-        // Main shell route
-        ShellRoute(
-          builder: (context, state, child) {
-            final currentPath = state.uri.toString();
+        // Home (after onboarding)
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomePage(),
+        ),
+        
+        // Settings
+        GoRoute(
+          path: '/settings',
+          builder: (context, state) => const SimpleSettingsPage(),
+        ),
+        
+        // Moments (requires householdId and allMembers passed via extra)
+        GoRoute(
+          path: '/moments',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final householdId = extra?['householdId'] as String? ?? '';
+            final membersRaw = extra?['allMembers'] as List?;
+            final allMembers = membersRaw?.cast<FamilyMember>() ?? <FamilyMember>[];
             
-            // Bypass MainLayout for standalone pages
-            if (standaloneRoutes.contains(currentPath)) {
-              return child;
-            }
-            
-            return MainLayout(child: child);
+            return MomentsV2Page(
+              householdId: householdId,
+              allMembers: allMembers,
+            );
           },
-          routes: [
-            GoRoute(
-              path: '/',
-              redirect: (_, state) {
-                return '/home';
-              },
-            ),
-          
-            // Content routes (nested shell)
-            ShellRoute(
-              builder: (context, state, child) {
-                return HomeLayout(child: child);
-              },
-              routes: [
-                GoRoute(
-                  path: '/home',
-                  builder: (context, state) => HomePage(),
-                ),
-              ],
-            ),
-
-            // Settings routes (nested shell)
-            ShellRoute(
-              builder: (context, state, child) {
-                return SettingsLayout(child: child);
-              },
-              routes: [
-                GoRoute(
-                  path: '/settings',
-                  builder: (context, state) => AboutYouPage(),
-                  routes: [
-                    GoRoute(
-                      path: '/about-you',
-                      builder: (context, state) => const AboutYouPage(),
-                    ),
-                    GoRoute(
-                      path: '/appearance',
-                      builder: (context, state) => const AppearancePage(),
-                    ),
-
-                  ]
-                ),
-              ],
-            ),
-
-            // Membership routes (nested shell)
-            ShellRoute(
-              builder: (context, state, child) {
-                return SettingsLayout(child: child);
-              },
-              routes: [
-                GoRoute(
-                  path: '/membership',
-                  builder: (context, state) {
-                    final shouldRefresh = state.queryParameters['refresh'] == 'true';
-                    return MembershipHomeScreen(key: shouldRefresh ? UniqueKey() : null);
-                  },
-                  routes: [
-                    GoRoute(
-                      path: '/subscribe',
-                      builder: (context, state) => const SubscribeScreen(),
-                    ),
-                    GoRoute(
-                      path: '/success',
-                      builder: (context, state) {
-                        final sessionId = state.queryParameters['session_id'];
-                        return CheckoutReturnScreen(status: 'success', sessionId: sessionId);
-                      },
-                    ),
-                    GoRoute(
-                      path: '/cancel',
-                      builder: (context, state) => const CheckoutReturnScreen(status: 'cancel'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+        ),
+        
+        // Plans (requires householdId passed via extra)
+        GoRoute(
+          path: '/plans',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final householdId = extra?['householdId'] as String? ?? '';
+            
+            return PlansListScreen(
+              householdId: householdId,
+            );
+          },
+        ),
+        
+        // Ideas - My Ideas Page
+        GoRoute(
+          path: '/ideas/my',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final householdId = extra?['householdId'] as String? ?? '';
+            final currentMemberId = extra?['currentMemberId'] as String? ?? '';
+            final isParent = extra?['isParent'] as bool? ?? false;
+            final allMembers = extra?['allMembers'] as List<FamilyMember>? ?? [];
+            final allPods = extra?['allPods'] as List<Pod>? ?? [];
+            
+            return MyIdeasPage(
+              householdId: householdId,
+              currentMemberId: currentMemberId,
+              isParent: isParent,
+              allMembers: allMembers,
+              allPods: allPods,
+            );
+          },
+        ),
+        
+        // Ideas - New Idea Composer
+        GoRoute(
+          path: '/ideas/new',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final householdId = extra?['householdId'] as String? ?? '';
+            final currentMemberId = extra?['currentMemberId'] as String? ?? '';
+            final allMembers = extra?['allMembers'] as List<FamilyMember>? ?? [];
+            final allPods = extra?['allPods'] as List<Pod>? ?? [];
+            
+            return IdeaComposer(
+              householdId: householdId,
+              currentMemberId: currentMemberId,
+              allMembers: allMembers,
+              allPods: allPods,
+            );
+          },
+        ),
+        
+        // Ideas - Idea Detail Page
+        GoRoute(
+          path: '/ideas/:id',
+          builder: (context, state) {
+            final ideaId = state.pathParameters['id'] ?? '';
+            final extra = state.extra as Map<String, dynamic>?;
+            final householdId = extra?['householdId'] as String? ?? '';
+            final currentMemberId = extra?['currentMemberId'] as String? ?? '';
+            final isParent = extra?['isParent'] as bool? ?? false;
+            final allMembers = extra?['allMembers'] as List<FamilyMember>? ?? [];
+            final allPods = extra?['allPods'] as List<Pod>? ?? [];
+            
+            return IdeaDetailPage(
+              ideaId: ideaId,
+              householdId: householdId,
+              currentMemberId: currentMemberId,
+              isParent: isParent,
+              allMembers: allMembers,
+              allPods: allPods,
+            );
+          },
+        ),
+        
+        // Root
+        GoRoute(
+          path: '/',
+          redirect: (context, state) => '/login',
         ),
       ],
     );
   }
+}
 
-  // Deep link storage methods
-  static void _storeDeepLink(String path) {
-    _prefs.setString('deep_link', path);
+// Helper to make auth state changes work with GoRouter
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<AuthState> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
   }
-  
-  static String? _getStoredDeepLink() {
-    return _prefs.getString('deep_link');
-  }
-  
-  static void _clearStoredDeepLink() {
-    _prefs.remove('deep_link');
+
+  late final StreamSubscription<AuthState> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }

@@ -1,6 +1,4 @@
-import 'package:app/modules/core/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:app/modules/user/models/user_settings.dart' as u;
 
 class ThemeColors {
   static const white = ColorGroup(
@@ -85,7 +83,7 @@ class ColorGroup {
   });
 
   Color getValue(BuildContext context) {
-    final themeProvider = ThemeProvider.of(context);
-    return themeProvider.currentTheme == u.ThemeMode.dark ? dark : light;
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? dark : light;
   }
 } 

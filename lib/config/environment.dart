@@ -31,15 +31,15 @@ class Environment {
     }
   }
 
-  // Add other environment-specific configurations
+  // Supabase Configuration (hosted project)
   static String get supabaseUrl => const String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: 'https://live-wired-fox.ngrok-free.app',
+    defaultValue: 'https://xnvzkjqnirqfgemjakok.supabase.co',
   );
 
   static String get supabaseAnonKey => const String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzQ1NDY3MjAwLCJleHAiOjE5MDMyMzM2MDB9.nJIBddnuSoAuyDW_4dZl0MaX41Gnvn__3EHySRVziZI',
+    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhudnpranFuaXJxZmdlbWpha29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMTk0NTksImV4cCI6MjA3NTc5NTQ1OX0.3Xz99qEjRzCTInLHLDVqkBd7xF_RJ9NpF5_CxtULkwE',
   );
 
   static String get appUrl {
@@ -57,5 +57,11 @@ class Environment {
         return 'http://localhost:8686';
     }
   }
+
+  // OpenAI API Key (for journaling/parsing)
+  static String get openAIApiKey => const String.fromEnvironment(
+    'OPENAI_API_KEY',
+    defaultValue: '', // User will provide via --dart-define
+  );
   
 } 
