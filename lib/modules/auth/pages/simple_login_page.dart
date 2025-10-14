@@ -190,10 +190,24 @@ class _SimpleLoginPageState extends State<SimpleLoginPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            'assets/img/google.svg',
-                            height: 20,
+                          // Google icon (using Unicode G for now)
+                          Container(
                             width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'G',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF4285F4), // Google blue
+                                ),
+                              ),
+                            ),
                           ),
                           const SizedBox(width: 12),
                           Text(
