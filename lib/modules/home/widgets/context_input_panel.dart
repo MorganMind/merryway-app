@@ -105,7 +105,7 @@ class _ContextInputPanelState extends State<ContextInputPanel> {
               controller: promptController,
               focusNode: _focusNode,
               decoration: InputDecoration(
-                hintText: 'What would you like to do?',
+                hintText: 'What are you thinking?',
                 hintStyle: const TextStyle(color: Color(0xFFCCCCCC), fontSize: 14),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
