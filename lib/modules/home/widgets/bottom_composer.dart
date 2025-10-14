@@ -157,6 +157,13 @@ class _BottomComposerState extends State<BottomComposer> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
+                  // Suggestions button (moved from main input row)
+                  _buildContextOption(
+                    icon: Icons.auto_awesome,
+                    onTap: widget.onMagic,
+                    color: RedesignTokens.accentGold,
+                  ),
+                  const SizedBox(width: RedesignTokens.space8),
                   _buildContextOption(
                     icon: _getWeatherIcon(widget.currentWeather),
                     onTap: () {
@@ -217,15 +224,6 @@ class _BottomComposerState extends State<BottomComposer> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Mic button
-              _buildAccessoryButton(
-                icon: widget.isRecording ? Icons.stop : Icons.mic,
-                onPressed: widget.isRecording ? widget.onVoiceStop : widget.onVoiceStart,
-                color: widget.isRecording ? RedesignTokens.dangerColor : RedesignTokens.slate,
-              ),
-              
-              const SizedBox(width: RedesignTokens.space8),
-              
               // Text field
               Expanded(
                 child: TextField(
@@ -236,7 +234,7 @@ class _BottomComposerState extends State<BottomComposer> {
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
                   decoration: InputDecoration(
-                    hintText: 'What would you like to do?',
+                    hintText: 'What are you thinking?',
                     hintStyle: RedesignTokens.body.copyWith(
                       color: RedesignTokens.mutedText.withOpacity(0.4),
                     ),
@@ -254,11 +252,11 @@ class _BottomComposerState extends State<BottomComposer> {
               
               const SizedBox(width: RedesignTokens.space8),
               
-              // Magic button
+              // Mic button (moved to right side)
               _buildAccessoryButton(
-                icon: Icons.auto_awesome,
-                onPressed: widget.onMagic,
-                color: RedesignTokens.accentGold,
+                icon: widget.isRecording ? Icons.stop : Icons.mic,
+                onPressed: widget.isRecording ? widget.onVoiceStop : widget.onVoiceStart,
+                color: widget.isRecording ? RedesignTokens.dangerColor : RedesignTokens.slate,
               ),
               
               // Send button (appears when there's text)
@@ -320,7 +318,9 @@ class _BottomComposerState extends State<BottomComposer> {
     IconData? icon,
     String? label,
     required VoidCallback onTap,
+    Color? color,
   }) {
+    final optionColor = color ?? RedesignTokens.primary;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(RedesignTokens.radiusPill),
@@ -330,17 +330,17 @@ class _BottomComposerState extends State<BottomComposer> {
           vertical: 8,
         ),
         decoration: BoxDecoration(
-          color: RedesignTokens.primary.withOpacity(0.08),
+          color: optionColor.withOpacity(0.08),
           borderRadius: BorderRadius.circular(RedesignTokens.radiusPill),
-          border: Border.all(color: RedesignTokens.primary.withOpacity(0.2)),
+          border: Border.all(color: optionColor.withOpacity(0.2)),
         ),
         child: icon != null
-            ? Icon(icon, size: 18, color: RedesignTokens.primary)
+            ? Icon(icon, size: 18, color: optionColor)
             : Text(
                 label ?? '',
                 style: RedesignTokens.caption.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: RedesignTokens.primary,
+                  color: optionColor,
                 ),
               ),
       ),
