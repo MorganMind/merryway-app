@@ -228,12 +228,12 @@ class _FamilyHealthDashboardPageState extends State<FamilyHealthDashboardPage>
         isTimeActive: true,
         onIdeas: () => Navigator.pop(context),
         onMoments: () {
-          if (_householdId != null && _familyMembers.isNotEmpty) {
+          if (widget.householdId.isNotEmpty && _familyMembers.isNotEmpty) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => MomentsV2Page(
-                  householdId: _householdId!,
+                  householdId: widget.householdId,
                   allMembers: _familyMembers,
                 ),
               ),
@@ -241,8 +241,11 @@ class _FamilyHealthDashboardPageState extends State<FamilyHealthDashboardPage>
           }
         },
         onPlanner: () {
-          // Navigate to plans - you'll need to import and implement this
-          // context.push('/plans', extra: {'householdId': _householdId});
+          if (widget.householdId.isNotEmpty) {
+            context.push('/plans', extra: {
+              'householdId': widget.householdId,
+            });
+          }
         },
         onTime: () {
           // Already on Trails page
