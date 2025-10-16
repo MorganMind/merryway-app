@@ -90,15 +90,22 @@ class _SimplifiedSuggestionCardState extends State<SimplifiedSuggestionCard> {
       onTap: widget.onTap,
       borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
       child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: RedesignTokens.getGutter(MediaQuery.of(context).size.width),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 16, // Match greeting section padding
           vertical: RedesignTokens.space12,
         ),
         padding: const EdgeInsets.all(RedesignTokens.space24),
         decoration: BoxDecoration(
           color: Colors.white, // Explicit white background for cards
           borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
-          boxShadow: RedesignTokens.shadowNone,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.transparent,
+              offset: Offset(0, 0),
+              blurRadius: 0,
+              spreadRadius: 0,
+            ),
+          ],
         ),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

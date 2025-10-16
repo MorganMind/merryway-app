@@ -23,8 +23,8 @@ class StickyPodRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: RedesignTokens.getGutter(MediaQuery.of(context).size.width),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16, // Match greeting section padding
         vertical: RedesignTokens.space12,
       ),
       decoration: BoxDecoration(
@@ -47,7 +47,7 @@ class StickyPodRow extends StatelessWidget {
                   _buildPodChip(
                     context,
                     label: 'All',
-                    icon: Icons.grid_view_rounded,
+                    emoji: '🌟',
                     isSelected: isAllMode,
                     onTap: () => onPodSelected(null, true),
                   ),
@@ -61,7 +61,7 @@ class StickyPodRow extends StatelessWidget {
                       child: _buildPodChip(
                         context,
                         label: pod.name,
-                        icon: _getIconForPod(pod.icon),
+                        emoji: pod.icon,
                         isSelected: isSelected,
                         onTap: () => onPodSelected(pod.id, false),
                       ),
@@ -111,7 +111,7 @@ class StickyPodRow extends StatelessWidget {
   Widget _buildPodChip(
     BuildContext context, {
     required String label,
-    required IconData icon,
+    required String emoji,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
@@ -134,10 +134,12 @@ class StickyPodRow extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isSelected ? Colors.white : RedesignTokens.slate,
+            Text(
+              emoji,
+              style: TextStyle(
+                fontSize: 16,
+                color: isSelected ? Colors.white : RedesignTokens.slate,
+              ),
             ),
             const SizedBox(width: 6),
             Text(
@@ -153,23 +155,5 @@ class StickyPodRow extends StatelessWidget {
     );
   }
 
-  IconData _getIconForPod(String? iconName) {
-    switch (iconName) {
-      case 'family':
-        return Icons.family_restroom;
-      case 'people':
-        return Icons.people;
-      case 'child':
-        return Icons.child_care;
-      case 'person':
-        return Icons.person;
-      case 'school':
-        return Icons.school;
-      case 'sports':
-        return Icons.sports;
-      default:
-        return Icons.group;
-    }
-  }
 }
 

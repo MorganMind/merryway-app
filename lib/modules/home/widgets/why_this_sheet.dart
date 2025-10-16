@@ -6,6 +6,7 @@ import '../../../modules/core/theme/redesign_tokens.dart';
 import '../../../modules/family/models/family_models.dart';
 import '../../auth/services/user_context_service.dart';
 import '../services/why_this_service.dart';
+import '../../core/widgets/sparkle_loading.dart';
 
 /// Bottom sheet for "Why This?" voice persuasion feature
 class WhyThisSheet extends StatefulWidget {
@@ -82,6 +83,18 @@ class _WhyThisSheetState extends State<WhyThisSheet> {
         setState(() => _position = position);
       }
     });
+  }
+
+  Future<void> _setupAudio() async {
+    if (_audioUrl == null || _audioUrl!.isEmpty) return;
+    
+    try {
+      print('🎵 Setting up audio: $_audioUrl');
+      await _audioPlayer?.setUrl(_audioUrl!);
+      print('✅ Audio setup complete');
+    } catch (e) {
+      print('❌ Error setting up audio: $e');
+    }
   }
 
   Future<void> _loadWhyThis() async {
@@ -202,6 +215,62 @@ class _WhyThisSheetState extends State<WhyThisSheet> {
       shownSetId: suggestionId,
       durationPlayedMs: _position.inMilliseconds,
     );
+  }
+
+  Future<void> _retryRationale() async {
+    if (_isLoading) return;
+    
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final suggestionId = widget.suggestion.id ?? widget.suggestion.activity.hashCode.toString();
+      
+      // Get current participants
+      final List<ParticipantInfo> participants = widget.activeParticipantIds
+          .map((id) => widget.allMembers.firstWhere((m) => m.id == id))
+          .map((member) => ParticipantInfo(
+                memberId: member.id!,
+                ageRange: _getAgeRange(member.age),
+                role: _getRole(member.role),
+              ))
+          .toList();
+
+      // Call retry API
+      final response = await WhyThisService.retryRationale(
+        suggestionId: suggestionId,
+        shownSetId: suggestionId,
+        householdId: widget.householdId,
+        participants: participants,
+        kidMode: await _isKidMode(),
+      );
+
+      // Update state with new content
+      setState(() {
+        _audioUrl = response.audioUrl;
+        _transcript = response.transcript;
+        _rationaleLine = response.rationaleLine;
+        _altSuggestionId = response.altSuggestionId;
+        _isLoading = false;
+      });
+
+      // Log the retry action
+      _logAction(WhyThisAction.audioStarted);
+
+      // If we have new audio, set it up
+      if (_audioUrl != null && _audioUrl!.isNotEmpty) {
+        await _setupAudio();
+      }
+
+    } catch (e) {
+      print('❌ Error retrying rationale: $e');
+      setState(() {
+        _errorMessage = 'Failed to generate new rationale: $e';
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _playPause() async {
@@ -599,6 +668,27 @@ class _WhyThisSheetState extends State<WhyThisSheet> {
         ),
 
         const SizedBox(height: 12),
+
+        // "Try Again" button
+        TextButton.icon(
+          onPressed: _isLoading ? null : _retryRationale,
+          icon: _isLoading 
+            ? const SizedBox(
+                width: 16,
+                height: 16,
+                child: SparkleLoading(size: 16),
+              )
+            : const Icon(Icons.refresh, size: 16),
+          label: Text(
+            _isLoading ? 'Generating...' : 'Try Again',
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 14,
+              color: _isLoading ? RedesignTokens.slate : RedesignTokens.primary,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 8),
 
         // Tertiary: "Show an alternative"
         if (_altSuggestionId != null && _altSuggestionId!.isNotEmpty)

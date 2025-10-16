@@ -39,7 +39,7 @@ class ProposalCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  proposal.activityName,
+                  proposal.activityName ?? 'Untitled Activity',
                   style: GoogleFonts.eczar(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

@@ -133,10 +133,12 @@ class IdeasApiService {
     final headers = await _getHeaders();
     final queryParams = <String, String>{
       'household_id': householdId,
+      'limit': '20', // Get more than the default 3 ideas
+      'state': 'active', // Get only active ideas by default
     };
 
     if (state != null) {
-      queryParams['state'] = state.toDbString();
+      queryParams['state'] = state.toDbString(); // Override default 'active'
     }
     if (visibility != null) {
       queryParams['visibility'] = visibility.toDbString();
@@ -151,7 +153,7 @@ class IdeasApiService {
       queryParams['creator_member_id'] = creatorMemberId;
     }
 
-    final url = Uri.parse('$baseUrl/ideas/').replace(queryParameters: queryParams);
+    final url = Uri.parse('$baseUrl/ideas/list/').replace(queryParameters: queryParams);
     print('  GET URL: $url');
 
     try {

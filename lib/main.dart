@@ -9,12 +9,33 @@ import 'package:merryway/config/environment.dart';
 import 'package:merryway/modules/family/blocs/family_bloc.dart';
 import 'package:merryway/modules/core/theme/merryway_theme.dart';
 
+/// Custom page transitions builder that provides instant transitions (no animation)
+class NoTransitionPageTransitionsBuilder extends PageTransitionsBuilder {
+  const NoTransitionPageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T extends Object?>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // Return the child immediately without any animation
+    return child;
+  }
+}
+
 // Legacy imports commented out for Phase 1
 // import 'package:merryway/modules/auth/blocs/auth_bloc.dart';
 // import 'package:merryway/modules/auth/services/auth_state_listener.dart';
 // import 'package:merryway/modules/core/blocs/layout_bloc.dart';
 // import 'package:merryway/modules/user/repositories/user_settings_repository.dart';
 // import 'package:merryway/modules/core/theme/theme_provider.dart';
+
+void main() async {
+  mainCommon();
+}
 
 void mainCommon() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,7 +73,17 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.setupRouter(context),
-        theme: MerryWayTheme.lightTheme,
+        theme: MerryWayTheme.lightTheme.copyWith(
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: NoTransitionPageTransitionsBuilder(),
+              TargetPlatform.iOS: NoTransitionPageTransitionsBuilder(),
+              TargetPlatform.linux: NoTransitionPageTransitionsBuilder(),
+              TargetPlatform.macOS: NoTransitionPageTransitionsBuilder(),
+              TargetPlatform.windows: NoTransitionPageTransitionsBuilder(),
+            },
+          ),
+        ),
         title: 'Merryway - Phase 1',
       ),
     );

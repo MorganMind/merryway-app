@@ -8,6 +8,7 @@ class Pod extends Equatable {
   final List<String> memberIds;
   final String color;
   final String icon;
+  final bool parentOnly; // Feature flag for parent-only pods
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -19,6 +20,7 @@ class Pod extends Equatable {
     required this.memberIds,
     this.color = '#B4D7E8',
     this.icon = '👥',
+    this.parentOnly = false,
     this.createdAt,
     this.updatedAt,
   });
@@ -32,6 +34,7 @@ class Pod extends Equatable {
         memberIds,
         color,
         icon,
+        parentOnly,
         createdAt,
         updatedAt,
       ];
@@ -44,6 +47,7 @@ class Pod extends Equatable {
         'member_ids': memberIds,
         'color': color,
         'icon': icon,
+        'parent_only': parentOnly,
       };
 
   factory Pod.fromJson(Map<String, dynamic> json) {
@@ -58,6 +62,7 @@ class Pod extends Equatable {
           [],
       color: json['color'] ?? '#B4D7E8',
       icon: json['icon'] ?? '👥',
+      parentOnly: json['parent_only'] ?? false,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
           : null,
@@ -75,6 +80,7 @@ class Pod extends Equatable {
     List<String>? memberIds,
     String? color,
     String? icon,
+    bool? parentOnly,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -86,6 +92,7 @@ class Pod extends Equatable {
       memberIds: memberIds ?? this.memberIds,
       color: color ?? this.color,
       icon: icon ?? this.icon,
+      parentOnly: parentOnly ?? this.parentOnly,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

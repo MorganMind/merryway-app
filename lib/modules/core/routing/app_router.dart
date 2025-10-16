@@ -15,6 +15,9 @@ import 'package:merryway/modules/ideas/pages/idea_detail_page.dart';
 import 'package:merryway/modules/ideas/widgets/idea_composer.dart';
 import 'package:merryway/modules/plans/screens/plans_list_screen.dart';
 import 'package:merryway/modules/auth/pages/simple_login_page.dart';
+import 'package:merryway/modules/auth/services/user_context_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../widgets/sparkle_loading.dart';
 
 // Phase 1 Auth Pages
 class OldLoginPage extends StatefulWidget {
@@ -116,7 +119,7 @@ class _OldLoginPageState extends State<OldLoginPage> {
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        child: SparkleLoading(size: 20),
                       )
                     : const Text('Sign In'),
               ),
@@ -241,7 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        child: SparkleLoading(size: 20),
                       )
                     : const Text('Sign Up'),
               ),
@@ -319,32 +322,19 @@ class AppRouter {
           builder: (context, state) => const SimpleSettingsPage(),
         ),
         
-        // Moments (requires householdId and allMembers passed via extra)
+        // Moments (auto-resolves householdId and loads members)
         GoRoute(
           path: '/moments',
           builder: (context, state) {
-            final extra = state.extra as Map<String, dynamic>?;
-            final householdId = extra?['householdId'] as String? ?? '';
-            final membersRaw = extra?['allMembers'] as List?;
-            final allMembers = membersRaw?.cast<FamilyMember>() ?? <FamilyMember>[];
-            
-            return MomentsV2Page(
-              householdId: householdId,
-              allMembers: allMembers,
-            );
+            return _MomentsRouteWrapper();
           },
         ),
         
-        // Plans (requires householdId passed via extra)
+        // Plans (auto-resolves householdId from user session)
         GoRoute(
           path: '/plans',
           builder: (context, state) {
-            final extra = state.extra as Map<String, dynamic>?;
-            final householdId = extra?['householdId'] as String? ?? '';
-            
-            return PlansListScreen(
-              householdId: householdId,
-            );
+            return _PlansRouteWrapper();
           },
         ),
         
@@ -434,5 +424,269 @@ class GoRouterRefreshStream extends ChangeNotifier {
   void dispose() {
     _subscription.cancel();
     super.dispose();
+  }
+}
+
+/// Wrapper that auto-resolves household ID from user session
+class _PlansRouteWrapper extends StatefulWidget {
+  @override
+  State<_PlansRouteWrapper> createState() => _PlansRouteWrapperState();
+}
+
+class _PlansRouteWrapperState extends State<_PlansRouteWrapper> {
+  String? _householdId;
+  bool _isLoading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolveHouseholdId();
+  }
+
+  Future<void> _resolveHouseholdId() async {
+    try {
+      // Get user's household from their session
+      final supabase = Supabase.instance.client;
+      final user = supabase.auth.currentUser;
+      
+      if (user == null) {
+        setState(() {
+          _error = 'User not authenticated';
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Query households table to find user's household
+      final response = await supabase
+          .from('households')
+          .select('id')
+          .eq('user_id', user.id)
+          .limit(1);
+
+      if (response.isNotEmpty) {
+        final householdId = response.first['id'] as String?;
+        if (householdId != null && householdId.isNotEmpty) {
+          setState(() {
+            _householdId = householdId;
+            _isLoading = false;
+          });
+          return;
+        }
+      }
+
+      // If no household found, show error
+      setState(() {
+        _error = 'No household found for user';
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = 'Failed to load household: $e';
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: SparkleLoading(),
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(
+                _error!,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => context.go('/home'),
+                child: const Text('Go to Home'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_householdId == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.home_outlined, size: 64, color: Colors.orange),
+              const SizedBox(height: 16),
+              const Text(
+                'No household found',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Text('Please create or join a household first'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => context.go('/home'),
+                child: const Text('Go to Home'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return PlansListScreen(householdId: _householdId!);
+  }
+}
+
+/// Wrapper that auto-resolves household ID and loads family members for moments
+class _MomentsRouteWrapper extends StatefulWidget {
+  @override
+  State<_MomentsRouteWrapper> createState() => _MomentsRouteWrapperState();
+}
+
+class _MomentsRouteWrapperState extends State<_MomentsRouteWrapper> {
+  String? _householdId;
+  List<FamilyMember> _allMembers = [];
+  bool _isLoading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolveHouseholdAndMembers();
+  }
+
+  Future<void> _resolveHouseholdAndMembers() async {
+    try {
+      // Get user's household from their session
+      final supabase = Supabase.instance.client;
+      final user = supabase.auth.currentUser;
+      
+      if (user == null) {
+        setState(() {
+          _error = 'User not authenticated';
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Query households table to find user's household
+      final response = await supabase
+          .from('households')
+          .select('id')
+          .eq('user_id', user.id)
+          .limit(1);
+
+      if (response.isNotEmpty) {
+        final householdId = response.first['id'] as String?;
+        if (householdId != null && householdId.isNotEmpty) {
+          // Load family members for this household
+          final membersData = await supabase
+              .from('family_members')
+              .select()
+              .eq('household_id', householdId);
+          final members = (membersData as List<dynamic>)
+              .map((json) => FamilyMember.fromJson(json))
+              .toList();
+          
+          setState(() {
+            _householdId = householdId;
+            _allMembers = members;
+            _isLoading = false;
+          });
+          return;
+        }
+      }
+
+      // If no household found, show error
+      setState(() {
+        _error = 'No household found for user';
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = 'Failed to load household and members: $e';
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: SparkleLoading(),
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(
+                _error!,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => context.go('/home'),
+                child: const Text('Go to Home'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_householdId == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.home_outlined, size: 64, color: Colors.orange),
+              const SizedBox(height: 16),
+              const Text(
+                'No household found',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Text('Please create or join a household first'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => context.go('/home'),
+                child: const Text('Go to Home'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return MomentsV2Page(
+      householdId: _householdId!,
+      allMembers: _allMembers,
+    );
   }
 }

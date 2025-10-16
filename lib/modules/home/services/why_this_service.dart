@@ -90,6 +90,58 @@ class WhyThisService {
     }
   }
 
+  /// Retry "Why This?" rationale generation
+  static Future<WhyThisResponse> retryRationale({
+    required String suggestionId,
+    required String shownSetId,
+    required String householdId,
+    required List<ParticipantInfo> participants,
+    required bool kidMode,
+    Map<String, dynamic>? contextOverride,
+  }) async {
+    try {
+      final token = await _getToken();
+      final url = '$_baseUrl/suggestions/$suggestionId/why-this-retry/';
+      final requestBody = {
+        'shown_set_id': shownSetId,
+        'household_id': householdId,
+        'participants': participants.map((p) => p.toJson()).toList(),
+        'kid_mode': kidMode,
+        if (contextOverride != null) 'context_override': contextOverride,
+      };
+      
+      print('🔄 Why This Retry Request:');
+      print('  URL: $url');
+      print('  Suggestion ID: $suggestionId');
+      print('  Household ID: $householdId');
+      print('  Participants: ${participants.length}');
+      print('  Kid Mode: $kidMode');
+      
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(requestBody),
+      );
+
+      print('📨 Why This Retry Response:');
+      print('  Status: ${response.statusCode}');
+      print('  Body: ${response.body.substring(0, response.body.length > 200 ? 200 : response.body.length)}...');
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return WhyThisResponse.fromJson(data);
+      } else {
+        throw Exception('Failed to retry rationale: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('❌ Error retrying rationale: $e');
+      rethrow;
+    }
+  }
+
   static Future<String> _getToken() async {
     final session = Supabase.instance.client.auth.currentSession;
     return session?.accessToken ?? '';

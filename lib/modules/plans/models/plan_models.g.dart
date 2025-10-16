@@ -7,9 +7,9 @@ part of 'plan_models.dart';
 // **************************************************************************
 
 _$PlanImpl _$$PlanImplFromJson(Map<String, dynamic> json) => _$PlanImpl(
-      id: json['id'] as String,
-      householdId: json['householdId'] as String,
-      title: json['title'] as String,
+      id: json['id'] as String?,
+      householdId: json['householdId'] as String?,
+      title: json['title'] as String?,
       status: json['status'] as String? ?? 'active',
       createdAt: json['createdAt'] == null
           ? null
@@ -53,39 +53,41 @@ Map<String, dynamic> _$$PlanMemberImplToJson(_$PlanMemberImpl instance) =>
 
 _$PlanMessageImpl _$$PlanMessageImplFromJson(Map<String, dynamic> json) =>
     _$PlanMessageImpl(
-      id: json['id'] as String,
-      planId: json['planId'] as String,
-      authorType: json['authorType'] as String,
-      authorMemberId: json['authorMemberId'] as String?,
-      bodyMd: json['bodyMd'] as String,
+      id: json['id'] as String?,
+      planId: json['plan_id'] as String?,
+      authorType: json['author_type'] as String?,
+      authorMemberId: json['author_member_id'] as String?,
+      bodyMd: json['body_md'] as String?,
+      timeAgo: json['time_ago'] as String?,
       attachments: json['attachments'] as List<dynamic>? ?? const [],
-      replyToId: json['replyToId'] as String?,
-      createdAt: json['createdAt'] == null
+      replyToId: json['reply_to_id'] as String?,
+      createdAt: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
           ? null
-          : DateTime.parse(json['updatedAt'] as String),
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$$PlanMessageImplToJson(_$PlanMessageImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'planId': instance.planId,
-      'authorType': instance.authorType,
-      'authorMemberId': instance.authorMemberId,
-      'bodyMd': instance.bodyMd,
+      'plan_id': instance.planId,
+      'author_type': instance.authorType,
+      'author_member_id': instance.authorMemberId,
+      'body_md': instance.bodyMd,
+      'time_ago': instance.timeAgo,
       'attachments': instance.attachments,
-      'replyToId': instance.replyToId,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'reply_to_id': instance.replyToId,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
 _$PlanProposalImpl _$$PlanProposalImplFromJson(Map<String, dynamic> json) =>
     _$PlanProposalImpl(
-      id: json['id'] as String,
-      planId: json['planId'] as String,
-      activityName: json['activityName'] as String,
+      id: json['id'] as String?,
+      planId: json['planId'] as String?,
+      activityName: json['activityName'] as String?,
       activityId: json['activityId'] as String?,
       proposedByMemberId: json['proposedByMemberId'] as String?,
       reasoning: json['reasoning'] as String?,
@@ -121,9 +123,9 @@ Map<String, dynamic> _$$PlanProposalImplToJson(_$PlanProposalImpl instance) =>
 
 _$PlanVoteImpl _$$PlanVoteImplFromJson(Map<String, dynamic> json) =>
     _$PlanVoteImpl(
-      id: json['id'] as String,
-      proposalId: json['proposalId'] as String,
-      voterMemberId: json['voterMemberId'] as String,
+      id: json['id'] as String?,
+      proposalId: json['proposalId'] as String?,
+      voterMemberId: json['voterMemberId'] as String?,
       value: (json['value'] as num?)?.toInt() ?? 0,
       createdAt: json['createdAt'] == null
           ? null
@@ -145,10 +147,10 @@ Map<String, dynamic> _$$PlanVoteImplToJson(_$PlanVoteImpl instance) =>
 
 _$PlanConstraintImpl _$$PlanConstraintImplFromJson(Map<String, dynamic> json) =>
     _$PlanConstraintImpl(
-      id: json['id'] as String,
-      planId: json['planId'] as String,
-      type: json['type'] as String,
-      valueJson: json['valueJson'] as Map<String, dynamic>,
+      id: json['id'] as String?,
+      planId: json['planId'] as String?,
+      type: json['type'] as String?,
+      valueJson: json['valueJson'] as Map<String, dynamic>?,
       addedByMemberId: json['addedByMemberId'] as String?,
       createdAt: json['createdAt'] == null
           ? null
@@ -168,8 +170,8 @@ Map<String, dynamic> _$$PlanConstraintImplToJson(
 
 _$PlanDecisionImpl _$$PlanDecisionImplFromJson(Map<String, dynamic> json) =>
     _$PlanDecisionImpl(
-      id: json['id'] as String,
-      planId: json['planId'] as String,
+      id: json['id'] as String?,
+      planId: json['planId'] as String?,
       proposalId: json['proposalId'] as String?,
       summaryMd: json['summaryMd'] as String? ?? '',
       decidedByMemberId: json['decidedByMemberId'] as String?,
@@ -190,9 +192,9 @@ Map<String, dynamic> _$$PlanDecisionImplToJson(_$PlanDecisionImpl instance) =>
 
 _$PlanItineraryImpl _$$PlanItineraryImplFromJson(Map<String, dynamic> json) =>
     _$PlanItineraryImpl(
-      id: json['id'] as String,
-      planId: json['planId'] as String,
-      title: json['title'] as String,
+      id: json['id'] as String?,
+      planId: json['planId'] as String?,
+      title: json['title'] as String?,
       itemsJson: json['itemsJson'] as List<dynamic>? ?? const [],
       createdByMemberId: json['createdByMemberId'] as String?,
       createdAt: json['createdAt'] == null
@@ -216,9 +218,9 @@ Map<String, dynamic> _$$PlanItineraryImplToJson(_$PlanItineraryImpl instance) =>
 
 _$PlanSummaryImpl _$$PlanSummaryImplFromJson(Map<String, dynamic> json) =>
     _$PlanSummaryImpl(
-      id: json['id'] as String,
-      householdId: json['householdId'] as String,
-      title: json['title'] as String,
+      id: json['id'] as String?,
+      householdId: json['householdId'] as String?,
+      title: json['title'] as String?,
       status: json['status'] as String? ?? 'active',
       memberFacepile: (json['memberFacepile'] as List<dynamic>?)
               ?.map(

@@ -20,9 +20,9 @@ Plan _$PlanFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Plan {
-  String get id => throw _privateConstructorUsedError;
-  String get householdId => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get householdId => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -42,9 +42,9 @@ abstract class $PlanCopyWith<$Res> {
       _$PlanCopyWithImpl<$Res, Plan>;
   @useResult
   $Res call(
-      {String id,
-      String householdId,
-      String title,
+      {String? id,
+      String? householdId,
+      String? title,
       String status,
       DateTime? createdAt,
       DateTime? updatedAt});
@@ -65,26 +65,26 @@ class _$PlanCopyWithImpl<$Res, $Val extends Plan>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? householdId = null,
-    Object? title = null,
+    Object? id = freezed,
+    Object? householdId = freezed,
+    Object? title = freezed,
     Object? status = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      householdId: null == householdId
+              as String?,
+      householdId: freezed == householdId
           ? _value.householdId
           : householdId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -109,9 +109,9 @@ abstract class _$$PlanImplCopyWith<$Res> implements $PlanCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
-      String householdId,
-      String title,
+      {String? id,
+      String? householdId,
+      String? title,
       String status,
       DateTime? createdAt,
       DateTime? updatedAt});
@@ -129,26 +129,26 @@ class __$$PlanImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? householdId = null,
-    Object? title = null,
+    Object? id = freezed,
+    Object? householdId = freezed,
+    Object? title = freezed,
     Object? status = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_$PlanImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      householdId: null == householdId
+              as String?,
+      householdId: freezed == householdId
           ? _value.householdId
           : householdId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -169,9 +169,9 @@ class __$$PlanImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanImpl implements _Plan {
   const _$PlanImpl(
-      {required this.id,
-      required this.householdId,
-      required this.title,
+      {this.id,
+      this.householdId,
+      this.title,
       this.status = 'active',
       this.createdAt,
       this.updatedAt});
@@ -180,11 +180,11 @@ class _$PlanImpl implements _Plan {
       _$$PlanImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String householdId;
+  final String? householdId;
   @override
-  final String title;
+  final String? title;
   @override
   @JsonKey()
   final String status;
@@ -237,9 +237,9 @@ class _$PlanImpl implements _Plan {
 
 abstract class _Plan implements Plan {
   const factory _Plan(
-      {required final String id,
-      required final String householdId,
-      required final String title,
+      {final String? id,
+      final String? householdId,
+      final String? title,
       final String status,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$PlanImpl;
@@ -247,11 +247,11 @@ abstract class _Plan implements Plan {
   factory _Plan.fromJson(Map<String, dynamic> json) = _$PlanImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get householdId;
+  String? get householdId;
   @override
-  String get title;
+  String? get title;
   @override
   String get status;
   @override
@@ -532,15 +532,25 @@ PlanMessage _$PlanMessageFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PlanMessage {
-  String get id => throw _privateConstructorUsedError;
-  String get planId => throw _privateConstructorUsedError;
-  String get authorType =>
+  String? get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'plan_id')
+  String? get planId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'author_type')
+  String? get authorType =>
       throw _privateConstructorUsedError; // 'member' or 'morgan'
+  @JsonKey(name: 'author_member_id')
   String? get authorMemberId => throw _privateConstructorUsedError;
-  String get bodyMd => throw _privateConstructorUsedError;
+  @JsonKey(name: 'body_md')
+  String? get bodyMd => throw _privateConstructorUsedError;
+  @JsonKey(name: 'time_ago')
+  String? get timeAgo =>
+      throw _privateConstructorUsedError; // Human-readable timestamp from backend
   List<dynamic> get attachments => throw _privateConstructorUsedError;
+  @JsonKey(name: 'reply_to_id')
   String? get replyToId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this PlanMessage to a JSON map.
@@ -560,15 +570,16 @@ abstract class $PlanMessageCopyWith<$Res> {
       _$PlanMessageCopyWithImpl<$Res, PlanMessage>;
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String authorType,
-      String? authorMemberId,
-      String bodyMd,
+      {String? id,
+      @JsonKey(name: 'plan_id') String? planId,
+      @JsonKey(name: 'author_type') String? authorType,
+      @JsonKey(name: 'author_member_id') String? authorMemberId,
+      @JsonKey(name: 'body_md') String? bodyMd,
+      @JsonKey(name: 'time_ago') String? timeAgo,
       List<dynamic> attachments,
-      String? replyToId,
-      DateTime? createdAt,
-      DateTime? updatedAt});
+      @JsonKey(name: 'reply_to_id') String? replyToId,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -586,37 +597,42 @@ class _$PlanMessageCopyWithImpl<$Res, $Val extends PlanMessage>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? authorType = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? authorType = freezed,
     Object? authorMemberId = freezed,
-    Object? bodyMd = null,
+    Object? bodyMd = freezed,
+    Object? timeAgo = freezed,
     Object? attachments = null,
     Object? replyToId = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      authorType: null == authorType
+              as String?,
+      authorType: freezed == authorType
           ? _value.authorType
           : authorType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       authorMemberId: freezed == authorMemberId
           ? _value.authorMemberId
           : authorMemberId // ignore: cast_nullable_to_non_nullable
               as String?,
-      bodyMd: null == bodyMd
+      bodyMd: freezed == bodyMd
           ? _value.bodyMd
           : bodyMd // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      timeAgo: freezed == timeAgo
+          ? _value.timeAgo
+          : timeAgo // ignore: cast_nullable_to_non_nullable
+              as String?,
       attachments: null == attachments
           ? _value.attachments
           : attachments // ignore: cast_nullable_to_non_nullable
@@ -646,15 +662,16 @@ abstract class _$$PlanMessageImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String authorType,
-      String? authorMemberId,
-      String bodyMd,
+      {String? id,
+      @JsonKey(name: 'plan_id') String? planId,
+      @JsonKey(name: 'author_type') String? authorType,
+      @JsonKey(name: 'author_member_id') String? authorMemberId,
+      @JsonKey(name: 'body_md') String? bodyMd,
+      @JsonKey(name: 'time_ago') String? timeAgo,
       List<dynamic> attachments,
-      String? replyToId,
-      DateTime? createdAt,
-      DateTime? updatedAt});
+      @JsonKey(name: 'reply_to_id') String? replyToId,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -670,37 +687,42 @@ class __$$PlanMessageImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? authorType = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? authorType = freezed,
     Object? authorMemberId = freezed,
-    Object? bodyMd = null,
+    Object? bodyMd = freezed,
+    Object? timeAgo = freezed,
     Object? attachments = null,
     Object? replyToId = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_$PlanMessageImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      authorType: null == authorType
+              as String?,
+      authorType: freezed == authorType
           ? _value.authorType
           : authorType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       authorMemberId: freezed == authorMemberId
           ? _value.authorMemberId
           : authorMemberId // ignore: cast_nullable_to_non_nullable
               as String?,
-      bodyMd: null == bodyMd
+      bodyMd: freezed == bodyMd
           ? _value.bodyMd
           : bodyMd // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      timeAgo: freezed == timeAgo
+          ? _value.timeAgo
+          : timeAgo // ignore: cast_nullable_to_non_nullable
+              as String?,
       attachments: null == attachments
           ? _value._attachments
           : attachments // ignore: cast_nullable_to_non_nullable
@@ -725,32 +747,42 @@ class __$$PlanMessageImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanMessageImpl implements _PlanMessage {
   const _$PlanMessageImpl(
-      {required this.id,
-      required this.planId,
-      required this.authorType,
-      this.authorMemberId,
-      required this.bodyMd,
+      {this.id,
+      @JsonKey(name: 'plan_id') this.planId,
+      @JsonKey(name: 'author_type') this.authorType,
+      @JsonKey(name: 'author_member_id') this.authorMemberId,
+      @JsonKey(name: 'body_md') this.bodyMd,
+      @JsonKey(name: 'time_ago') this.timeAgo,
       final List<dynamic> attachments = const [],
-      this.replyToId,
-      this.createdAt,
-      this.updatedAt})
+      @JsonKey(name: 'reply_to_id') this.replyToId,
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'updated_at') this.updatedAt})
       : _attachments = attachments;
 
   factory _$PlanMessageImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlanMessageImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String planId;
+  @JsonKey(name: 'plan_id')
+  final String? planId;
   @override
-  final String authorType;
+  @JsonKey(name: 'author_type')
+  final String? authorType;
 // 'member' or 'morgan'
   @override
+  @JsonKey(name: 'author_member_id')
   final String? authorMemberId;
   @override
-  final String bodyMd;
+  @JsonKey(name: 'body_md')
+  final String? bodyMd;
+  @override
+  @JsonKey(name: 'time_ago')
+  final String? timeAgo;
+// Human-readable timestamp from backend
   final List<dynamic> _attachments;
+// Human-readable timestamp from backend
   @override
   @JsonKey()
   List<dynamic> get attachments {
@@ -760,15 +792,18 @@ class _$PlanMessageImpl implements _PlanMessage {
   }
 
   @override
+  @JsonKey(name: 'reply_to_id')
   final String? replyToId;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
 
   @override
   String toString() {
-    return 'PlanMessage(id: $id, planId: $planId, authorType: $authorType, authorMemberId: $authorMemberId, bodyMd: $bodyMd, attachments: $attachments, replyToId: $replyToId, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PlanMessage(id: $id, planId: $planId, authorType: $authorType, authorMemberId: $authorMemberId, bodyMd: $bodyMd, timeAgo: $timeAgo, attachments: $attachments, replyToId: $replyToId, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -783,6 +818,7 @@ class _$PlanMessageImpl implements _PlanMessage {
             (identical(other.authorMemberId, authorMemberId) ||
                 other.authorMemberId == authorMemberId) &&
             (identical(other.bodyMd, bodyMd) || other.bodyMd == bodyMd) &&
+            (identical(other.timeAgo, timeAgo) || other.timeAgo == timeAgo) &&
             const DeepCollectionEquality()
                 .equals(other._attachments, _attachments) &&
             (identical(other.replyToId, replyToId) ||
@@ -802,6 +838,7 @@ class _$PlanMessageImpl implements _PlanMessage {
       authorType,
       authorMemberId,
       bodyMd,
+      timeAgo,
       const DeepCollectionEquality().hash(_attachments),
       replyToId,
       createdAt,
@@ -825,36 +862,48 @@ class _$PlanMessageImpl implements _PlanMessage {
 
 abstract class _PlanMessage implements PlanMessage {
   const factory _PlanMessage(
-      {required final String id,
-      required final String planId,
-      required final String authorType,
-      final String? authorMemberId,
-      required final String bodyMd,
-      final List<dynamic> attachments,
-      final String? replyToId,
-      final DateTime? createdAt,
-      final DateTime? updatedAt}) = _$PlanMessageImpl;
+          {final String? id,
+          @JsonKey(name: 'plan_id') final String? planId,
+          @JsonKey(name: 'author_type') final String? authorType,
+          @JsonKey(name: 'author_member_id') final String? authorMemberId,
+          @JsonKey(name: 'body_md') final String? bodyMd,
+          @JsonKey(name: 'time_ago') final String? timeAgo,
+          final List<dynamic> attachments,
+          @JsonKey(name: 'reply_to_id') final String? replyToId,
+          @JsonKey(name: 'created_at') final DateTime? createdAt,
+          @JsonKey(name: 'updated_at') final DateTime? updatedAt}) =
+      _$PlanMessageImpl;
 
   factory _PlanMessage.fromJson(Map<String, dynamic> json) =
       _$PlanMessageImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get planId;
+  @JsonKey(name: 'plan_id')
+  String? get planId;
   @override
-  String get authorType; // 'member' or 'morgan'
+  @JsonKey(name: 'author_type')
+  String? get authorType; // 'member' or 'morgan'
   @override
+  @JsonKey(name: 'author_member_id')
   String? get authorMemberId;
   @override
-  String get bodyMd;
+  @JsonKey(name: 'body_md')
+  String? get bodyMd;
+  @override
+  @JsonKey(name: 'time_ago')
+  String? get timeAgo; // Human-readable timestamp from backend
   @override
   List<dynamic> get attachments;
   @override
+  @JsonKey(name: 'reply_to_id')
   String? get replyToId;
   @override
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
 
   /// Create a copy of PlanMessage
@@ -871,9 +920,9 @@ PlanProposal _$PlanProposalFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PlanProposal {
-  String get id => throw _privateConstructorUsedError;
-  String get planId => throw _privateConstructorUsedError;
-  String get activityName => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get planId => throw _privateConstructorUsedError;
+  String? get activityName => throw _privateConstructorUsedError;
   String? get activityId => throw _privateConstructorUsedError;
   String? get proposedByMemberId => throw _privateConstructorUsedError;
   String? get reasoning => throw _privateConstructorUsedError;
@@ -902,9 +951,9 @@ abstract class $PlanProposalCopyWith<$Res> {
       _$PlanProposalCopyWithImpl<$Res, PlanProposal>;
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String activityName,
+      {String? id,
+      String? planId,
+      String? activityName,
       String? activityId,
       String? proposedByMemberId,
       String? reasoning,
@@ -932,9 +981,9 @@ class _$PlanProposalCopyWithImpl<$Res, $Val extends PlanProposal>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? activityName = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? activityName = freezed,
     Object? activityId = freezed,
     Object? proposedByMemberId = freezed,
     Object? reasoning = freezed,
@@ -947,18 +996,18 @@ class _$PlanProposalCopyWithImpl<$Res, $Val extends PlanProposal>
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      activityName: null == activityName
+              as String?,
+      activityName: freezed == activityName
           ? _value.activityName
           : activityName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       activityId: freezed == activityId
           ? _value.activityId
           : activityId // ignore: cast_nullable_to_non_nullable
@@ -1012,9 +1061,9 @@ abstract class _$$PlanProposalImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String activityName,
+      {String? id,
+      String? planId,
+      String? activityName,
       String? activityId,
       String? proposedByMemberId,
       String? reasoning,
@@ -1040,9 +1089,9 @@ class __$$PlanProposalImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? activityName = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? activityName = freezed,
     Object? activityId = freezed,
     Object? proposedByMemberId = freezed,
     Object? reasoning = freezed,
@@ -1055,18 +1104,18 @@ class __$$PlanProposalImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
   }) {
     return _then(_$PlanProposalImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      activityName: null == activityName
+              as String?,
+      activityName: freezed == activityName
           ? _value.activityName
           : activityName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       activityId: freezed == activityId
           ? _value.activityId
           : activityId // ignore: cast_nullable_to_non_nullable
@@ -1115,9 +1164,9 @@ class __$$PlanProposalImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanProposalImpl implements _PlanProposal {
   const _$PlanProposalImpl(
-      {required this.id,
-      required this.planId,
-      required this.activityName,
+      {this.id,
+      this.planId,
+      this.activityName,
       this.activityId,
       this.proposedByMemberId,
       this.reasoning,
@@ -1135,11 +1184,11 @@ class _$PlanProposalImpl implements _PlanProposal {
       _$$PlanProposalImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String planId;
+  final String? planId;
   @override
-  final String activityName;
+  final String? activityName;
   @override
   final String? activityId;
   @override
@@ -1247,9 +1296,9 @@ class _$PlanProposalImpl implements _PlanProposal {
 
 abstract class _PlanProposal implements PlanProposal {
   const factory _PlanProposal(
-      {required final String id,
-      required final String planId,
-      required final String activityName,
+      {final String? id,
+      final String? planId,
+      final String? activityName,
       final String? activityId,
       final String? proposedByMemberId,
       final String? reasoning,
@@ -1265,11 +1314,11 @@ abstract class _PlanProposal implements PlanProposal {
       _$PlanProposalImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get planId;
+  String? get planId;
   @override
-  String get activityName;
+  String? get activityName;
   @override
   String? get activityId;
   @override
@@ -1305,9 +1354,9 @@ PlanVote _$PlanVoteFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PlanVote {
-  String get id => throw _privateConstructorUsedError;
-  String get proposalId => throw _privateConstructorUsedError;
-  String get voterMemberId => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get proposalId => throw _privateConstructorUsedError;
+  String? get voterMemberId => throw _privateConstructorUsedError;
   int get value => throw _privateConstructorUsedError; // +1, 0, -1
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -1328,9 +1377,9 @@ abstract class $PlanVoteCopyWith<$Res> {
       _$PlanVoteCopyWithImpl<$Res, PlanVote>;
   @useResult
   $Res call(
-      {String id,
-      String proposalId,
-      String voterMemberId,
+      {String? id,
+      String? proposalId,
+      String? voterMemberId,
       int value,
       DateTime? createdAt,
       DateTime? updatedAt});
@@ -1351,26 +1400,26 @@ class _$PlanVoteCopyWithImpl<$Res, $Val extends PlanVote>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? proposalId = null,
-    Object? voterMemberId = null,
+    Object? id = freezed,
+    Object? proposalId = freezed,
+    Object? voterMemberId = freezed,
     Object? value = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      proposalId: null == proposalId
+              as String?,
+      proposalId: freezed == proposalId
           ? _value.proposalId
           : proposalId // ignore: cast_nullable_to_non_nullable
-              as String,
-      voterMemberId: null == voterMemberId
+              as String?,
+      voterMemberId: freezed == voterMemberId
           ? _value.voterMemberId
           : voterMemberId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -1396,9 +1445,9 @@ abstract class _$$PlanVoteImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String proposalId,
-      String voterMemberId,
+      {String? id,
+      String? proposalId,
+      String? voterMemberId,
       int value,
       DateTime? createdAt,
       DateTime? updatedAt});
@@ -1417,26 +1466,26 @@ class __$$PlanVoteImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? proposalId = null,
-    Object? voterMemberId = null,
+    Object? id = freezed,
+    Object? proposalId = freezed,
+    Object? voterMemberId = freezed,
     Object? value = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_$PlanVoteImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      proposalId: null == proposalId
+              as String?,
+      proposalId: freezed == proposalId
           ? _value.proposalId
           : proposalId // ignore: cast_nullable_to_non_nullable
-              as String,
-      voterMemberId: null == voterMemberId
+              as String?,
+      voterMemberId: freezed == voterMemberId
           ? _value.voterMemberId
           : voterMemberId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -1457,9 +1506,9 @@ class __$$PlanVoteImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanVoteImpl implements _PlanVote {
   const _$PlanVoteImpl(
-      {required this.id,
-      required this.proposalId,
-      required this.voterMemberId,
+      {this.id,
+      this.proposalId,
+      this.voterMemberId,
       this.value = 0,
       this.createdAt,
       this.updatedAt});
@@ -1468,11 +1517,11 @@ class _$PlanVoteImpl implements _PlanVote {
       _$$PlanVoteImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String proposalId;
+  final String? proposalId;
   @override
-  final String voterMemberId;
+  final String? voterMemberId;
   @override
   @JsonKey()
   final int value;
@@ -1527,9 +1576,9 @@ class _$PlanVoteImpl implements _PlanVote {
 
 abstract class _PlanVote implements PlanVote {
   const factory _PlanVote(
-      {required final String id,
-      required final String proposalId,
-      required final String voterMemberId,
+      {final String? id,
+      final String? proposalId,
+      final String? voterMemberId,
       final int value,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$PlanVoteImpl;
@@ -1538,11 +1587,11 @@ abstract class _PlanVote implements PlanVote {
       _$PlanVoteImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get proposalId;
+  String? get proposalId;
   @override
-  String get voterMemberId;
+  String? get voterMemberId;
   @override
   int get value; // +1, 0, -1
   @override
@@ -1564,10 +1613,10 @@ PlanConstraint _$PlanConstraintFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PlanConstraint {
-  String get id => throw _privateConstructorUsedError;
-  String get planId => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
-  Map<String, dynamic> get valueJson => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get planId => throw _privateConstructorUsedError;
+  String? get type => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get valueJson => throw _privateConstructorUsedError;
   String? get addedByMemberId => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
@@ -1588,10 +1637,10 @@ abstract class $PlanConstraintCopyWith<$Res> {
       _$PlanConstraintCopyWithImpl<$Res, PlanConstraint>;
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String type,
-      Map<String, dynamic> valueJson,
+      {String? id,
+      String? planId,
+      String? type,
+      Map<String, dynamic>? valueJson,
       String? addedByMemberId,
       DateTime? createdAt});
 }
@@ -1611,30 +1660,30 @@ class _$PlanConstraintCopyWithImpl<$Res, $Val extends PlanConstraint>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? type = null,
-    Object? valueJson = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? type = freezed,
+    Object? valueJson = freezed,
     Object? addedByMemberId = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as String?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      valueJson: null == valueJson
+              as String?,
+      valueJson: freezed == valueJson
           ? _value.valueJson
           : valueJson // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
+              as Map<String, dynamic>?,
       addedByMemberId: freezed == addedByMemberId
           ? _value.addedByMemberId
           : addedByMemberId // ignore: cast_nullable_to_non_nullable
@@ -1656,10 +1705,10 @@ abstract class _$$PlanConstraintImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String type,
-      Map<String, dynamic> valueJson,
+      {String? id,
+      String? planId,
+      String? type,
+      Map<String, dynamic>? valueJson,
       String? addedByMemberId,
       DateTime? createdAt});
 }
@@ -1677,30 +1726,30 @@ class __$$PlanConstraintImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? type = null,
-    Object? valueJson = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? type = freezed,
+    Object? valueJson = freezed,
     Object? addedByMemberId = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_$PlanConstraintImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as String?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      valueJson: null == valueJson
+              as String?,
+      valueJson: freezed == valueJson
           ? _value._valueJson
           : valueJson // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
+              as Map<String, dynamic>?,
       addedByMemberId: freezed == addedByMemberId
           ? _value.addedByMemberId
           : addedByMemberId // ignore: cast_nullable_to_non_nullable
@@ -1717,10 +1766,10 @@ class __$$PlanConstraintImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanConstraintImpl implements _PlanConstraint {
   const _$PlanConstraintImpl(
-      {required this.id,
-      required this.planId,
-      required this.type,
-      required final Map<String, dynamic> valueJson,
+      {this.id,
+      this.planId,
+      this.type,
+      final Map<String, dynamic>? valueJson,
       this.addedByMemberId,
       this.createdAt})
       : _valueJson = valueJson;
@@ -1729,17 +1778,19 @@ class _$PlanConstraintImpl implements _PlanConstraint {
       _$$PlanConstraintImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String planId;
+  final String? planId;
   @override
-  final String type;
-  final Map<String, dynamic> _valueJson;
+  final String? type;
+  final Map<String, dynamic>? _valueJson;
   @override
-  Map<String, dynamic> get valueJson {
+  Map<String, dynamic>? get valueJson {
+    final value = _valueJson;
+    if (value == null) return null;
     if (_valueJson is EqualUnmodifiableMapView) return _valueJson;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_valueJson);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
@@ -1798,10 +1849,10 @@ class _$PlanConstraintImpl implements _PlanConstraint {
 
 abstract class _PlanConstraint implements PlanConstraint {
   const factory _PlanConstraint(
-      {required final String id,
-      required final String planId,
-      required final String type,
-      required final Map<String, dynamic> valueJson,
+      {final String? id,
+      final String? planId,
+      final String? type,
+      final Map<String, dynamic>? valueJson,
       final String? addedByMemberId,
       final DateTime? createdAt}) = _$PlanConstraintImpl;
 
@@ -1809,13 +1860,13 @@ abstract class _PlanConstraint implements PlanConstraint {
       _$PlanConstraintImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get planId;
+  String? get planId;
   @override
-  String get type;
+  String? get type;
   @override
-  Map<String, dynamic> get valueJson;
+  Map<String, dynamic>? get valueJson;
   @override
   String? get addedByMemberId;
   @override
@@ -1835,8 +1886,8 @@ PlanDecision _$PlanDecisionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PlanDecision {
-  String get id => throw _privateConstructorUsedError;
-  String get planId => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get planId => throw _privateConstructorUsedError;
   String? get proposalId => throw _privateConstructorUsedError;
   String get summaryMd => throw _privateConstructorUsedError;
   String? get decidedByMemberId => throw _privateConstructorUsedError;
@@ -1859,8 +1910,8 @@ abstract class $PlanDecisionCopyWith<$Res> {
       _$PlanDecisionCopyWithImpl<$Res, PlanDecision>;
   @useResult
   $Res call(
-      {String id,
-      String planId,
+      {String? id,
+      String? planId,
       String? proposalId,
       String summaryMd,
       String? decidedByMemberId,
@@ -1882,22 +1933,22 @@ class _$PlanDecisionCopyWithImpl<$Res, $Val extends PlanDecision>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
+    Object? id = freezed,
+    Object? planId = freezed,
     Object? proposalId = freezed,
     Object? summaryMd = null,
     Object? decidedByMemberId = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       proposalId: freezed == proposalId
           ? _value.proposalId
           : proposalId // ignore: cast_nullable_to_non_nullable
@@ -1927,8 +1978,8 @@ abstract class _$$PlanDecisionImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String planId,
+      {String? id,
+      String? planId,
       String? proposalId,
       String summaryMd,
       String? decidedByMemberId,
@@ -1948,22 +1999,22 @@ class __$$PlanDecisionImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
+    Object? id = freezed,
+    Object? planId = freezed,
     Object? proposalId = freezed,
     Object? summaryMd = null,
     Object? decidedByMemberId = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_$PlanDecisionImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       proposalId: freezed == proposalId
           ? _value.proposalId
           : proposalId // ignore: cast_nullable_to_non_nullable
@@ -1988,8 +2039,8 @@ class __$$PlanDecisionImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanDecisionImpl implements _PlanDecision {
   const _$PlanDecisionImpl(
-      {required this.id,
-      required this.planId,
+      {this.id,
+      this.planId,
       this.proposalId,
       this.summaryMd = '',
       this.decidedByMemberId,
@@ -1999,9 +2050,9 @@ class _$PlanDecisionImpl implements _PlanDecision {
       _$$PlanDecisionImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String planId;
+  final String? planId;
   @override
   final String? proposalId;
   @override
@@ -2057,8 +2108,8 @@ class _$PlanDecisionImpl implements _PlanDecision {
 
 abstract class _PlanDecision implements PlanDecision {
   const factory _PlanDecision(
-      {required final String id,
-      required final String planId,
+      {final String? id,
+      final String? planId,
       final String? proposalId,
       final String summaryMd,
       final String? decidedByMemberId,
@@ -2068,9 +2119,9 @@ abstract class _PlanDecision implements PlanDecision {
       _$PlanDecisionImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get planId;
+  String? get planId;
   @override
   String? get proposalId;
   @override
@@ -2094,9 +2145,9 @@ PlanItinerary _$PlanItineraryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PlanItinerary {
-  String get id => throw _privateConstructorUsedError;
-  String get planId => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get planId => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
   List<dynamic> get itemsJson => throw _privateConstructorUsedError;
   String? get createdByMemberId => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -2119,9 +2170,9 @@ abstract class $PlanItineraryCopyWith<$Res> {
       _$PlanItineraryCopyWithImpl<$Res, PlanItinerary>;
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String title,
+      {String? id,
+      String? planId,
+      String? title,
       List<dynamic> itemsJson,
       String? createdByMemberId,
       DateTime? createdAt,
@@ -2143,27 +2194,27 @@ class _$PlanItineraryCopyWithImpl<$Res, $Val extends PlanItinerary>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? title = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? title = freezed,
     Object? itemsJson = null,
     Object? createdByMemberId = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       itemsJson: null == itemsJson
           ? _value.itemsJson
           : itemsJson // ignore: cast_nullable_to_non_nullable
@@ -2193,9 +2244,9 @@ abstract class _$$PlanItineraryImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String planId,
-      String title,
+      {String? id,
+      String? planId,
+      String? title,
       List<dynamic> itemsJson,
       String? createdByMemberId,
       DateTime? createdAt,
@@ -2215,27 +2266,27 @@ class __$$PlanItineraryImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? planId = null,
-    Object? title = null,
+    Object? id = freezed,
+    Object? planId = freezed,
+    Object? title = freezed,
     Object? itemsJson = null,
     Object? createdByMemberId = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
     return _then(_$PlanItineraryImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      planId: null == planId
+              as String?,
+      planId: freezed == planId
           ? _value.planId
           : planId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       itemsJson: null == itemsJson
           ? _value._itemsJson
           : itemsJson // ignore: cast_nullable_to_non_nullable
@@ -2260,9 +2311,9 @@ class __$$PlanItineraryImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanItineraryImpl implements _PlanItinerary {
   const _$PlanItineraryImpl(
-      {required this.id,
-      required this.planId,
-      required this.title,
+      {this.id,
+      this.planId,
+      this.title,
       final List<dynamic> itemsJson = const [],
       this.createdByMemberId,
       this.createdAt,
@@ -2273,11 +2324,11 @@ class _$PlanItineraryImpl implements _PlanItinerary {
       _$$PlanItineraryImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String planId;
+  final String? planId;
   @override
-  final String title;
+  final String? title;
   final List<dynamic> _itemsJson;
   @override
   @JsonKey()
@@ -2347,9 +2398,9 @@ class _$PlanItineraryImpl implements _PlanItinerary {
 
 abstract class _PlanItinerary implements PlanItinerary {
   const factory _PlanItinerary(
-      {required final String id,
-      required final String planId,
-      required final String title,
+      {final String? id,
+      final String? planId,
+      final String? title,
       final List<dynamic> itemsJson,
       final String? createdByMemberId,
       final DateTime? createdAt,
@@ -2359,11 +2410,11 @@ abstract class _PlanItinerary implements PlanItinerary {
       _$PlanItineraryImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get planId;
+  String? get planId;
   @override
-  String get title;
+  String? get title;
   @override
   List<dynamic> get itemsJson;
   @override
@@ -2387,9 +2438,9 @@ PlanSummary _$PlanSummaryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PlanSummary {
-  String get id => throw _privateConstructorUsedError;
-  String get householdId => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get householdId => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   List<MemberFacepileItem> get memberFacepile =>
       throw _privateConstructorUsedError;
@@ -2416,9 +2467,9 @@ abstract class $PlanSummaryCopyWith<$Res> {
       _$PlanSummaryCopyWithImpl<$Res, PlanSummary>;
   @useResult
   $Res call(
-      {String id,
-      String householdId,
-      String title,
+      {String? id,
+      String? householdId,
+      String? title,
       String status,
       List<MemberFacepileItem> memberFacepile,
       String? lastMessageSnippet,
@@ -2443,9 +2494,9 @@ class _$PlanSummaryCopyWithImpl<$Res, $Val extends PlanSummary>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? householdId = null,
-    Object? title = null,
+    Object? id = freezed,
+    Object? householdId = freezed,
+    Object? title = freezed,
     Object? status = null,
     Object? memberFacepile = null,
     Object? lastMessageSnippet = freezed,
@@ -2455,18 +2506,18 @@ class _$PlanSummaryCopyWithImpl<$Res, $Val extends PlanSummary>
     Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      householdId: null == householdId
+              as String?,
+      householdId: freezed == householdId
           ? _value.householdId
           : householdId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -2508,9 +2559,9 @@ abstract class _$$PlanSummaryImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String householdId,
-      String title,
+      {String? id,
+      String? householdId,
+      String? title,
       String status,
       List<MemberFacepileItem> memberFacepile,
       String? lastMessageSnippet,
@@ -2533,9 +2584,9 @@ class __$$PlanSummaryImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? householdId = null,
-    Object? title = null,
+    Object? id = freezed,
+    Object? householdId = freezed,
+    Object? title = freezed,
     Object? status = null,
     Object? memberFacepile = null,
     Object? lastMessageSnippet = freezed,
@@ -2545,18 +2596,18 @@ class __$$PlanSummaryImplCopyWithImpl<$Res>
     Object? updatedAt = freezed,
   }) {
     return _then(_$PlanSummaryImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      householdId: null == householdId
+              as String?,
+      householdId: freezed == householdId
           ? _value.householdId
           : householdId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -2593,9 +2644,9 @@ class __$$PlanSummaryImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlanSummaryImpl implements _PlanSummary {
   const _$PlanSummaryImpl(
-      {required this.id,
-      required this.householdId,
-      required this.title,
+      {this.id,
+      this.householdId,
+      this.title,
       this.status = 'active',
       final List<MemberFacepileItem> memberFacepile = const [],
       this.lastMessageSnippet,
@@ -2609,11 +2660,11 @@ class _$PlanSummaryImpl implements _PlanSummary {
       _$$PlanSummaryImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String householdId;
+  final String? householdId;
   @override
-  final String title;
+  final String? title;
   @override
   @JsonKey()
   final String status;
@@ -2700,9 +2751,9 @@ class _$PlanSummaryImpl implements _PlanSummary {
 
 abstract class _PlanSummary implements PlanSummary {
   const factory _PlanSummary(
-      {required final String id,
-      required final String householdId,
-      required final String title,
+      {final String? id,
+      final String? householdId,
+      final String? title,
       final String status,
       final List<MemberFacepileItem> memberFacepile,
       final String? lastMessageSnippet,
@@ -2715,11 +2766,11 @@ abstract class _PlanSummary implements PlanSummary {
       _$PlanSummaryImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get householdId;
+  String? get householdId;
   @override
-  String get title;
+  String? get title;
   @override
   String get status;
   @override

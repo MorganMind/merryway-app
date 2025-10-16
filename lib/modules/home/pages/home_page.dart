@@ -28,6 +28,7 @@ import '../widgets/feedback_bar.dart';
 import '../widgets/inline_participants_editor.dart';
 import '../widgets/bottom_composer.dart';
 import '../widgets/idea_card_detail_modal.dart';
+import '../services/ai_suggestions_service.dart';
 import '../widgets/gentle_loading_indicator.dart';
 import '../widgets/why_this_sheet.dart';
 import '../services/suggestion_feedback_service.dart';
@@ -36,6 +37,7 @@ import '../../core/ui/widgets/whimsical_card.dart';
 import '../../core/services/weather_service.dart';
 import '../../auth/services/user_context_service.dart';
 import '../../auth/widgets/user_switcher.dart';
+import '../../core/widgets/sparkle_loading.dart';
 import '../../experiences/widgets/create_experience_sheet.dart';
 import '../../experiences/widgets/live_experience_card.dart';
 import '../../experiences/widgets/experience_debrief_modal.dart';
@@ -83,6 +85,13 @@ class _HomePageState extends State<HomePage> {
   
   // Saved AI suggestions from database
   List<ActivitySuggestion> savedAISuggestions = [];
+  
+  // Pagination state
+  int _currentPage = 0;
+  int _pageSize = 20;
+  bool _hasMoreSuggestions = true;
+  bool _isLoadingMore = false;
+  final ScrollController _scrollController = ScrollController();
 
   String _getDefaultTimeOfDay() {
     final hour = DateTime.now().hour;
@@ -286,12 +295,14 @@ class _HomePageState extends State<HomePage> {
 
   String? _lastAISuggestionLogId; // Track the last AI suggestion log ID
   List<ActivitySuggestion> _savedAISuggestions = []; // Cache of saved AI suggestions
-  Map<String, String> _suggestionFeedback = {}; // activity_name -> feedback_type
+  Map<String, String> _suggestionFeedback = {}; // activity_name -> feedback_type (current user only)
+  Map<String, Map<String, String>> _allParticipantsFeedback = {}; // activity_name -> {memberId -> feedback_type}
 
   Future<void> _loadSuggestionFeedback() async {
     if (householdId == null || currentMemberId == null) return;
 
     try {
+      // Load current user's feedback
       final feedback = await SuggestionFeedbackService.loadFeedback(
         householdId: householdId!,
         memberId: currentMemberId!,
@@ -310,23 +321,58 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _loadAllParticipantsFeedback() async {
+    if (householdId == null) return;
+
+    try {
+      // Load feedback for all family members
+      final allFeedback = <String, Map<String, String>>{};
+      
+      for (final member in familyMembers) {
+        if (member.id != null) {
+          try {
+            final memberFeedback = await SuggestionFeedbackService.loadFeedback(
+              householdId: householdId!,
+              memberId: member.id!,
+            );
+            
+            // Group feedback by activity
+            memberFeedback.forEach((activity, feedbackType) {
+              if (!allFeedback.containsKey(activity)) {
+                allFeedback[activity] = {};
+              }
+              allFeedback[activity]![member.id!] = feedbackType;
+            });
+          } catch (e) {
+            debugPrint('❌ Error loading feedback for member ${member.id}: $e');
+          }
+        }
+      }
+      
+      setState(() {
+        _allParticipantsFeedback = allFeedback;
+      });
+      
+      debugPrint('✅ Loaded feedback for ${allFeedback.length} activities');
+    } catch (e) {
+      debugPrint('❌ Error loading all participants feedback: $e');
+    }
+  }
+
   Future<void> _loadSavedAISuggestions() async {
     if (householdId == null) return;
 
     try {
-      final supabase = Supabase.instance.client;
-      
-      // Load recent AI suggestion logs (last 20)
-      final response = await supabase
-          .from('ai_suggestion_logs')
-          .select('suggestions, created_at, prompt')
-          .eq('household_id', householdId!)
-          .order('created_at', ascending: false)
-          .limit(20);
+      // Use backend API instead of direct Supabase reads
+      final logs = await AISuggestionsService.getAISuggestionLogs(
+        householdId: householdId!,
+        limit: _pageSize,
+        offset: 0,
+      );
 
       final List<ActivitySuggestion> allSuggestions = [];
       
-      for (var log in response) {
+      for (var log in logs) {
         final suggestions = log['suggestions'] as List?;
         if (suggestions != null) {
           for (var suggestionJson in suggestions) {
@@ -342,11 +388,14 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         _savedAISuggestions = allSuggestions;
+        // Reset pagination state
+        _currentPage = 0;
+        _hasMoreSuggestions = allSuggestions.length == _pageSize;
       });
       
-      debugPrint('✅ Loaded ${allSuggestions.length} saved AI suggestions from database');
+      debugPrint('✅ Loaded ${allSuggestions.length} saved AI suggestions via backend API');
     } catch (e) {
-      debugPrint('❌ Error loading saved AI suggestions: $e');
+      debugPrint('❌ Error loading saved AI suggestions via backend API: $e');
     }
   }
 
@@ -354,72 +403,51 @@ class _HomePageState extends State<HomePage> {
     if (householdId == null) return;
 
     try {
-      final supabase = Supabase.instance.client;
-      
-      // Prepare suggestions data for JSON storage (include all fields)
-      final suggestionsJson = suggestions.map((s) => {
-        'activity': s.activity,
-        'rationale': s.rationale,
-        'duration_minutes': s.durationMinutes,
-        'tags': s.tags,
-        'location': s.location,
-        'distance_miles': s.distanceMiles,
-        'venue_type': s.venueType,
-        'description': s.description,
-        'attire': s.attire,
-        'food_available': s.foodAvailable,
-        'average_rating': s.averageRating,
-        'review_count': s.reviewCount,
-      }).toList();
-
-      // Save to ai_suggestion_logs table
-      final result = await supabase.from('ai_suggestion_logs').insert({
-        'household_id': householdId,
-        'pod_id': selectedPodId,
-        'prompt': customPrompt,
-        'context': {
+      // Use backend API instead of direct Supabase writes
+      final logId = await AISuggestionsService.saveAISuggestions(
+        householdId: householdId!,
+        podId: selectedPodId,
+        prompt: customPrompt,
+        context: {
           'weather': weather,
           'time_of_day': timeOfDay,
           'day_of_week': dayOfWeek,
         },
-        'participant_ids': isAllMode 
+        participantIds: isAllMode 
             ? null 
             : (selectedParticipants.isNotEmpty ? selectedParticipants.toList() : null),
-        'suggestions': suggestionsJson,
-        'model_used': 'gpt-3.5-turbo',
-      }).select();
+        suggestions: suggestions,
+        modelUsed: 'gpt-3.5-turbo',
+      );
 
       // Store the log ID for tracking acceptance
-      if (result.isNotEmpty) {
-        _lastAISuggestionLogId = result[0]['id'];
-      }
+      _lastAISuggestionLogId = logId;
 
-      debugPrint('✅ AI suggestions saved to database (log_id: $_lastAISuggestionLogId)');
+      debugPrint('✅ AI suggestions saved via backend API (log_id: $_lastAISuggestionLogId)');
       
       // Reload saved suggestions to include this new one
       await _loadSavedAISuggestions();
     } catch (e) {
-      debugPrint('❌ Error saving AI suggestions to database: $e');
+      debugPrint('❌ Error saving AI suggestions via backend API: $e');
       // Don't show error to user - this is background logging
     }
   }
 
   Future<void> _trackAISuggestionAccepted(String suggestionName) async {
-    if (_lastAISuggestionLogId == null) return;
+    if (_lastAISuggestionLogId == null || householdId == null || currentMemberId == null) return;
 
     try {
-      final supabase = Supabase.instance.client;
-      
-      await supabase
-          .from('ai_suggestion_logs')
-          .update({
-            'user_accepted_suggestion': suggestionName,
-          })
-          .eq('id', _lastAISuggestionLogId!);
+      // Use backend API instead of direct Supabase writes
+      await AISuggestionsService.trackSuggestionAccepted(
+        logId: _lastAISuggestionLogId!,
+        suggestionName: suggestionName,
+        householdId: householdId!,
+        memberId: currentMemberId!,
+      );
 
-      debugPrint('✅ Tracked AI suggestion acceptance: $suggestionName');
+      debugPrint('✅ Tracked AI suggestion acceptance via backend API: $suggestionName');
     } catch (e) {
-      debugPrint('❌ Error tracking AI suggestion acceptance: $e');
+      debugPrint('❌ Error tracking AI suggestion acceptance via backend API: $e');
     }
   }
 
@@ -704,7 +732,7 @@ class _HomePageState extends State<HomePage> {
       // Filter out parent-only pods if current user is a child
       final currentUser = UserContextService.getCurrentMember(currentMemberId, familyMembers);
       if (currentUser?.role == MemberRole.child) {
-        loadedPods = loadedPods.where((pod) => !_isPodParentOnly(pod)).toList();
+        loadedPods = loadedPods.where((pod) => !pod.parentOnly && !_isPodParentOnly(pod)).toList();
       }
       
       setState(() {
@@ -783,6 +811,7 @@ class _HomePageState extends State<HomePage> {
         await _loadLiveExperiences(); // Load experiences on init
         await _loadSavedAISuggestions(); // Load saved AI suggestions from database
         await _loadSuggestionFeedback(); // Load user's feedback history
+        await _loadAllParticipantsFeedback(); // Load all participants' feedback
 
         _fetchNewSuggestion();
       }
@@ -799,6 +828,73 @@ class _HomePageState extends State<HomePage> {
     dayOfWeek = _getDefaultDayOfWeek();
     _initializeWeather();
     _loadHouseholdId();
+    
+    // Add scroll listener for pagination
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= 
+        _scrollController.position.maxScrollExtent - 200) {
+      _loadMoreSuggestions();
+    }
+  }
+
+  Future<void> _loadMoreSuggestions() async {
+    if (_isLoadingMore || !_hasMoreSuggestions) return;
+    
+    setState(() {
+      _isLoadingMore = true;
+    });
+    
+    try {
+      // Use backend API instead of direct Supabase reads
+      final logs = await AISuggestionsService.getAISuggestionLogs(
+        householdId: householdId!,
+        limit: _pageSize,
+        offset: _currentPage * _pageSize,
+      );
+
+      if (logs.isNotEmpty) {
+        final List<ActivitySuggestion> newSuggestions = [];
+        
+        for (var log in logs) {
+          final suggestions = log['suggestions'] as List?;
+          if (suggestions != null) {
+            for (var suggestionJson in suggestions) {
+              try {
+                final suggestion = ActivitySuggestion.fromJson(suggestionJson);
+                newSuggestions.add(suggestion);
+              } catch (e) {
+                debugPrint('Error parsing suggestion: $e');
+              }
+            }
+          }
+        }
+        
+        setState(() {
+          savedAISuggestions.addAll(newSuggestions);
+          _currentPage++;
+          _hasMoreSuggestions = newSuggestions.length == _pageSize;
+        });
+      } else {
+        setState(() {
+          _hasMoreSuggestions = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading more suggestions via backend API: $e');
+    } finally {
+      setState(() {
+        _isLoadingMore = false;
+      });
+    }
   }
 
   Future<void> _initializeWeather() async {
@@ -817,6 +913,7 @@ class _HomePageState extends State<HomePage> {
     
     // Reload feedback for the new user
     _loadSuggestionFeedback();
+    _loadAllParticipantsFeedback();
     
     // Optionally re-fetch suggestions for the new user
     _fetchNewSuggestion();
@@ -1186,6 +1283,7 @@ class _HomePageState extends State<HomePage> {
                 // Scrollable content
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     padding: const EdgeInsets.only(bottom: 140), // Space for bottom composer + fade gradient
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1274,7 +1372,7 @@ class _HomePageState extends State<HomePage> {
                                   // "All" mode chip
                                   _buildPodChip(
                                     label: 'All',
-                                    icon: Icons.grid_view_rounded,
+                                    emoji: '🌟',
                                     isSelected: isAllMode,
                                     onTap: () {
                                       setState(() {
@@ -1294,7 +1392,7 @@ class _HomePageState extends State<HomePage> {
                                       padding: const EdgeInsets.only(right: RedesignTokens.space8),
                                       child: _buildPodChip(
                                         label: pod.name,
-                                        icon: _getIconForPod(pod.icon),
+                                        emoji: pod.icon,
                                         isSelected: isSelected,
                                         onTap: () {
                                           setState(() {
@@ -1458,15 +1556,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Row(
                               children: [
-                                SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      RedesignTokens.primary,
-                                    ),
-                                  ),
+                                const SparkleLoading(
+                                  size: 20,
+                                  color: RedesignTokens.primary,
                                 ),
                                 const SizedBox(width: RedesignTokens.space16),
                                 Expanded(
@@ -1479,7 +1571,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
 
-                        const SizedBox(height: RedesignTokens.space16),
+                        const SizedBox(height: RedesignTokens.space8),
 
                         // Suggestions section
                         BlocBuilder<FamilyBloc, FamilyState>(
@@ -1499,44 +1591,13 @@ class _HomePageState extends State<HomePage> {
                               
                               return Column(
                                 children: [
-                                    // Show loading indicator if not complete
+                                    // Show proper loading indicator if not complete
                                     if (!state.isComplete)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                        child: Container(
-                                          margin: const EdgeInsets.only(bottom: 16),
-                                          padding: const EdgeInsets.all(16),
-                                        decoration: BoxDecoration(
-                                          color: RedesignTokens.accentGold.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
-                                          border: Border.all(
-                                            color: RedesignTokens.accentGold.withOpacity(0.3),
-                                          ),
+                                      const SizedBox(
+                                        height: 200,
+                                        child: GentleLoadingIndicator(
+                                          message: 'Finding wonderful ideas...',
                                         ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                                valueColor: AlwaysStoppedAnimation<Color>(
-                                                  RedesignTokens.accentGold,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Text(
-                                              'Finding more wonderful ideas...',
-                                              style: GoogleFonts.spaceGrotesk(
-                                                fontSize: 14,
-                                                color: RedesignTokens.ink,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
                                       ),
                                     
                                     // Show suggestions as they come in
@@ -1615,14 +1676,13 @@ class _HomePageState extends State<HomePage> {
                                               }
                                             });
                                           },
-                                          memberFeedback: currentMemberId != null ? () {
+                                          memberFeedback: () {
                                             final activityKey = suggestion.activity.toLowerCase().trim();
-                                            final feedback = _suggestionFeedback[activityKey];
-                                            return feedback != null ? {currentMemberId!: feedback} : null;
-                                          }() : null,
-                                          onFeedback: (feedbackType) {
+                                            return _allParticipantsFeedback[activityKey] ?? {};
+                                          }(),
+                                          onFeedback: (feedbackType) async {
                                             if (currentMemberId != null) {
-                                              SuggestionFeedbackService.saveFeedback(
+                                              await SuggestionFeedbackService.saveFeedback(
                                                 householdId: householdId!,
                                                 memberId: currentMemberId!,
                                                 activityName: suggestion.activity,
@@ -1632,6 +1692,12 @@ class _HomePageState extends State<HomePage> {
                                               setState(() {
                                                 final activityKey = suggestion.activity.toLowerCase().trim();
                                                 _suggestionFeedback[activityKey] = feedbackType;
+                                                
+                                                // Update all participants feedback
+                                                if (!_allParticipantsFeedback.containsKey(activityKey)) {
+                                                  _allParticipantsFeedback[activityKey] = {};
+                                                }
+                                                _allParticipantsFeedback[activityKey]![currentMemberId!] = feedbackType;
                                               });
                                             }
                                           },
@@ -1684,49 +1750,17 @@ class _HomePageState extends State<HomePage> {
                               ];
                               
                               return Column(
-                                children: allSuggestions.asMap().entries.map((entry) {
-                                  final index = entry.key;
-                                  final suggestion = entry.value;
+                                children: [
+                                  ...allSuggestions.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final suggestion = entry.value;
                                   
-                              return AnimatedListItem(
-                                index: index,
-                                delay: const Duration(milliseconds: 80),
-                                child: WhimsicalCard(
-                                  hoverScale: 1.005, // Very subtle 0.5% scale
-                                  child: SimplifiedSuggestionCard(
-                                  title: suggestion.activity,
-                                  rationale: suggestion.rationale,
-                                  durationMinutes: suggestion.durationMinutes,
-                                  tags: suggestion.tags,
-                                  location: suggestion.location,
-                                  distanceMiles: suggestion.distanceMiles,
-                                  venueType: suggestion.venueType,
-                                  participants: isAllMode 
-                                      ? familyMembers // Show all members in "All" mode
-                                      : familyMembers
-                                          .where((m) => selectedParticipants.contains(m.id))
-                                          .toList(),
-                                  podName: pods.firstWhere(
-                                    (p) => p.id == selectedPodId,
-                                    orElse: () => Pod(
-                                      id: '',
-                                      householdId: '',
-                                      name: isAllMode ? 'All' : 'Everyone',
-                                      memberIds: [],
-                                    ),
-                                  ).name,
-                                  onTap: () {
-                                    // Get current participants from card (excluding toggled off)
-                                    final currentParticipants = isAllMode 
-                                        ? familyMembers
-                                        : familyMembers
-                                            .where((m) => selectedParticipants.contains(m.id))
-                                            .toList();
-                                    
-                                    // Show detail modal
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => IdeaCardDetailModal(
+                                    return AnimatedListItem(
+                                      index: index,
+                                      delay: const Duration(milliseconds: 80),
+                                      child: WhimsicalCard(
+                                        hoverScale: 1.005, // Very subtle 0.5% scale
+                                        child: SimplifiedSuggestionCard(
                                           title: suggestion.activity,
                                           rationale: suggestion.rationale,
                                           durationMinutes: suggestion.durationMinutes,
@@ -1734,107 +1768,165 @@ class _HomePageState extends State<HomePage> {
                                           location: suggestion.location,
                                           distanceMiles: suggestion.distanceMiles,
                                           venueType: suggestion.venueType,
-                                          participants: currentParticipants,
-                                          description: suggestion.description ?? 
-                                              'This is a family-friendly activity perfect for all ages. Expect to spend quality time together with plenty of smiles and laughter. The atmosphere is welcoming and there are facilities nearby.',
-                                          onMakeExperience: () {
-                                            // Use the participants displayed in the card
-                                            final participantIds = currentParticipants
-                                                .map((m) => m.id ?? '')
-                                                .where((id) => id.isNotEmpty)
-                                                .toList();
-                                            Navigator.pop(context);
-                                            _showCreateExperienceSheet(suggestion, participantIds: participantIds);
+                                          participants: isAllMode 
+                                              ? familyMembers // Show all members in "All" mode
+                                              : familyMembers
+                                                  .where((m) => selectedParticipants.contains(m.id))
+                                                  .toList(),
+                                          podName: pods.firstWhere(
+                                            (p) => p.id == selectedPodId,
+                                            orElse: () => Pod(
+                                              id: '',
+                                              householdId: '',
+                                              name: isAllMode ? 'All' : 'Everyone',
+                                              memberIds: [],
+                                            ),
+                                          ).name,
+                                          onTap: () {
+                                            // Get current participants from card (excluding toggled off)
+                                            final currentParticipants = isAllMode 
+                                                ? familyMembers
+                                                : familyMembers
+                                                    .where((m) => selectedParticipants.contains(m.id))
+                                                    .toList();
+                                            
+                                            // Show detail modal
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) => IdeaCardDetailModal(
+                                                  title: suggestion.activity,
+                                                  rationale: suggestion.rationale,
+                                                  durationMinutes: suggestion.durationMinutes,
+                                                  tags: suggestion.tags,
+                                                  location: suggestion.location,
+                                                  distanceMiles: suggestion.distanceMiles,
+                                                  venueType: suggestion.venueType,
+                                                  participants: currentParticipants,
+                                                  description: suggestion.description ?? 
+                                                      'This is a family-friendly activity perfect for all ages. Expect to spend quality time together with plenty of smiles and laughter. The atmosphere is welcoming and there are facilities nearby.',
+                                                  onMakeExperience: () {
+                                                    // Use the participants displayed in the card
+                                                    final participantIds = currentParticipants
+                                                        .map((m) => m.id ?? '')
+                                                        .where((id) => id.isNotEmpty)
+                                                        .toList();
+                                                    Navigator.pop(context);
+                                                    _showCreateExperienceSheet(suggestion, participantIds: participantIds);
+                                                  },
+                                                ),
+                                              ),
+                                            );
                                           },
+                                          onMakeExperience: (activeParticipantIds) => _showCreateExperienceSheet(suggestion, participantIds: activeParticipantIds),
+                                          onParticipantToggle: (memberId, included) {
+                                            setState(() {
+                                              if (included) {
+                                                if (!selectedParticipants.contains(memberId)) {
+                                                  selectedParticipants.add(memberId);
+                                                }
+                                              } else {
+                                                selectedParticipants.remove(memberId);
+                                              }
+                                            });
+                                          },
+                                          memberFeedback: _allParticipantsFeedback[suggestion.activity.toLowerCase().trim()] ?? {},
+                                          onFeedback: (action) async {
+                                            // Save feedback to database
+                                            if (householdId != null && currentMemberId != null) {
+                                              await SuggestionFeedbackService.saveFeedback(
+                                                householdId: householdId!,
+                                                memberId: currentMemberId!,
+                                                activityName: suggestion.activity,
+                                                feedbackType: action,
+                                              );
+                                            
+                                              // Update local cache
+                                              setState(() {
+                                                final activityKey = suggestion.activity.toLowerCase().trim();
+                                                _suggestionFeedback[activityKey] = action;
+                                                
+                                                // Update all participants feedback
+                                                if (!_allParticipantsFeedback.containsKey(activityKey)) {
+                                                  _allParticipantsFeedback[activityKey] = {};
+                                                }
+                                                _allParticipantsFeedback[activityKey]![currentMemberId!] = action;
+                                              });
+                                            }
+                                            
+                                            switch (action) {
+                                              case 'love':
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text('Saved to Wishbook ❤️')),
+                                                );
+                                                break;
+                                              case 'neutral':
+                                                // Don't fetch new suggestion, just neutral rating
+                                                break;
+                                              case 'not_interested':
+                                                // Don't fetch new suggestion, just mark as not interested
+                                                break;
+                                            }
+                                          },,
+                                        currentMemberId: currentMemberId,
+                                        onWhyThis: () {
+                                          // Get current participants
+                                          final currentParticipants = isAllMode 
+                                              ? familyMembers
+                                              : familyMembers
+                                                  .where((m) => selectedParticipants.contains(m.id))
+                                                  .toList();
+                                          
+                                          // Get their IDs
+                                          final participantIds = currentParticipants
+                                              .map((m) => m.id ?? '')
+                                              .where((id) => id.isNotEmpty)
+                                              .toList();
+                                          
+                                          // Show Why This sheet
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            isDismissible: true,
+                                            enableDrag: true,
+                                            backgroundColor: Colors.transparent,
+                                            barrierColor: Colors.black.withOpacity(0.4),
+                                            builder: (context) => WhyThisSheet(
+                                              suggestion: suggestion,
+                                              allMembers: familyMembers,
+                                              activeParticipantIds: participantIds,
+                                              currentMemberId: currentMemberId,
+                                              householdId: householdId!,
+                                            ),
+                                          );
+                                        },
+                                        onMenu: () {},
+                                      );
+                                  }).toList(),
+                                  
+                                  // Loading indicator for pagination
+                                  if (_isLoadingMore)
+                                    const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Center(
+                                        child: SparkleLoading(),
+                                      ),
+                                    ),
+                                  
+                                  // End of suggestions indicator
+                                  if (!_hasMoreSuggestions && allSuggestions.isNotEmpty)
+                                    const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Center(
+                                        child: Text(
+                                          'No more suggestions',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  onMakeExperience: (activeParticipantIds) => _showCreateExperienceSheet(suggestion, participantIds: activeParticipantIds),
-                                  onParticipantToggle: (memberId, included) {
-                                    setState(() {
-                                      if (included) {
-                                        if (!selectedParticipants.contains(memberId)) {
-                                          selectedParticipants.add(memberId);
-                                        }
-                                      } else {
-                                        selectedParticipants.remove(memberId);
-                                      }
-                                    });
-                                  },
-                                memberFeedback: currentMemberId != null ? () {
-                                  final activityKey = suggestion.activity.toLowerCase().trim();
-                                  final feedback = _suggestionFeedback[activityKey];
-                                  debugPrint('🔍 Looking up feedback for "$activityKey": $feedback');
-                                  return feedback != null ? {currentMemberId!: feedback} : null;
-                                }() : null,
-                                onFeedback: (action) async {
-                                  // Save feedback to database
-                                  if (householdId != null && currentMemberId != null) {
-                                    await SuggestionFeedbackService.saveFeedback(
-                                      householdId: householdId!,
-                                      memberId: currentMemberId!,
-                                      activityName: suggestion.activity,
-                                      feedbackType: action,
-                                    );
-                                    
-                                    // Update local cache
-                                    setState(() {
-                                      _suggestionFeedback[suggestion.activity.toLowerCase().trim()] = action;
-                                    });
-                                  }
-                                  
-                                  switch (action) {
-                                    case 'love':
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Saved to Wishbook ❤️')),
-                                      );
-                                      break;
-                                    case 'neutral':
-                                      // Don't fetch new suggestion, just neutral rating
-                                      break;
-                                    case 'not_interested':
-                                      // Don't fetch new suggestion, just mark as not interested
-                                      break;
-                                  }
-                                },
-                                currentMemberId: currentMemberId,
-                                onWhyThis: () {
-                                  // Get current participants
-                                  final currentParticipants = isAllMode 
-                                      ? familyMembers
-                                      : familyMembers
-                                          .where((m) => selectedParticipants.contains(m.id))
-                                          .toList();
-                                  
-                                  // Get their IDs
-                                  final participantIds = currentParticipants
-                                      .map((m) => m.id ?? '')
-                                      .where((id) => id.isNotEmpty)
-                                      .toList();
-                                  
-                                  // Show Why This sheet
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    isDismissible: true,
-                                    enableDrag: true,
-                                    backgroundColor: Colors.transparent,
-                                    barrierColor: Colors.black.withOpacity(0.4),
-                                    builder: (context) => WhyThisSheet(
-                                      suggestion: suggestion,
-                                      allMembers: familyMembers,
-                                      activeParticipantIds: participantIds,
-                                      currentMemberId: currentMemberId,
-                                      householdId: householdId!,
                                     ),
-                                  );
-                                },
-                                onMenu: () {},
-                                  ),
-                                ),
-                              );
-                                }).toList(),
+                                ],
                               );
                             }
 
@@ -1944,7 +2036,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildPodChip({
     required String label,
-    required IconData icon,
+    required String emoji,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
@@ -1967,10 +2059,12 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isSelected ? RedesignTokens.onPrimary : RedesignTokens.slate,
+            Text(
+              emoji,
+              style: TextStyle(
+                fontSize: 16,
+                color: isSelected ? RedesignTokens.onPrimary : RedesignTokens.slate,
+              ),
             ),
             const SizedBox(width: 6),
             Text(
@@ -1986,22 +2080,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  IconData _getIconForPod(String? iconName) {
-    switch (iconName) {
-      case 'family':
-        return Icons.family_restroom;
-      case 'people':
-        return Icons.people;
-      case 'child':
-        return Icons.child_care;
-      case 'person':
-        return Icons.person;
-      case 'school':
-        return Icons.school;
-      case 'sports':
-        return Icons.sports;
-      default:
-        return Icons.group;
-    }
-  }
 }

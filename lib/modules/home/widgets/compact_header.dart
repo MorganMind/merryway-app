@@ -40,8 +40,8 @@ class CompactHeader extends StatelessWidget {
     final isMobile = screenWidth < kMobileBreakpoint;
     
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: RedesignTokens.getGutter(screenWidth),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16, // Match greeting section padding
         vertical: RedesignTokens.space12,
       ),
       decoration: BoxDecoration(
@@ -190,9 +190,9 @@ class CompactHeader extends StatelessWidget {
                     value: 'logout',
                     child: Row(
                       children: [
-                        Icon(Icons.logout, size: 18, color: RedesignTokens.dangerColor),
+                        Icon(Icons.logout, size: 18, color: RedesignTokens.mutedText),
                         const SizedBox(width: RedesignTokens.space12),
-                        Text('Logout', style: RedesignTokens.body.copyWith(color: RedesignTokens.dangerColor)),
+                        Text('Logout', style: RedesignTokens.body.copyWith(color: RedesignTokens.mutedText)),
                       ],
                     ),
                   ),
@@ -302,7 +302,7 @@ class BottomNavBar extends StatelessWidget {
         ],
       ),
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom, // Safe area for iOS
+        bottom: MediaQuery.of(context).padding.bottom + 20, // Safe area for iOS + 20px
         top: RedesignTokens.space8,
       ),
       child: Row(

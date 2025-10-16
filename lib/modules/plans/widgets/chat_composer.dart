@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/redesign_tokens.dart';
 
@@ -22,11 +23,14 @@ class ChatComposer extends StatefulWidget {
 class _ChatComposerState extends State<ChatComposer> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
+  final _keyboardFocusNode = FocusNode();
+  bool _hasText = false;
 
   @override
   void dispose() {
     _controller.dispose();
     _focusNode.dispose();
+    _keyboardFocusNode.dispose();
     super.dispose();
   }
 
@@ -34,22 +38,17 @@ class _ChatComposerState extends State<ChatComposer> {
     if (_controller.text.trim().isNotEmpty) {
       widget.onSend(_controller.text.trim());
       _controller.clear();
+      // Ensure no stray newline remains
+      _controller.text = '';
+      _controller.selection = const TextSelection.collapsed(offset: 0);
+      setState(() => _hasText = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
+      color: Colors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -106,12 +105,35 @@ class _ChatComposerState extends State<ChatComposer> {
 
           // Text input
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                  child: TextField(
+                  child: RawKeyboardListener(
+                    focusNode: _keyboardFocusNode,
+                    onKey: (event) {
+                      if (event is RawKeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
+                        final keys = RawKeyboard.instance.keysPressed;
+                        final hasCtrl = keys.contains(LogicalKeyboardKey.controlLeft) ||
+                            keys.contains(LogicalKeyboardKey.controlRight) ||
+                            keys.contains(LogicalKeyboardKey.metaLeft) ||
+                            keys.contains(LogicalKeyboardKey.metaRight);
+                        if (hasCtrl) {
+                          final text = _controller.text;
+                          final selection = _controller.selection;
+                          final insertAt = selection.start >= 0 ? selection.start : text.length;
+                          final newText = text.replaceRange(insertAt, insertAt, '\n');
+                          _controller.text = newText;
+                          _controller.selection = TextSelection.collapsed(offset: insertAt + 1);
+                        } else {
+                          // Prevent newline insertion by handling and clearing
+                          _send();
+                          return; // swallow key
+                        }
+                      }
+                    },
+                    child: TextField(
                     controller: _controller,
                     focusNode: _focusNode,
                     maxLines: null,
@@ -122,7 +144,7 @@ class _ChatComposerState extends State<ChatComposer> {
                         color: RedesignTokens.slate,
                       ),
                       filled: true,
-                      fillColor: RedesignTokens.canvas,
+                        fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
@@ -131,29 +153,45 @@ class _ChatComposerState extends State<ChatComposer> {
                         horizontal: 16,
                         vertical: 12,
                       ),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: _hasText
+                              ? IconButton(
+                                  onPressed: _send,
+                                  icon: const Icon(Icons.arrow_upward),
+                                  color: Colors.white,
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: RedesignTokens.primary,
+                                    minimumSize: const Size(40, 40),
+                                  ),
+                                )
+                              : IconButton(
+                                  onPressed: () {
+                                    // Voice input placeholder - to be wired later
+                                  },
+                                  icon: const Icon(Icons.mic),
+                                  color: Colors.white,
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: RedesignTokens.primary,
+                                    minimumSize: const Size(40, 40),
+                                  ),
+                                ),
+                        ),
                     ),
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 15,
                       color: RedesignTokens.ink,
                     ),
-                    onSubmitted: (_) => _send(),
+                      onChanged: (val) {
+                        final has = val.trim().isNotEmpty;
+                        if (has != _hasText) setState(() => _hasText = has);
+                      },
+                      onSubmitted: (_) {
+                        // Prevent TextField from inserting newline when sending
+                        _send();
+                        _focusNode.requestFocus();
+                      },
                   ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: _send,
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: RedesignTokens.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.arrow_upward,
-                      color: Colors.white,
-                      size: 20,
-                    ),
                   ),
                 ),
               ],

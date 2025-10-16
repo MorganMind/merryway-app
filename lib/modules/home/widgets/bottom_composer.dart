@@ -204,10 +204,10 @@ class _BottomComposerState extends State<BottomComposer> {
             maxWidth: isDesktop ? 720 : double.infinity,
           ),
           margin: EdgeInsets.fromLTRB(
-            isDesktop ? RedesignTokens.space16 : 0,
-            0,
-            isDesktop ? RedesignTokens.space16 : 0,
-            isDesktop ? MediaQuery.of(context).padding.bottom + RedesignTokens.space16 : 0,
+            RedesignTokens.space16,
+            RedesignTokens.space16,
+            RedesignTokens.space16,
+            isDesktop ? MediaQuery.of(context).padding.bottom + RedesignTokens.space16 : RedesignTokens.space16,
           ),
           child: TextField(
             controller: _controller,

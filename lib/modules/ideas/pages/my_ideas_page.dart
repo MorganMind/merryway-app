@@ -66,49 +66,65 @@ class _MyIdeasPageState extends State<MyIdeasPage>
     setState(() => _isLoading = true);
 
     try {
-      // Load drafts
-      final drafts = await _apiService.listIdeas(
-        householdId: widget.householdId,
-        creatorMemberId: widget.currentMemberId,
-        state: IdeaState.draft,
-      );
-
-      // Load pending
-      final pending = await _apiService.listIdeas(
-        householdId: widget.householdId,
-        creatorMemberId: widget.currentMemberId,
-        state: IdeaState.pendingApproval,
-      );
-
-      // Load active
-      final active = await _apiService.listIdeas(
-        householdId: widget.householdId,
-        creatorMemberId: widget.currentMemberId,
-        state: IdeaState.active,
-      );
-
-      // Load archived
-      final archived = await _apiService.listIdeas(
-        householdId: widget.householdId,
-        creatorMemberId: widget.currentMemberId,
-        state: IdeaState.archived,
-      );
-
-      setState(() {
-        _draftIdeas = drafts;
-        _pendingIdeas = pending;
-        _activeIdeas = active;
-        _archivedIdeas = archived;
-        _isLoading = false;
-      });
+      // Load ideas progressively with small delays to show streaming effect
+      await _loadIdeasProgressive();
+      
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     } catch (e) {
       print('Error loading ideas: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error loading ideas: $e')),
         );
+        setState(() => _isLoading = false);
       }
-      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _loadIdeasProgressive() async {
+    // Load drafts first
+    final drafts = await _apiService.listIdeas(
+      householdId: widget.householdId,
+      creatorMemberId: widget.currentMemberId,
+      state: IdeaState.draft,
+    );
+    if (mounted) {
+      setState(() => _draftIdeas = drafts);
+      await Future.delayed(const Duration(milliseconds: 200)); // Small delay
+    }
+
+    // Load pending
+    final pending = await _apiService.listIdeas(
+      householdId: widget.householdId,
+      creatorMemberId: widget.currentMemberId,
+      state: IdeaState.pendingApproval,
+    );
+    if (mounted) {
+      setState(() => _pendingIdeas = pending);
+      await Future.delayed(const Duration(milliseconds: 200)); // Small delay
+    }
+
+    // Load active
+    final active = await _apiService.listIdeas(
+      householdId: widget.householdId,
+      creatorMemberId: widget.currentMemberId,
+      state: IdeaState.active,
+    );
+    if (mounted) {
+      setState(() => _activeIdeas = active);
+      await Future.delayed(const Duration(milliseconds: 200)); // Small delay
+    }
+
+    // Load archived
+    final archived = await _apiService.listIdeas(
+      householdId: widget.householdId,
+      creatorMemberId: widget.currentMemberId,
+      state: IdeaState.archived,
+    );
+    if (mounted) {
+      setState(() => _archivedIdeas = archived);
     }
   }
 

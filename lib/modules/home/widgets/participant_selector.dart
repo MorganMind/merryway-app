@@ -6,6 +6,7 @@ class ParticipantSelector extends StatelessWidget {
   final Set<String> selectedMemberIds;
   final Function(Set<String>) onSelectionChanged;
   final VoidCallback onManagePresets;
+  final Map<String, String>? memberFeedback; // memberId -> feedback type
 
   const ParticipantSelector({
     super.key,
@@ -13,6 +14,7 @@ class ParticipantSelector extends StatelessWidget {
     required this.selectedMemberIds,
     required this.onSelectionChanged,
     required this.onManagePresets,
+    this.memberFeedback,
   });
 
   void _toggleMember(String memberId) {
@@ -42,6 +44,34 @@ class ParticipantSelector extends StatelessWidget {
       const Color(0xFFE8D4FF), // Lavender
     ];
     return colors[index % colors.length];
+  }
+
+  IconData _getFeedbackIcon(String feedbackType) {
+    switch (feedbackType.toLowerCase()) {
+      case 'love':
+      case 'like':
+        return Icons.favorite;
+      case 'not_interested':
+      case 'dislike':
+        return Icons.close;
+      case 'neutral':
+      default:
+        return Icons.remove;
+    }
+  }
+
+  Color _getFeedbackColor(String feedbackType) {
+    switch (feedbackType.toLowerCase()) {
+      case 'love':
+      case 'like':
+        return Colors.red;
+      case 'not_interested':
+      case 'dislike':
+        return Colors.grey;
+      case 'neutral':
+      default:
+        return Colors.grey.shade400;
+    }
   }
 
   @override
@@ -109,15 +139,24 @@ class ParticipantSelector extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Avatar
-                      CircleAvatar(
-                        radius: 14,
-                        backgroundColor: _getAvatarColor(index),
-                        child: Text(
-                          _getInitials(member.name),
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
                             color: Colors.white,
+                            width: 2,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 15.4, // 10% larger than 14
+                          backgroundColor: _getAvatarColor(index),
+                          child: Text(
+                            _getInitials(member.name),
+                            style: const TextStyle(
+                              fontSize: 12, // Slightly larger text
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -133,19 +172,15 @@ class ParticipantSelector extends StatelessWidget {
                               : const Color(0xFF8B8B8B),
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      // Status indicator
-                      AnimatedScale(
-                        scale: isSelected ? 1.0 : 0.8,
-                        duration: const Duration(milliseconds: 200),
-                        child: Icon(
-                          isSelected ? Icons.check_circle : Icons.circle_outlined,
-                          size: 16,
-                          color: isSelected
-                              ? _getAvatarColor(index)
-                              : Colors.grey.shade400,
+                      // Feedback status indicator
+                      if (memberFeedback != null && memberFeedback![member.id] != null) ...[
+                        const SizedBox(width: 4),
+                        Icon(
+                          _getFeedbackIcon(memberFeedback![member.id]!),
+                          size: 12,
+                          color: _getFeedbackColor(memberFeedback![member.id]!),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),

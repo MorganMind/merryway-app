@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/redesign_tokens.dart';
 import '../../../config/environment.dart';
+import '../../core/widgets/sparkle_loading.dart';
 
 class SimpleLoginPage extends StatefulWidget {
   const SimpleLoginPage({super.key});
@@ -340,14 +341,12 @@ class _SimpleLoginPageState extends State<SimpleLoginPage> {
                         elevation: 0,
                       ),
                       child: _isLoading
-                          ? SizedBox(
+                          ? const SizedBox(
                               height: 20,
                               width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  RedesignTokens.onPrimary,
-                                ),
+                              child: SparkleLoading(
+                                size: 20,
+                                color: RedesignTokens.onPrimary,
                               ),
                             )
                           : Text(

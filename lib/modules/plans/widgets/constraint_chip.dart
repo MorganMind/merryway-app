@@ -61,9 +61,12 @@ class ConstraintChip extends StatelessWidget {
   }
 
   (IconData, String) _getConstraintDisplay() {
-    switch (constraint.type) {
+    final type = constraint.type ?? 'unknown';
+    final valueJson = constraint.valueJson ?? {};
+    
+    switch (type) {
       case 'cost_cap':
-        final maxCost = constraint.valueJson['max_cost'] ?? 100;
+        final maxCost = valueJson['max_cost'] ?? 100;
         return (Icons.attach_money, 'Budget: \$$maxCost');
       
       case 'indoor_only':
@@ -73,21 +76,21 @@ class ConstraintChip extends StatelessWidget {
         return (Icons.park, 'Outdoor only');
       
       case 'duration_cap':
-        final maxDuration = constraint.valueJson['max_duration_min'] ?? 120;
+        final maxDuration = valueJson['max_duration_min'] ?? 120;
         return (Icons.schedule, 'Max ${maxDuration}min');
       
       case 'time_window':
-        final start = constraint.valueJson['start_time'];
-        final end = constraint.valueJson['end_time'];
+        final start = valueJson['start_time'] ?? 'Unknown';
+        final end = valueJson['end_time'] ?? 'Unknown';
         return (Icons.access_time, '$start - $end');
       
       case 'location_radius':
-        final radius = constraint.valueJson['radius_miles'] ?? 5;
+        final radius = valueJson['radius_miles'] ?? 5;
         return (Icons.location_on, 'Within ${radius}mi');
       
       case 'age_appropriate':
-        final minAge = constraint.valueJson['min_age'] ?? 0;
-        final maxAge = constraint.valueJson['max_age'];
+        final minAge = valueJson['min_age'] ?? 0;
+        final maxAge = valueJson['max_age'];
         if (maxAge != null) {
           return (Icons.child_care, 'Ages $minAge-$maxAge');
         } else {
@@ -95,7 +98,7 @@ class ConstraintChip extends StatelessWidget {
         }
       
       default:
-        return (Icons.rule, constraint.type);
+        return (Icons.rule, type);
     }
   }
 }

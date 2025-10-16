@@ -7,9 +7,9 @@ part 'plan_models.g.dart';
 @freezed
 class Plan with _$Plan {
   const factory Plan({
-    required String id,
-    required String householdId,
-    required String title,
+    String? id,
+    String? householdId,
+    String? title,
     @Default('active') String status,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -38,15 +38,16 @@ class PlanMember with _$PlanMember {
 @freezed
 class PlanMessage with _$PlanMessage {
   const factory PlanMessage({
-    required String id,
-    required String planId,
-    required String authorType, // 'member' or 'morgan'
-    String? authorMemberId,
-    required String bodyMd,
+    String? id,
+    @JsonKey(name: 'plan_id') String? planId,
+    @JsonKey(name: 'author_type') String? authorType, // 'member' or 'morgan'
+    @JsonKey(name: 'author_member_id') String? authorMemberId,
+    @JsonKey(name: 'body_md') String? bodyMd,
+    @JsonKey(name: 'time_ago') String? timeAgo, // Human-readable timestamp from backend
     @Default([]) List<dynamic> attachments,
-    String? replyToId,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    @JsonKey(name: 'reply_to_id') String? replyToId,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _PlanMessage;
 
   factory PlanMessage.fromJson(Map<String, dynamic> json) =>
@@ -57,9 +58,9 @@ class PlanMessage with _$PlanMessage {
 @freezed
 class PlanProposal with _$PlanProposal {
   const factory PlanProposal({
-    required String id,
-    required String planId,
-    required String activityName,
+    String? id,
+    String? planId,
+    String? activityName,
     String? activityId,
     String? proposedByMemberId,
     String? reasoning,
@@ -80,9 +81,9 @@ class PlanProposal with _$PlanProposal {
 @freezed
 class PlanVote with _$PlanVote {
   const factory PlanVote({
-    required String id,
-    required String proposalId,
-    required String voterMemberId,
+    String? id,
+    String? proposalId,
+    String? voterMemberId,
     @Default(0) int value, // +1, 0, -1
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -96,10 +97,10 @@ class PlanVote with _$PlanVote {
 @freezed
 class PlanConstraint with _$PlanConstraint {
   const factory PlanConstraint({
-    required String id,
-    required String planId,
-    required String type,
-    required Map<String, dynamic> valueJson,
+    String? id,
+    String? planId,
+    String? type,
+    Map<String, dynamic>? valueJson,
     String? addedByMemberId,
     DateTime? createdAt,
   }) = _PlanConstraint;
@@ -112,8 +113,8 @@ class PlanConstraint with _$PlanConstraint {
 @freezed
 class PlanDecision with _$PlanDecision {
   const factory PlanDecision({
-    required String id,
-    required String planId,
+    String? id,
+    String? planId,
     String? proposalId,
     @Default('') String summaryMd,
     String? decidedByMemberId,
@@ -128,9 +129,9 @@ class PlanDecision with _$PlanDecision {
 @freezed
 class PlanItinerary with _$PlanItinerary {
   const factory PlanItinerary({
-    required String id,
-    required String planId,
-    required String title,
+    String? id,
+    String? planId,
+    String? title,
     @Default([]) List<dynamic> itemsJson,
     String? createdByMemberId,
     DateTime? createdAt,
@@ -145,9 +146,9 @@ class PlanItinerary with _$PlanItinerary {
 @freezed
 class PlanSummary with _$PlanSummary {
   const factory PlanSummary({
-    required String id,
-    required String householdId,
-    required String title,
+    String? id,
+    String? householdId,
+    String? title,
     @Default('active') String status,
     @Default([]) List<MemberFacepileItem> memberFacepile,
     String? lastMessageSnippet,

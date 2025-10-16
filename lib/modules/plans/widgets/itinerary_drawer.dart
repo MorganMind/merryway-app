@@ -139,7 +139,7 @@ class ItineraryDrawer extends StatelessWidget {
         children: [
           // Title
           Text(
-            itinerary.title,
+            itinerary.title ?? 'Untitled Itinerary',
             style: GoogleFonts.eczar(
               fontSize: 20,
               fontWeight: FontWeight.w600,

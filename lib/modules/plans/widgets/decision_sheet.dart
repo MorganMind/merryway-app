@@ -114,7 +114,7 @@ class _DecisionSheetState extends State<DecisionSheet> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            pw.proposal.activityName,
+                            pw.proposal.activityName ?? 'Untitled Activity',
                             style: GoogleFonts.spaceGrotesk(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,

@@ -16,6 +16,7 @@ class SuggestionCard extends StatefulWidget {
   final Function(Set<String>)? onParticipantsChanged;
   final VoidCallback? onManagePresets;
   final VoidCallback? onMakeExperience;
+  final Map<String, String>? memberFeedback; // memberId -> feedback type
 
   const SuggestionCard({
     super.key,
@@ -28,6 +29,7 @@ class SuggestionCard extends StatefulWidget {
     this.onParticipantsChanged,
     this.onManagePresets,
     this.onMakeExperience,
+    this.memberFeedback,
   });
 
   @override
@@ -188,6 +190,7 @@ class _SuggestionCardState extends State<SuggestionCard>
                         selectedMemberIds: widget.selectedMemberIds!,
                         onSelectionChanged: widget.onParticipantsChanged!,
                         onManagePresets: widget.onManagePresets!,
+                        memberFeedback: widget.memberFeedback,
                       ),
                     ),
                   const SizedBox(height: 16),

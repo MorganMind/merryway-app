@@ -37,7 +37,7 @@ class PlanCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    plan.title,
+                    plan.title ?? 'Untitled Plan',
                     style: GoogleFonts.eczar(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
