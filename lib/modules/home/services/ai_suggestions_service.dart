@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../config/environment.dart';
-import '../models/activity_suggestion.dart';
+import '../../family/models/family_models.dart';
 
 /// Service for AI suggestions API communication
 class AISuggestionsService {

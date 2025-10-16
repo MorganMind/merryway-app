@@ -1866,7 +1866,7 @@ class _HomePageState extends State<HomePage> {
                                                 // Don't fetch new suggestion, just mark as not interested
                                                 break;
                                             }
-                                          },,
+                                          },
                                         currentMemberId: currentMemberId,
                                         onWhyThis: () {
                                           // Get current participants
@@ -1900,7 +1900,9 @@ class _HomePageState extends State<HomePage> {
                                           );
                                         },
                                         onMenu: () {},
-                                      );
+                                      ),
+                                    ),
+                                  );
                                   }).toList(),
                                   
                                   // Loading indicator for pagination
