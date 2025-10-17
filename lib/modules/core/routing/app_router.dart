@@ -18,6 +18,7 @@ import 'package:merryway/modules/auth/pages/simple_login_page.dart';
 import 'package:merryway/modules/auth/services/user_context_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/sparkle_loading.dart';
+import '../../../test_token_widget.dart';
 
 // Phase 1 Auth Pages
 class OldLoginPage extends StatefulWidget {
@@ -275,6 +276,12 @@ class AppRouter {
         final isOnLoginPage = state.uri.path == '/login';
         final isOnOnboarding = state.uri.path == '/onboarding';
         final isOnHome = state.uri.path == '/home';
+        final isOnTestToken = state.uri.path == '/test-token';
+
+        // Allow test-token route without authentication
+        if (isOnTestToken) {
+          return null;
+        }
 
         // Not authenticated → redirect to login
         if (!isAuthenticated && !isOnLoginPage) {
@@ -401,6 +408,12 @@ class AppRouter {
           },
         ),
         
+        // Test route for token testing
+        GoRoute(
+          path: '/test-token',
+          builder: (context, state) => const TestTokenWidget(),
+        ),
+        
         // Root
         GoRoute(
           path: '/',
@@ -458,11 +471,12 @@ class _PlansRouteWrapperState extends State<_PlansRouteWrapper> {
         return;
       }
 
-      // Query households table to find user's household
+      // Query households table to find user's household (get most recent)
       final response = await supabase
           .from('households')
-          .select('id')
+          .select()
           .eq('user_id', user.id)
+          .order('created_at', ascending: false)
           .limit(1);
 
       if (response.isNotEmpty) {
@@ -584,11 +598,12 @@ class _MomentsRouteWrapperState extends State<_MomentsRouteWrapper> {
         return;
       }
 
-      // Query households table to find user's household
+      // Query households table to find user's household (get most recent)
       final response = await supabase
           .from('households')
-          .select('id')
+          .select()
           .eq('user_id', user.id)
+          .order('created_at', ascending: false)
           .limit(1);
 
       if (response.isNotEmpty) {
