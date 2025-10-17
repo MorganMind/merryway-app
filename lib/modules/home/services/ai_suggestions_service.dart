@@ -134,6 +134,7 @@ class AISuggestionsService {
   /// Get AI suggestion logs from backend
   static Future<List<Map<String, dynamic>>> getAISuggestionLogs({
     required String householdId,
+    required String memberId,
     int limit = 20,
     int offset = 0,
   }) async {
@@ -143,6 +144,7 @@ class AISuggestionsService {
       final uri = Uri.parse('$_baseUrl/ai-suggestions/').replace(
         queryParameters: {
           'household_id': householdId,
+          'member_id': memberId,
           'limit': limit.toString(),
           'offset': offset.toString(),
         },
@@ -150,6 +152,7 @@ class AISuggestionsService {
 
       print('📋 Get AI Suggestion Logs Request:');
       print('  Household ID: $householdId');
+      print('  Member ID: $memberId');
       print('  Limit: $limit, Offset: $offset');
 
       final response = await http.get(uri, headers: headers);

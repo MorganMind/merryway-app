@@ -366,6 +366,7 @@ class _HomePageState extends State<HomePage> {
       // Use backend API instead of direct Supabase reads
       final logs = await AISuggestionsService.getAISuggestionLogs(
         householdId: householdId!,
+        memberId: currentMemberId!,
         limit: _pageSize,
         offset: 0,
       );
@@ -857,6 +858,7 @@ class _HomePageState extends State<HomePage> {
       // Use backend API instead of direct Supabase reads
       final logs = await AISuggestionsService.getAISuggestionLogs(
         householdId: householdId!,
+        memberId: currentMemberId!,
         limit: _pageSize,
         offset: _currentPage * _pageSize,
       );

@@ -121,6 +121,7 @@ class IdeasApiService {
   // List Ideas (with filters)
   Future<List<Idea>> listIdeas({
     required String householdId,
+    required String memberId,
     IdeaState? state,
     IdeaVisibility? visibility,
     String? podId,
@@ -129,10 +130,12 @@ class IdeasApiService {
   }) async {
     print('🔵 IdeasApiService.listIdeas called');
     print('  householdId: $householdId');
+    print('  memberId: $memberId');
     
     final headers = await _getHeaders();
     final queryParams = <String, String>{
       'household_id': householdId,
+      'member_id': memberId,
       'limit': '20', // Get more than the default 3 ideas
       'state': 'active', // Get only active ideas by default
     };

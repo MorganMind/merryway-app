@@ -87,6 +87,7 @@ class _MyIdeasPageState extends State<MyIdeasPage>
     // Load drafts first
     final drafts = await _apiService.listIdeas(
       householdId: widget.householdId,
+      memberId: widget.currentMemberId,
       creatorMemberId: widget.currentMemberId,
       state: IdeaState.draft,
     );
@@ -98,6 +99,7 @@ class _MyIdeasPageState extends State<MyIdeasPage>
     // Load pending
     final pending = await _apiService.listIdeas(
       householdId: widget.householdId,
+      memberId: widget.currentMemberId,
       creatorMemberId: widget.currentMemberId,
       state: IdeaState.pendingApproval,
     );
@@ -109,6 +111,7 @@ class _MyIdeasPageState extends State<MyIdeasPage>
     // Load active
     final active = await _apiService.listIdeas(
       householdId: widget.householdId,
+      memberId: widget.currentMemberId,
       creatorMemberId: widget.currentMemberId,
       state: IdeaState.active,
     );
@@ -120,6 +123,7 @@ class _MyIdeasPageState extends State<MyIdeasPage>
     // Load archived
     final archived = await _apiService.listIdeas(
       householdId: widget.householdId,
+      memberId: widget.currentMemberId,
       creatorMemberId: widget.currentMemberId,
       state: IdeaState.archived,
     );
