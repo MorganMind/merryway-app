@@ -23,50 +23,30 @@ class AISuggestionsService {
     };
   }
 
-  /// Save AI suggestions to backend
-  static Future<String> saveAISuggestions({
+  /// Get AI suggestions from backend
+  static Future<Map<String, dynamic>> getAISuggestions({
     required String householdId,
-    required String? podId,
     required String prompt,
     required Map<String, dynamic> context,
-    required List<String>? participantIds,
-    required List<ActivitySuggestion> suggestions,
-    required String modelUsed,
+    List<String>? participants,
+    String? podId,
   }) async {
     try {
       final headers = await _getHeaders();
       
-      // Prepare suggestions data for JSON storage
-      final suggestionsJson = suggestions.map((s) => {
-        'activity': s.activity,
-        'rationale': s.rationale,
-        'duration_minutes': s.durationMinutes,
-        'tags': s.tags,
-        'location': s.location,
-        'distance_miles': s.distanceMiles,
-        'venue_type': s.venueType,
-        'description': s.description,
-        'attire': s.attire,
-        'food_available': s.foodAvailable,
-        'average_rating': s.averageRating,
-        'review_count': s.reviewCount,
-      }).toList();
-
       final requestBody = {
         'household_id': householdId,
-        'pod_id': podId,
         'prompt': prompt,
         'context': context,
-        'participant_ids': participantIds,
-        'suggestions': suggestionsJson,
-        'model_used': modelUsed,
+        if (participants != null) 'participants': participants,
+        if (podId != null) 'pod_id': podId,
       };
 
-      print('🤖 Save AI Suggestions Request:');
+      print('🤖 Get AI Suggestions Request:');
       print('  Household ID: $householdId');
       print('  Pod ID: $podId');
       print('  Prompt: $prompt');
-      print('  Suggestions count: ${suggestions.length}');
+      print('  Participants: $participants');
 
       final response = await http.post(
         Uri.parse('$_baseUrl/ai-suggestions/'),
@@ -74,18 +54,18 @@ class AISuggestionsService {
         body: json.encode(requestBody),
       );
 
-      print('🤖 Save AI Suggestions Response:');
+      print('📨 Get AI Suggestions Response:');
       print('  Status: ${response.statusCode}');
-      print('  Body: ${response.body}');
+      print('  Body: ${response.body.substring(0, response.body.length > 200 ? 200 : response.body.length)}...');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = json.decode(response.body);
-        return data['id'] ?? data['log_id'] ?? 'unknown';
+        return data;
       } else {
-        throw Exception('Failed to save AI suggestions: ${response.statusCode} - ${response.body}');
+        throw Exception('Failed to get AI suggestions: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      print('❌ Error saving AI suggestions: $e');
+      print('❌ Error getting AI suggestions: $e');
       rethrow;
     }
   }

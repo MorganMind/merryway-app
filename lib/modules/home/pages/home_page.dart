@@ -401,37 +401,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _saveAISuggestionsToDatabase(List<ActivitySuggestion> suggestions) async {
-    if (householdId == null) return;
-
-    try {
-      // Use backend API instead of direct Supabase writes
-      final logId = await AISuggestionsService.saveAISuggestions(
-        householdId: householdId!,
-        podId: selectedPodId,
-        prompt: customPrompt,
-        context: {
-          'weather': weather,
-          'time_of_day': timeOfDay,
-          'day_of_week': dayOfWeek,
-        },
-        participantIds: isAllMode 
-            ? null 
-            : (selectedParticipants.isNotEmpty ? selectedParticipants.toList() : null),
-        suggestions: suggestions,
-        modelUsed: 'gpt-3.5-turbo',
-      );
-
-      // Store the log ID for tracking acceptance
-      _lastAISuggestionLogId = logId;
-
-      debugPrint('✅ AI suggestions saved via backend API (log_id: $_lastAISuggestionLogId)');
-      
-      // Reload saved suggestions to include this new one
-      await _loadSavedAISuggestions();
-    } catch (e) {
-      debugPrint('❌ Error saving AI suggestions via backend API: $e');
-      // Don't show error to user - this is background logging
-    }
+    // This method is no longer needed since the backend API now generates and saves suggestions in one call
+    // The _fetchAISuggestions method already handles this via the backend API
+    debugPrint('✅ AI suggestions are now generated and saved by the backend API in one call');
   }
 
   Future<void> _trackAISuggestionAccepted(String suggestionName) async {
@@ -530,6 +502,10 @@ class _HomePageState extends State<HomePage> {
             throw Exception('No suggestions returned from backend');
           }
 
+          // Extract log ID for tracking acceptance
+          _lastAISuggestionLogId = data['metadata']?['log_id'] ?? data['log_id'];
+          debugPrint('✅ AI suggestions generated and saved by backend (log_id: $_lastAISuggestionLogId)');
+
           final suggestionsResponse = SuggestionsResponse(
             suggestions: suggestions,
             context: {
@@ -547,8 +523,7 @@ class _HomePageState extends State<HomePage> {
               isLoadingAISuggestions = false;
             });
             
-            // Save AI suggestions to database for tracking
-            _saveAISuggestionsToDatabase(suggestions);
+            // AI suggestions are now generated and saved by the backend in one call
           }
         } catch (e) {
           debugPrint('Error parsing response: $e');
