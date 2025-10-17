@@ -8,6 +8,7 @@ import 'package:merryway/modules/core/platform/url_strategy.dart';
 import 'package:merryway/config/environment.dart';
 import 'package:merryway/modules/family/blocs/family_bloc.dart';
 import 'package:merryway/modules/core/theme/merryway_theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Custom page transitions builder that provides instant transitions (no animation)
 class NoTransitionPageTransitionsBuilder extends PageTransitionsBuilder {
@@ -39,6 +40,9 @@ void main() async {
 
 void mainCommon() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
 
   await Supabase.initialize(
     url: Environment.supabaseUrl,
