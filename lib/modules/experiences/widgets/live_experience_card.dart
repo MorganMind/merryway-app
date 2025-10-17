@@ -301,16 +301,13 @@ END:VCALENDAR''';
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: RedesignTokens.getGutter(screenWidth),
+        horizontal: RedesignTokens.getGutter(screenWidth) + 16, // Added extra padding
         vertical: RedesignTokens.space12,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(RedesignTokens.radiusCard),
-        border: Border.all(
-          color: isLive ? RedesignTokens.accentGold : RedesignTokens.primary,
-          width: 2,
-        ),
+        // Removed the border that was creating the black line
         boxShadow: RedesignTokens.shadowLevel2,
       ),
       child: Padding(
